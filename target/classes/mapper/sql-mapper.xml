@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.fedal.dao.FestivalDAO">
+
+	<resultMap type="festivalVO" id="festivalMap">
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+	</resultMap>
+
+	<select id="selectFestival" resultType="festivalVO">
+		select fid, fname,
+		to_char(start_date,'yyyy-mm-dd') as startDate,
+		to_char(end_date,
+		'yyyy-mm-dd') as endDate,
+		floc, genre, src
+		from festival
+	</select>
+
+	<select id="selectByEmail" resultType="kr.co.fedal.vo.SignupVO">
+		select email,nickname
+		from u_data
+		where email = #{email}
+	</select>
+
+	<select id="selectById" resultType="kr.co.fedal.vo.SignupVO">
+		select id,nickname
+		from u_data
+		where id = #{id}
+	</select>
+
+	<insert id="insertMember" parameterType="kr.co.fedal.vo.SignupVO">
+		insert into u_data(
+		no,
+		id,
+		email,
+		nickname,
+		password
+		)values(
+		u_data_no_seq.nextval,
+		#{id},
+		#{email},
+		#{nickname},
+		#{password}
+		)
+	</insert>
+
+</mapper>
