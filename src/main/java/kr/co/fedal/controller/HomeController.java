@@ -99,7 +99,6 @@ public class HomeController {
         }
 		ModelAndView mav = new ModelAndView("/signup/signupSuccess");
 		
-		//mav.addObject("signupRequest", new SignupRequest());
 		return mav;
 	}
 }
