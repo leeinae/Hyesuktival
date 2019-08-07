@@ -46,4 +46,10 @@
 		)
 	</insert>
 
+	<select id="selectAllById" resultType="kr.co.fedal.vo.SignupVO">
+		select *
+		from u_data
+		where id = #{id}
+	</select>
+	
 </mapper>

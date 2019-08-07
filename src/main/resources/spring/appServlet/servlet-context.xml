@@ -23,6 +23,7 @@
 	
 	<context:component-scan base-package="kr.co.fedal.*" />
 	
-	
+	<!-- NaverLoginBO Class에 대한 Bean설정 추가 -->
+<beans:bean id="naverLoginBO" class="kr.co.fedal.naver.NaverLoginBO" />
 	
 </beans:beans>

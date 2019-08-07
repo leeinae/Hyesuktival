@@ -44,14 +44,25 @@ body {
 </head>
 <body>
 	<h1>Calendar Page</h1>
-	<a href="/signup"><i class="signup"></i>회원가입</a>
+	<div id="topMenu" align="right">
+		<c:catch>
+			<c:choose>
+				<c:when test="${empty authInfo && empty sessionId}">
+					<li><a href="/login"><i class="login"></i>로그인</a></li>
+					<li><a href="/signup"><i class="signup"></i>회원가입</a></li>
+				</c:when>
+				<c:when test="${sessionId != null}">
+					<li>${sessionId}님, 반갑습니다!</li>
+					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+				</c:when>
+				<c:otherwise>
+					<li>${authInfo.nickname }님, 반갑습니다!</li>
+					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+				</c:otherwise>
+			</c:choose>
+		</c:catch>
+	</div>
+	<br>
 	<div id="calendar"></div>
-	<table border=1>
-		<c:forEach items="${requestScope.festivalList}" var="fest">
-			<tr>
-				<td>${fest }</td>
-			</tr>
-		</c:forEach>
-	</table>
 </body>
 </html>

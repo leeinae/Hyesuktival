@@ -15,6 +15,8 @@ public interface FestivalDAO {
 	public SignupVO selectByEmail(String email);
 
 	public SignupVO selectById(String id);
+	
+	public SignupVO selectAllById(String id);
 
 	public void insertUser(SignupRequest signReq);
 }

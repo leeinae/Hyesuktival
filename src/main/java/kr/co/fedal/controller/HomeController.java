@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.CommandMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +31,7 @@ public class HomeController {
 	@Autowired
 	private FestivalService service;
 
+	// 캘린더
 	@RequestMapping(value = "/", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public ModelAndView viewCalendar() {
 		System.out.println("Festival Controller 호출");
@@ -63,7 +62,7 @@ public class HomeController {
 			festivalList.add(json);
 		}
 
-		System.out.println(festivalList);
+		/* System.out.println(festivalList); */
 
 		ModelAndView mav = new ModelAndView("/calendar/calendar");
 
@@ -71,6 +70,7 @@ public class HomeController {
 		return mav;
 	}
 
+	// 캘린더 -> 회원가입
 	@RequestMapping(value = "/signup", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public ModelAndView signupPage() {
 		ModelAndView mav = new ModelAndView("/signup/signup");
@@ -79,26 +79,77 @@ public class HomeController {
 		return mav;
 	}
 
+	// 회원가입 -> 회원가입 성공
 	@RequestMapping(value = "/signupSuccess", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ModelAndView signupSuccessPage(SignupRequest signReq, Errors errors) throws Exception {
 		new SignupRequestValidator().validate(signReq, errors);
-		if(errors.hasErrors()) {
+		if (errors.hasErrors()) {
 			ModelAndView mav = new ModelAndView("/signup/signup");
 			return mav;
 		}
 		try {
 			service.signup(signReq);
-		}catch(AlreadyExistingEmailException e) {
+		} catch (AlreadyExistingEmailException e) {
 			errors.rejectValue("email", "duplicate", "이미 가입된 이메일입니다.");
-            ModelAndView mav = new ModelAndView("/signup/signup");
-            return mav;
-        } catch (AlreadyExistingIdException e) {
-            errors.rejectValue("id", "duplicate", "이미 가입된 아이디입니다.");
-            ModelAndView mav = new ModelAndView("/signup/signup");
-            return mav;
-        }
+			ModelAndView mav = new ModelAndView("/signup/signup");
+			return mav;
+		} catch (AlreadyExistingIdException e) {
+			errors.rejectValue("id", "duplicate", "이미 가입된 아이디입니다.");
+			ModelAndView mav = new ModelAndView("/signup/signup");
+			return mav;
+		}
 		ModelAndView mav = new ModelAndView("/signup/signupSuccess");
-		
+
 		return mav;
 	}
+
+	/*
+	 * // 캘린더 -> 로그인
+	 * 
+	 * @RequestMapping(value = "/login", method = RequestMethod.GET, produces =
+	 * "text/plain;charset=UTF-8") public ModelAndView loginForm(LoginCommand
+	 * loginCommand,
+	 * 
+	 * @CookieValue(value = "REMEMBER", required = false) Cookie rememberCookie)
+	 * throws Exception {
+	 * 
+	 * if (rememberCookie != null) { loginCommand.setId(rememberCookie.getValue());
+	 * loginCommand.setRememberId(true); } ModelAndView mav = new
+	 * ModelAndView("/login/login");
+	 * 
+	 * return mav; }
+	 * 
+	 * // 로그인 -> 로그인 성공
+	 * 
+	 * @RequestMapping(value = "/login", method = RequestMethod.POST, produces =
+	 * "text/plain;charset=UTF-8") public ModelAndView loginSuccess(@Valid
+	 * LoginCommand loginCommand, BindingResult bindingResult, HttpSession session,
+	 * HttpServletResponse response) throws Exception {
+	 * 
+	 * if (bindingResult.hasErrors()) { ModelAndView mav = new
+	 * ModelAndView("/login/login"); return mav; }
+	 * 
+	 * try {
+	 * 
+	 * AuthInfo authInfo = service.loginAuth(loginCommand);
+	 * session.setAttribute("authInfo", authInfo);
+	 * 
+	 * Cookie rememberCookie = new Cookie("REMEMBER", loginCommand.getId());
+	 * rememberCookie.setPath("/"); if (loginCommand.isRememberId()) {
+	 * rememberCookie.setMaxAge(60 * 60 * 24 * 30); } else {
+	 * rememberCookie.setMaxAge(0); } response.addCookie(rememberCookie);
+	 * 
+	 * } catch (IdPasswordNotMatchingException e) {
+	 * bindingResult.rejectValue("password", "notMatch", "아이디와 비밀번호가 맞지않습니다.");
+	 * ModelAndView mav = new ModelAndView("/login/login"); return mav; }
+	 * 
+	 * ModelAndView mav = new ModelAndView("redirect:/"); return mav; }
+	 * 
+	 * // 캘린더 -> 로그아웃
+	 * 
+	 * @RequestMapping(value = "/logout", method = RequestMethod.GET, produces =
+	 * "text/plain;charset=UTF-8") public ModelAndView logout(HttpSession session) {
+	 * session.invalidate(); ModelAndView mav = new ModelAndView("redirect:/");
+	 * return mav; }
+	 */
 }

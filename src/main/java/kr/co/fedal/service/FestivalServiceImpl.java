@@ -11,6 +11,9 @@ import kr.co.fedal.dao.FestivalDAO;
 import kr.co.fedal.dao.FestivalDAOImpl;
 import kr.co.fedal.exception.AlreadyExistingEmailException;
 import kr.co.fedal.exception.AlreadyExistingIdException;
+import kr.co.fedal.exception.IdPasswordNotMatchingException;
+import kr.co.fedal.util.AuthInfo;
+import kr.co.fedal.util.LoginCommand;
 import kr.co.fedal.util.SignupRequest;
 import kr.co.fedal.vo.FestivalVO;
 import kr.co.fedal.vo.SignupVO;
@@ -41,5 +44,18 @@ public class FestivalServiceImpl implements FestivalService {
 			throw new AlreadyExistingIdException(signReq.getId() + " is duplicate id.");
 		}
 		festivalDAOImpl.insertUser(signReq);
+	}
+
+	@Override
+	public AuthInfo loginAuth(LoginCommand loginCommand) throws Exception {
+		SignupVO user = festivalDAOImpl.selectAllById(loginCommand.getId());
+		if (user == null) {
+			throw new IdPasswordNotMatchingException();
+		}
+		if (!user.matchPassword(loginCommand.getPassword())) {
+			throw new IdPasswordNotMatchingException();
+		}
+
+		return new AuthInfo(user.getId(), user.getNickname());
 	}
 }

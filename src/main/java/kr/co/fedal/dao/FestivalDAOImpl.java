@@ -58,4 +58,9 @@ public class FestivalDAOImpl implements FestivalDAO {
 	public void insertUser(SignupRequest signReq) {
 		insert("kr.co.fedal.dao.FestivalDAO.insertMember", signReq);
 	}
+	
+	@Override
+	public SignupVO selectAllById(String id) {
+		return (SignupVO) selectOne("kr.co.fedal.dao.FestivalDAO.selectAllById", id);
+	}
 }
