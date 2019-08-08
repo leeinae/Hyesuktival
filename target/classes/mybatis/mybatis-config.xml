@@ -5,5 +5,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="kr.co.fedal.vo.FestivalVO" alias="festivalVO"/>
+		<typeAlias type="kr.co.fedal.vo.ArtistVO" alias="artistVO"/>
+		<typeAlias type="kr.co.fedal.vo.MusicVO" alias="musicVO"/>
 	</typeAliases>
 </configuration>

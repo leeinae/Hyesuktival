@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,6 +50,12 @@ body {
 </head>
 <body>
 	<h1>Calendar Page</h1>
+	<br>
+	<form action="/search" method="get">
+		<input type="text" name="search">
+		<button type="submit">검색!</button>
+	</form>
+	
 	<div id="calendar"></div>
 	<table border=1>
 <%-- 		<c:forEach items="${requestScope.festivalList}" var="fest">

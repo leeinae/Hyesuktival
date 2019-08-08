@@ -20,4 +20,12 @@ public class FestivalDAOImpl implements FestivalDAO {
 		return festivalList;		
 	}
 
+	@Override
+	public FestivalVO selectDetailFestival(String fid) {
+		FestivalVO vo = session.selectOne("kr.co.fedal.dao.FestivalDAO.searchFestivalDetail",fid);
+		return vo;
+	}
+	
+	
+
 }

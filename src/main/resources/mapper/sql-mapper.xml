@@ -5,15 +5,37 @@
 <mapper namespace="kr.co.fedal.dao.FestivalDAO">
 
 	<resultMap type="festivalVO" id="festivalMap">
-		<result column="start_date" property="startDate"/>
-		<result column="end_date" property="endDate"/>
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
 	</resultMap>
-	
+
 	<select id="selectFestival" resultType="festivalVO">
 		select fid, fname,
 		to_char(start_date,'yyyy-mm-dd') as startDate,
+		to_char(end_date,
+		'yyyy-mm-dd') as endDate,
+		floc, genre, src
+		from festival
+	</select>
+
+	<select id="searchFestivalDetail" parameterType="string"
+		resultType="festivalVO">
+		select fid, fname,
+		to_char(start_date,'yyyy-mm-dd') as
+		startDate,
 		to_char(end_date, 'yyyy-mm-dd') as endDate,
 		floc, genre, src
 		from festival
+		where fid =#{fid}
+	</select>
+
+	<select id="selectArtist" resultType="artistVO" parameterType="string">
+		select aid, aname, src from artist where aid in (select aid from
+		festival JOIN relation on festival.fid = relation.fid where
+		relation.fid=#{fid})
+	</select>
+	
+	<select id="selectMusic" resultType="musicVO" parameterType="String">
+		select aid, mname, mcnt from music where aid =#{aid}
 	</select>
 </mapper>

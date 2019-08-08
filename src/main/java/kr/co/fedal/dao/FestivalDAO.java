@@ -9,4 +9,6 @@ public interface FestivalDAO {
 	 * @return : festival 전체 리스트 반환
 	 */
 	List<FestivalVO> selectAllFestival();
+	
+	FestivalVO selectDetailFestival(String fid);
 }
