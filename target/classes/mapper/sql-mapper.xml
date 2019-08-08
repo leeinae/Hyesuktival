@@ -29,13 +29,23 @@
 		where fid =#{fid}
 	</select>
 
-	<select id="selectArtist" resultType="artistVO" parameterType="string">
+	<select id="selectArtistList" resultType="artistVO" parameterType="string">
 		select aid, aname, src from artist where aid in (select aid from
 		festival JOIN relation on festival.fid = relation.fid where
 		relation.fid=#{fid})
 	</select>
 	
+	<select id="selectArtist" resultType="artistVO" parameterType="String">
+		select aid, aname, src from artist where aid = #{aid}
+	</select>
+	
 	<select id="selectMusic" resultType="musicVO" parameterType="String">
 		select aid, mname, mcnt from music where aid =#{aid}
+	</select>
+	
+<!-- 	페스티벌 검색 -->
+	<select id="searchFestival" resultType="festivalVO" parameterType="String">
+	<bind name="pattern" value="'%'+keyword +'%'" />
+		select fid, fname from festival where fname like #{pattern}
 	</select>
 </mapper>

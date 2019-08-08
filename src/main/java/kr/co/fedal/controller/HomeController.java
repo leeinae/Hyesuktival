@@ -6,10 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.fedal.service.FestivalService;
@@ -32,10 +34,10 @@ public class HomeController {
 		List<FestivalVO> list = service.selectAll();
 		
 		//fullcalendar 띄우기 위한 json 같은 string
-		String festivalList = "";
+		StringBuffer festivalList = new StringBuffer();
 		
 		for (FestivalVO vo : list) {
-			festivalList = ("{ start : \"" +vo.getStartDate()+"\", end :\"" +vo.getEndDate()+"\", title : \""+ vo.getFname()+"\", url : \"festival/"+vo.getFid()+"\" },");
+			festivalList.append("{ start : \"" +vo.getStartDate()+"\", end :\"" +vo.getEndDate()+"\", title : \""+ vo.getFname()+"\", url : \"festival/"+vo.getFid()+"\" },");
 		}
 
 		//ModelAndView 생성 + 넘겨줄 View 지정
@@ -72,20 +74,37 @@ public class HomeController {
 	@RequestMapping(value="/artist/{aid}", method=RequestMethod.GET)
 	public ModelAndView viewArtist(@PathVariable("aid") String aid) {
 		
+		//aid 일치하는 아티스트 정보
+		ArtistVO avo = service.selectArtist(aid);
+		
 		//aid가 일치하는 music 가져오기
 		List<MusicVO> mvoList = service.selectAllMusic(aid);
 		
 		ModelAndView mav = new ModelAndView("festival/detailArtist");
 		mav.addObject("musicList", mvoList);
+		mav.addObject("artist",avo);
 		
 		return mav;
 	}
 
 	//검색결과 페이지
 	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public String searchFestival(@RequestParam("search") String keyword) {
+	public ModelAndView searchFestival(@RequestParam("search") String keyword) {
+		//넘어온 param 확인
 		System.out.println(keyword);
-		return "search/searchFestival";
+		
+		List<FestivalVO> searchList = service.searchAllFestival(keyword);
+		
+		ModelAndView mav = new ModelAndView("search/searchFestival");
+		mav.addObject("searchList",searchList);
+		
+		return mav;
 	}
+	
+//	@ResponseBody
+//	@RequestMapping(value="/festival/{fid}", method=RequestMethod.POST)
+//	public void insertComment(@PathVariable("fid") String fid) {
+//		System.out.println("post 방식 전송 완료");
+//	}
 
 }

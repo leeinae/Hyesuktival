@@ -7,13 +7,20 @@ import kr.co.fedal.vo.FestivalVO;
 import kr.co.fedal.vo.MusicVO;
 
 public interface FestivalService {
-	//�佺Ƽ�� ����
+	//페스티벌 정보
 	public List<FestivalVO> selectAll();
+	//fid가 일치하는 페스티벌 
 	public FestivalVO selectDetail(String fid);
 	
-	//��Ƽ��Ʈ ����
+	//fid가 동일한 페스티벌에 참가하는 아티스트
 	public List<ArtistVO> selectAllArtist(String fid); 
 	
-	//��������
+	//아티스트 음원정보
 	public List<MusicVO> selectAllMusic(String aid);
+	
+	//아티스트 정보
+	public ArtistVO selectArtist(String aid);
+	
+	//페스티벌 검색
+	public List<FestivalVO> searchAllFestival(String keyword);
 }

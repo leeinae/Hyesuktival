@@ -48,5 +48,17 @@ public class FestivalServiceImpl implements FestivalService {
 		return list;
 	}
 
+	@Override
+	public ArtistVO selectArtist(String aid) {
+		ArtistVO vo = artistDao.selectArtist(aid);
+		return vo;
+	}
+
+	@Override
+	public List<FestivalVO> searchAllFestival(String keyword) {
+		List<FestivalVO> list = festivalDao.searchFestival(keyword);
+		return list;
+	}
+
 	
 }

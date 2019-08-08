@@ -10,7 +10,8 @@
 <body>
 	<h1>상세 아티스트 페이지</h1>
 	<br>
-	<img alt="" src="">
+	<h1>${requestScope.artist.aname }</h1>
+	<img alt="" src="${requestScope.artist.src }">
 
 		<table border="1">
 			<thead>

@@ -15,9 +15,15 @@ public class ArtistDAOImpl implements ArtistDAO {
 
 	@Override
 	public List<ArtistVO> selectAllArtist(String fid) {
-		List<ArtistVO> artistList = session.selectList("kr.co.fedal.dao.FestivalDAO.selectArtist", fid);
+		List<ArtistVO> artistList = session.selectList("kr.co.fedal.dao.FestivalDAO.selectArtistList", fid);
 		
 		return artistList;
+	}
+
+	@Override
+	public ArtistVO selectArtist(String aid) {
+		ArtistVO vo = session.selectOne("kr.co.fedal.dao.FestivalDAO.selectArtist", aid);
+		return vo;
 	}
 
 }

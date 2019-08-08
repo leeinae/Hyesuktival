@@ -11,6 +11,7 @@ import kr.co.fedal.vo.FestivalVO;
 @Repository
 public class FestivalDAOImpl implements FestivalDAO {
 	
+
 	@Autowired
 	private SqlSessionTemplate session;
 	
@@ -26,6 +27,11 @@ public class FestivalDAOImpl implements FestivalDAO {
 		return vo;
 	}
 	
+	@Override
+	public List<FestivalVO> searchFestival(String keyword) {
+		List<FestivalVO> searchList = session.selectList("kr.co.fedal.dao.FestivalDAO.searchFestival", keyword);
+		return searchList;
+	}
 	
 
 }
