@@ -34,12 +34,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import kr.co.fedal.exception.IdPasswordNotMatchingException;
-import kr.co.fedal.google.GoogleAuthInfo;
 import kr.co.fedal.util.AuthInfo;
 import kr.co.fedal.naver.NaverLoginBO;
 import kr.co.fedal.service.FestivalService;
 import kr.co.fedal.util.LoginCommand;
-import kr.co.fedal.vo.SignupVO;
 
 @RestController
 public class LoginController {
@@ -61,7 +59,7 @@ public class LoginController {
 	@Autowired
 	private OAuth2Parameters googleOAuth2Parameters;
 
-	// Ä¶¸°´õ -> ·Î±×ÀÎ
+	// ìº˜ë¦°ë” -> ë¡œê·¸ì¸
 	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public ModelAndView loginForm(Model model, HttpSession session, LoginCommand loginCommand,
 			@CookieValue(value = "REMEMBER", required = false) Cookie rememberCookie) throws Exception {
@@ -71,11 +69,11 @@ public class LoginController {
 			loginCommand.setRememberId(true);
 		}
 
-		// ³×ÀÌ¹ö ·Î±×ÀÎ
+		// ë„¤ì´ë²„ ë¡œê·¸ì¸
 		String naverAuthUrl = naverLoginBO.getAuthorizationUrl(session);
 		model.addAttribute("url", naverAuthUrl);
 
-		// ±¸±Û ·Î±×ÀÎ
+		// êµ¬ê¸€ ë¡œê·¸ì¸
 		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
 		String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, googleOAuth2Parameters);
 		model.addAttribute("google_url", url);
@@ -85,11 +83,11 @@ public class LoginController {
 		return mav;
 	}
 
-	// ·Î±×ÀÎ -> ·Î±×ÀÎ ¼º°ø
+	// ë¡œê·¸ì¸ -> ë¡œê·¸ì¸ ì„±ê³µ
 	@RequestMapping(value = "/loginS", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ModelAndView loginSuccess(@Valid LoginCommand loginCommand, BindingResult bindingResult, HttpSession session,
 			HttpServletResponse response) throws Exception {
-		System.out.println("±âº» ·Î±×ÀÎ");
+		System.out.println("ê¸°ë³¸ ë¡œê·¸ì¸");
 		if (bindingResult.hasErrors()) {
 			ModelAndView mav = new ModelAndView("/login/login");
 			return mav;
@@ -110,7 +108,7 @@ public class LoginController {
 			response.addCookie(rememberCookie);
 
 		} catch (IdPasswordNotMatchingException e) {
-			bindingResult.rejectValue("password", "notMatch", "¾ÆÀÌµð¿Í ºñ¹Ð¹øÈ£°¡ ¸ÂÁö¾Ê½À´Ï´Ù.");
+			bindingResult.rejectValue("password", "notMatch", "ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ê°€ ë§žì§€ì•ŠìŠµë‹ˆë‹¤.");
 			ModelAndView mav = new ModelAndView("/login/login");
 			return mav;
 		}
@@ -119,43 +117,43 @@ public class LoginController {
 		return mav;
 	}
 
-	// ³×ÀÌ¹ö ·Î±×ÀÎ ¼º°ø½Ã callbackÈ£Ãâ ¸Þ¼Òµå
+	// ë„¤ì´ë²„ ë¡œê·¸ì¸ ì„±ê³µì‹œ callbackí˜¸ì¶œ ë©”ì†Œë“œ
 	@RequestMapping(value = "/naverCallback", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView naverCallback(Model model, @RequestParam String code, @RequestParam String state,
 			HttpSession session) throws IOException, ParseException {
-		System.out.println("¿©±â´Â naverCallback");
+		System.out.println("ì—¬ê¸°ëŠ” naverCallback");
 		OAuth2AccessToken oauthToken;
 		oauthToken = naverLoginBO.getAccessToken(session, code, state);
-		// 1. ·Î±×ÀÎ »ç¿ëÀÚ Á¤º¸¸¦ ÀÐ¾î¿Â´Ù.
-		apiResult = naverLoginBO.getUserProfile(oauthToken); // StringÇü½ÄÀÇ jsonµ¥ÀÌÅÍ
+		// 1. ë¡œê·¸ì¸ ì‚¬ìš©ìž ì •ë³´ë¥¼ ì½ì–´ì˜¨ë‹¤.
+		apiResult = naverLoginBO.getUserProfile(oauthToken); // Stringí˜•ì‹ì˜ jsonë°ì´í„°
 		/**
-		 * apiResult json ±¸Á¶ {"resultcode":"00", "message":"success",
+		 * apiResult json êµ¬ì¡° {"resultcode":"00", "message":"success",
 		 * "response":{"id":"33666449","nickname":"shinn****","age":"20-29","gender":"M","email":"shinn0608@naver.com","name":"\uc2e0\ubc94\ud638"}}
 		 **/
-		// 2. StringÇü½ÄÀÎ apiResult¸¦ jsonÇüÅÂ·Î ¹Ù²Þ
+		// 2. Stringí˜•ì‹ì¸ apiResultë¥¼ jsoní˜•íƒœë¡œ ë°”ê¿ˆ
 		JSONParser parser = new JSONParser();
 		Object obj = parser.parse(apiResult);
 		JSONObject jsonObj = (JSONObject) obj;
-		// 3. µ¥ÀÌÅÍ ÆÄ½Ì
-		// Top·¹º§ ´Ü°è _response ÆÄ½Ì
+		// 3. ë°ì´í„° íŒŒì‹±
+		// Topë ˆë²¨ ë‹¨ê³„ _response íŒŒì‹±
 		JSONObject response_obj = (JSONObject) jsonObj.get("response");
-		// responseÀÇ nickname°ª ÆÄ½Ì
+		// responseì˜ nicknameê°’ íŒŒì‹±
 		String nickname = (String) response_obj.get("nickname");
 		System.out.println(nickname);
-		// 4.ÆÄ½Ì ´Ð³×ÀÓ ¼¼¼ÇÀ¸·Î ÀúÀå
-		session.setAttribute("naverSessionId", nickname); // ¼¼¼Ç »ý¼º
+		// 4.íŒŒì‹± ë‹‰ë„¤ìž„ ì„¸ì…˜ìœ¼ë¡œ ì €ìž¥
+		session.setAttribute("naverSessionId", nickname); // ì„¸ì…˜ ìƒì„±
 		model.addAttribute("result", apiResult);
 
 		ModelAndView mav = new ModelAndView("redirect:/");
 		return mav;
 	}
 
-	// ±¸±Û ·Î±×ÀÎ ¼º°ø½Ã callbackÈ£Ãâ ¸Þ¼Òµå
+	// êµ¬ê¸€ ë¡œê·¸ì¸ ì„±ê³µì‹œ callbackí˜¸ì¶œ ë©”ì†Œë“œ
 
 	@RequestMapping(value = "/googleCallback", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView googleCallback(Model model, @RequestParam String code, HttpServletRequest request,
 			HttpSession session) throws IOException {
-		System.out.println("¿©±â´Â googleCallback");
+		System.out.println("ì—¬ê¸°ëŠ” googleCallback");
 
 		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
 		AccessGrant accessGrant = oauthOperations.exchangeForAccess(code, googleOAuth2Parameters.getRedirectUri(),
@@ -181,7 +179,7 @@ public class LoginController {
 		return mav;
 	}
 
-	// Ä¶¸°´õ -> ·Î±×¾Æ¿ô
+	// ìº˜ë¦°ë” -> ë¡œê·¸ì•„ì›ƒ
 	@RequestMapping(value = "/logout", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/plain;charset=UTF-8")
 	public ModelAndView logout(HttpSession session) {

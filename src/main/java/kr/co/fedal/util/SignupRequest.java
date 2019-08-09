@@ -4,7 +4,6 @@ public class SignupRequest {
 	private int no;
 	private String id, email, nickname, password, password2;
 
-	// 비밀번호 확인
 	public boolean isPwEqualToCheckPw() {
 		return password.equals(password2);
 	}

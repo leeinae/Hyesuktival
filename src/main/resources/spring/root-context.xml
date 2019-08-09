@@ -36,6 +36,7 @@
 			value="327725197170-72s4ihbc5r3ldsjji62ds1vd63fbvot3.apps.googleusercontent.com" />
 		<constructor-arg value="mtjT6-bAfWondKVQvJs0zvjl" />
 	</bean>
+	
 	<!-- 승인된 자바스크립트 원본과 승인된 리디렉션 URI -->
 	<bean id="googleOAuth2Parameters"
 		class="org.springframework.social.oauth2.OAuth2Parameters">
@@ -46,4 +47,3 @@
 	</bean>
 
 </beans>
-

@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     var calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'interaction', 'dayGrid' ],
-      editable: true,
       eventLimit: true, // allow "more" link when too many events
       events: [${requestScope.festivalList}]
     });
@@ -52,20 +51,20 @@ body {
 			<c:choose>
 				<c:when
 					test="${empty AuthInfo && empty naverSessionId && empty googleSessionId}">
-					<li><a href="/login"><i class="login"></i>·Î±×ÀÎ</a></li>
-					<li><a href="/signup"><i class="signup"></i>È¸¿ø°¡ÀÔ</a></li>
+					<li><a href="/login"><i class="login"></i>ë¡œê·¸ì¸</a></li>
+					<li><a href="/signup"><i class="signup"></i>íšŒì›ê°€ì…</a></li>
 				</c:when>
 				<c:when test="${naverSessionId != null}">
-					<li>${naverSessionId}´Ô,¹İ°©½À´Ï´Ù!</li>
-					<li><a href="/logout"><i class="logout"></i> ·Î±×¾Æ¿ô</a></li>
+					<li>${naverSessionId}ë‹˜,ë°˜ê°‘ìŠµë‹ˆë‹¤!</li>
+					<li><a href="/logout"><i class="logout"></i>ë¡œê·¸ì•„ì›ƒ</a></li>
 				</c:when>
 				<c:when test="${googleSessionId != null}">
-					<li>${googleSessionId}´Ô,¹İ°©½À´Ï´Ù!</li>
-					<li><a href="/logout"><i class="logout"></i> ·Î±×¾Æ¿ô</a></li>
+					<li>${googleSessionId}ë‹˜,ë°˜ê°‘ìŠµë‹ˆë‹¤!</li>
+					<li><a href="/logout"><i class="logout"></i> ë¡œê·¸ì•„ì›ƒ</a></li>
 				</c:when>
 				<c:otherwise>
-					<li>${AuthInfo.nickname }´Ô,¹İ°©½À´Ï´Ù!</li>
-					<li><a href="/logout"><i class="logout"></i> ·Î±×¾Æ¿ô</a></li>
+					<li>${AuthInfo.nickname }ë‹˜,ë°˜ê°‘ìŠµë‹ˆë‹¤!</li>
+					<li><a href="/logout"><i class="logout"></i> ë¡œê·¸ì•„ì›ƒ</a></li>
 				</c:otherwise>
 			</c:choose>
 		</c:catch>
@@ -73,9 +72,8 @@ body {
 	<br>
 	<form action="/search" method="get">
 		<input type="text" name="search">
-		<button type="submit">°Ë»ö!</button>
+		<button type="submit">ê²€ìƒ‰!</button>
 	</form>
 
 	<div id="calendar"></div>
 </body>
-</html>

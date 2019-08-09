@@ -4,10 +4,10 @@ import javax.validation.constraints.NotEmpty;
 
 public class LoginCommand {
 
-	@NotEmpty(message = "¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.")
+	@NotEmpty(message = "ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.")
 	private String id;
 
-	@NotEmpty(message = "ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.")
+	@NotEmpty(message = "ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.")
 	private String password;
 	private boolean rememberId;
 
