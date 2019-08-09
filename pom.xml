@@ -205,6 +205,18 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.spring-social/spring-social-google -->
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-google</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+
 
 	</dependencies>
 	<build>

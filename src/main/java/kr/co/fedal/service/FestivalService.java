@@ -6,7 +6,6 @@ import kr.co.fedal.util.AuthInfo;
 import kr.co.fedal.util.LoginCommand;
 import kr.co.fedal.util.SignupRequest;
 import kr.co.fedal.vo.FestivalVO;
-import kr.co.fedal.vo.SignupVO;
 
 public interface FestivalService {
 	List<FestivalVO> selectAll();

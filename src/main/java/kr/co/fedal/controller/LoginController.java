@@ -3,6 +3,7 @@ package kr.co.fedal.controller;
 import java.io.IOException;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -11,6 +12,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.google.api.Google;
+import org.springframework.social.google.api.impl.GoogleTemplate;
+import org.springframework.social.google.api.plus.Person;
+import org.springframework.social.google.api.plus.PlusOperations;
+import org.springframework.social.google.connect.GoogleConnectionFactory;
+import org.springframework.social.oauth2.AccessGrant;
+import org.springframework.social.oauth2.GrantType;
+import org.springframework.social.oauth2.OAuth2Operations;
+import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -23,10 +34,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import kr.co.fedal.exception.IdPasswordNotMatchingException;
+import kr.co.fedal.google.GoogleAuthInfo;
+import kr.co.fedal.util.AuthInfo;
 import kr.co.fedal.naver.NaverLoginBO;
 import kr.co.fedal.service.FestivalService;
-import kr.co.fedal.util.AuthInfo;
 import kr.co.fedal.util.LoginCommand;
+import kr.co.fedal.vo.SignupVO;
 
 @RestController
 public class LoginController {
@@ -42,6 +55,12 @@ public class LoginController {
 		this.naverLoginBO = naverLoginBO;
 	}
 
+	@Autowired
+	private GoogleConnectionFactory googleConnectionFactory;
+
+	@Autowired
+	private OAuth2Parameters googleOAuth2Parameters;
+
 	// 캘린더 -> 로그인
 	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public ModelAndView loginForm(Model model, HttpSession session, LoginCommand loginCommand,
@@ -55,6 +74,11 @@ public class LoginController {
 		// 네이버 로그인
 		String naverAuthUrl = naverLoginBO.getAuthorizationUrl(session);
 		model.addAttribute("url", naverAuthUrl);
+
+		// 구글 로그인
+		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
+		String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, googleOAuth2Parameters);
+		model.addAttribute("google_url", url);
 
 		ModelAndView mav = new ModelAndView("/login/login");
 
@@ -73,8 +97,8 @@ public class LoginController {
 
 		try {
 
-			AuthInfo authInfo = service.loginAuth(loginCommand);
-			session.setAttribute("authInfo", authInfo);
+			AuthInfo AuthInfo = service.loginAuth(loginCommand);
+			session.setAttribute("AuthInfo", AuthInfo);
 
 			Cookie rememberCookie = new Cookie("REMEMBER", loginCommand.getId());
 			rememberCookie.setPath("/");
@@ -96,10 +120,10 @@ public class LoginController {
 	}
 
 	// 네이버 로그인 성공시 callback호출 메소드
-	@RequestMapping(value = "/callback", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView callback(Model model, @RequestParam String code, @RequestParam String state,
+	@RequestMapping(value = "/naverCallback", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView naverCallback(Model model, @RequestParam String code, @RequestParam String state,
 			HttpSession session) throws IOException, ParseException {
-		System.out.println("여기는 callback");
+		System.out.println("여기는 naverCallback");
 		OAuth2AccessToken oauthToken;
 		oauthToken = naverLoginBO.getAccessToken(session, code, state);
 		// 1. 로그인 사용자 정보를 읽어온다.
@@ -119,10 +143,41 @@ public class LoginController {
 		String nickname = (String) response_obj.get("nickname");
 		System.out.println(nickname);
 		// 4.파싱 닉네임 세션으로 저장
-		session.setAttribute("sessionId", nickname); // 세션 생성
+		session.setAttribute("naverSessionId", nickname); // 세션 생성
 		model.addAttribute("result", apiResult);
 
 		ModelAndView mav = new ModelAndView("redirect:/");
+		return mav;
+	}
+
+	// 구글 로그인 성공시 callback호출 메소드
+
+	@RequestMapping(value = "/googleCallback", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView googleCallback(Model model, @RequestParam String code, HttpServletRequest request,
+			HttpSession session) throws IOException {
+		System.out.println("여기는 googleCallback");
+
+		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
+		AccessGrant accessGrant = oauthOperations.exchangeForAccess(code, googleOAuth2Parameters.getRedirectUri(),
+				null);
+
+		String accessToken = accessGrant.getAccessToken();
+		Long expireTime = accessGrant.getExpireTime();
+		if (expireTime != null && expireTime < System.currentTimeMillis()) {
+			accessToken = accessGrant.getRefreshToken();
+			System.out.printf("accessToken is expired. refresh token = {}", accessToken);
+		}
+		Connection<Google> connection = googleConnectionFactory.createConnection(accessGrant);
+		Google google = connection == null ? new GoogleTemplate(accessToken) : connection.getApi();
+
+		PlusOperations plusOperations = google.plusOperations();
+		Person profile = plusOperations.getGoogleProfile();
+		String nickname = (String) profile.getDisplayName();
+
+		session.setAttribute("googleSessionId", nickname);
+
+		ModelAndView mav = new ModelAndView("redirect:/");
+
 		return mav;
 	}
 

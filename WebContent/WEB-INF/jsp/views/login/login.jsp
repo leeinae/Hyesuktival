@@ -32,17 +32,17 @@
 						</label>
 					</div>
 					<button type="submit" class="btn btn-lg btn-success btn-block">로그인</button>
-
-					<br>
-					<!-- 네이버 로그인 창으로 이동 -->
-					<div id="naver_id_login" style="text-align: center">
-						<a href="${url}"> <img width="223"
-							src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png" /></a>
-					</div>
-					<br>
-
 				</fieldset>
 			</form:form>
+			<br>
+			<!-- 네이버 로그인 창으로 이동 -->
+			<div id="naver_id_login" style="text-align: center">
+				<a href="${url}"> <img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png" /></a></div>
+			<!-- 구글 로그인 창으로 이동 -->
+			<div id="google_id_login" style="text-align: center">
+				<a href="${google_url}"><button id="btnJoinGoogle" class="btn btn-primary btn-round" style="width: 100%"> Google Login</button></a>
+			</div>
+			<br>
 		</div>
 	</section>
 </body>

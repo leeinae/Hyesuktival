@@ -14,18 +14,21 @@
 <script src='/resources/fullcalendar/packages/interaction/main.js'></script>
 <script src='/resources/fullcalendar/packages/daygrid/main.js'></script>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		var calendarEl = document.getElementById('calendar');
-
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-			plugins : [ 'interaction', 'dayGrid' ],
-			defaultDate : '2019-06-12',
-			editable : true,
-			eventLimit : true, // allow "more" link when too many events
-			events : []
-		});
-		calendar.render();
-	});
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var form = {
+    		title : "title",
+    		start : "2010-01-01",
+    		end : "2011-01-01"
+    }
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      plugins: [ 'interaction', 'dayGrid' ],
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: [${requestScope.festivalList}]
+    });
+    calendar.render();
+  });
 </script>
 <style>
 body {
@@ -47,22 +50,32 @@ body {
 	<div id="topMenu" align="right">
 		<c:catch>
 			<c:choose>
-				<c:when test="${empty authInfo && empty sessionId}">
+				<c:when
+					test="${empty AuthInfo && empty naverSessionId && empty googleSessionId}">
 					<li><a href="/login"><i class="login"></i>·Î±×ÀÎ</a></li>
 					<li><a href="/signup"><i class="signup"></i>È¸¿ø°¡ÀÔ</a></li>
 				</c:when>
-				<c:when test="${sessionId != null}">
-					<li>${sessionId}´Ô, ¹Ý°©½À´Ï´Ù!</li>
+				<c:when test="${naverSessionId != null}">
+					<li>${naverSessionId}´Ô,¹Ý°©½À´Ï´Ù!</li>
+					<li><a href="/logout"><i class="logout"></i> ·Î±×¾Æ¿ô</a></li>
+				</c:when>
+				<c:when test="${googleSessionId != null}">
+					<li>${googleSessionId}´Ô,¹Ý°©½À´Ï´Ù!</li>
 					<li><a href="/logout"><i class="logout"></i> ·Î±×¾Æ¿ô</a></li>
 				</c:when>
 				<c:otherwise>
-					<li>${authInfo.nickname }´Ô, ¹Ý°©½À´Ï´Ù!</li>
+					<li>${AuthInfo.nickname }´Ô,¹Ý°©½À´Ï´Ù!</li>
 					<li><a href="/logout"><i class="logout"></i> ·Î±×¾Æ¿ô</a></li>
 				</c:otherwise>
 			</c:choose>
 		</c:catch>
 	</div>
 	<br>
+	<form action="/search" method="get">
+		<input type="text" name="search">
+		<button type="submit">°Ë»ö!</button>
+	</form>
+
 	<div id="calendar"></div>
 </body>
 </html>
