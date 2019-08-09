@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.co.fedal.service.FestivalService;
 import kr.co.fedal.vo.ArtistVO;
 import kr.co.fedal.vo.FestivalVO;
+import kr.co.fedal.vo.FreviewVO;
 import kr.co.fedal.vo.MusicVO;
 
 @Controller
@@ -100,11 +102,14 @@ public class HomeController {
 		
 		return mav;
 	}
-	
-//	@ResponseBody
-//	@RequestMapping(value="/festival/{fid}", method=RequestMethod.POST)
-//	public void insertComment(@PathVariable("fid") String fid) {
-//		System.out.println("post 방식 전송 완료");
-//	}
+
+	@RequestMapping(value="/festival/{fid}", method=RequestMethod.POST)
+	@ResponseBody
+	public void insertComment(FreviewVO review){
+		System.out.println(review.toString());
+		System.out.println("post 방식 전송 완료");
+		
+		service.insertFestivalComment(review);
+	}
 
 }

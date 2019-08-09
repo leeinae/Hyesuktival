@@ -6,6 +6,7 @@
 <head>
 <meta charset="EUC-KR">
 <title>Insert title here</title>
+
 </head>
 <body>
 	<h1>상세 아티스트 페이지</h1>

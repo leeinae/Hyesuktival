@@ -4,6 +4,7 @@ import java.util.List;
 
 import kr.co.fedal.vo.ArtistVO;
 import kr.co.fedal.vo.FestivalVO;
+import kr.co.fedal.vo.FreviewVO;
 import kr.co.fedal.vo.MusicVO;
 
 public interface FestivalService {
@@ -23,4 +24,7 @@ public interface FestivalService {
 	
 	//페스티벌 검색
 	public List<FestivalVO> searchAllFestival(String keyword);
+	
+	//페스티벌 리뷰 insert
+	public void insertFestivalComment(FreviewVO fvo);
 }

@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import kr.co.fedal.dao.ArtistDAO;
 import kr.co.fedal.dao.FestivalDAO;
+import kr.co.fedal.dao.FreviewDAO;
 import kr.co.fedal.dao.MusicDAO;
 import kr.co.fedal.vo.ArtistVO;
 import kr.co.fedal.vo.FestivalVO;
+import kr.co.fedal.vo.FreviewVO;
 import kr.co.fedal.vo.MusicVO;
 
 @Service
@@ -23,6 +25,9 @@ public class FestivalServiceImpl implements FestivalService {
 	
 	@Autowired
 	private MusicDAO musicDao;
+	
+	@Autowired
+	private FreviewDAO freviewDao;
 	
 	@Override
 	public List<FestivalVO> selectAll() {
@@ -58,6 +63,10 @@ public class FestivalServiceImpl implements FestivalService {
 	public List<FestivalVO> searchAllFestival(String keyword) {
 		List<FestivalVO> list = festivalDao.searchFestival(keyword);
 		return list;
+	}
+	
+	public void insertFestivalComment(FreviewVO fvo) {
+		freviewDao.insertFestivalComment(fvo);
 	}
 
 	
