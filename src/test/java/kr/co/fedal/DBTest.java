@@ -47,7 +47,7 @@ public class DBTest {
 	@Test
 	@Ignore
 	public void detailFestivalTest() throws Exception {
-		System.out.println("페스티벌 상세정보 테스트");
+		System.out.println("�럹�뒪�떚踰� �긽�꽭�젙蹂� �뀒�뒪�듃");
 		FestivalVO vo = session.selectOne("kr.co.fedal.dao.FestivalDAO.searchFestivalDetail","203987");
 		
 		System.out.println(vo.toString());
@@ -56,7 +56,7 @@ public class DBTest {
 	@Test
 	@Ignore
 	public void detailArtistTest() throws Exception {
-		System.out.println("아티스트 상세정보 테스트");
+		System.out.println("�븘�떚�뒪�듃 �긽�꽭�젙蹂� �뀒�뒪�듃");
 		List<ArtistVO> artistList= session.selectList("kr.co.fedal.dao.FestivalDAO.selectArtist","203935");
 		
 		for(ArtistVO vo : artistList) {
@@ -66,7 +66,7 @@ public class DBTest {
 	
 	@Test
 	public void detailMusicTest() throws Exception {
-		System.out.println("음원 상세정보 테스트");
+		System.out.println("아티스트 상세 테스트");
 		List<MusicVO> musicList = session.selectList("kr.co.fedal.dao.FestivalDAO.selectMusic","41499");
 		
 		for(MusicVO vo : musicList) {

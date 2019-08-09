@@ -5,8 +5,35 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<script src="/resources/js/jquery-3.4.1.min.js"></script>
+<!-- <script src="/resources/js/jquery-3.4.1.min.js"></script> -->
+<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
+	
+ 	function getComments() {
+		var param = {
+				content : "${list.content}",
+				writer : "${list.writer}"
+		}
+		$.ajax({
+			url:"${pageContext.request.contextPath}/festival/${requestScope.festival.fid}",
+			type:"POST",
+			data : param,
+			dataType :"json",
+			success : function(data) {
+				console.log("댓글 실행");
+				var htmls ="";
+				if (data.length < 1) {
+					html.push("등록된 댓글 x");
+				} else {
+					$(data).each(function(){
+						htmls+="<h2>" +this.content+"</h2>"
+					})
+					$("#commentsList").html(htmls);
+				}
+			}
+		});
+	} 
+
 	function btnClick() {
 		if($("#content").val().trim()==="") {
 			alert("댓글을 입력하세요");
@@ -18,28 +45,15 @@
 				type : "POST",
 				data : $("#comments").serialize(),
 				success: function(data) {
+					$("#content").text("");
 					console.log("data 등록 완료~");
+					getComments();
 				}
 			});
 		}
 	}
 </script>
-<script>
-/* 	function getComments() {
-		$.ajax({
-			url:"${pageContext.request.contextPath}/festival/${requestScope.festival.fid}",
-			type:"POST",
-			data : {
 
-			},
-			dataType:"json",
-			success : function(result) {
-				
-			}
-			
-		});
-	} */
-</script>
 <title>Insert title here</title>
 </head>
 <body>

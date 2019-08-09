@@ -8,23 +8,26 @@ import kr.co.fedal.vo.FreviewVO;
 import kr.co.fedal.vo.MusicVO;
 
 public interface FestivalService {
-	//페스티벌 정보
+	//�럹�뒪�떚踰� �젙蹂�
 	public List<FestivalVO> selectAll();
-	//fid가 일치하는 페스티벌 
+	//fid媛� �씪移섑븯�뒗 �럹�뒪�떚踰� 
 	public FestivalVO selectDetail(String fid);
 	
-	//fid가 동일한 페스티벌에 참가하는 아티스트
+	//fid媛� �룞�씪�븳 �럹�뒪�떚踰뚯뿉 李멸��븯�뒗 �븘�떚�뒪�듃
 	public List<ArtistVO> selectAllArtist(String fid); 
 	
-	//아티스트 음원정보
+	//�븘�떚�뒪�듃 �쓬�썝�젙蹂�
 	public List<MusicVO> selectAllMusic(String aid);
 	
-	//아티스트 정보
+	//�븘�떚�뒪�듃 �젙蹂�
 	public ArtistVO selectArtist(String aid);
 	
-	//페스티벌 검색
+	//�럹�뒪�떚踰� 寃��깋
 	public List<FestivalVO> searchAllFestival(String keyword);
 	
-	//페스티벌 리뷰 insert
+	//�럹�뒪�떚踰� 由щ럭 insert
 	public void insertFestivalComment(FreviewVO fvo);
+	
+	//페스티벌 댓글 select
+	public List<FreviewVO> selectFestivalComments(String fid);
 }

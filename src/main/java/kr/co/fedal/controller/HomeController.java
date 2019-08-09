@@ -104,12 +104,26 @@ public class HomeController {
 	}
 
 	@RequestMapping(value="/festival/{fid}", method=RequestMethod.POST)
-	@ResponseBody
-	public void insertComment(FreviewVO review){
+	public void insertComment(@PathVariable("fid") String fid, FreviewVO review){
 		System.out.println(review.toString());
 		System.out.println("post 방식 전송 완료");
 		
+		//댓글 db에 저장
 		service.insertFestivalComment(review);
+	}
+	
+	@RequestMapping(value="/festival/{fid}")
+	@ResponseBody
+	public List<FreviewVO> selectComment(@PathVariable("fid") String fid, FreviewVO review){
+		System.out.println(review.toString());
+		System.out.println("post 방식 가져오기 완료");
+		
+		//댓글 db에서 받아오기
+		List<FreviewVO> list = service.selectFestivalComments(fid);
+		for(FreviewVO vo : list) {
+			System.out.println(vo);
+		}
+		return list;
 	}
 
 }

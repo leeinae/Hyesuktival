@@ -17,11 +17,6 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-    var form = {
-    		title : "title",
-    		start : "2010-01-01",
-    		end : "2011-01-01"
-    }
     var calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'interaction', 'dayGrid' ],
       editable: true,
@@ -55,15 +50,7 @@ body {
 		<input type="text" name="search">
 		<button type="submit">검색!</button>
 	</form>
-	
-	<div id="calendar"></div>
-	<table border=1>
-<%-- 		<c:forEach items="${requestScope.festivalList}" var="fest">
-			<tr>
-				<td>${fest }</td>
-			</tr>
 
-		</c:forEach> --%>
-	</table>
+	<div id="calendar"></div>
 </body>
 </html>

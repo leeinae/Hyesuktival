@@ -69,5 +69,11 @@ public class FestivalServiceImpl implements FestivalService {
 		freviewDao.insertFestivalComment(fvo);
 	}
 
+	@Override
+	public List<FreviewVO> selectFestivalComments(String fid) {
+		List<FreviewVO> list = freviewDao.selectFestivalComments(fid);
+		return list;
+	}
+
 	
 }
