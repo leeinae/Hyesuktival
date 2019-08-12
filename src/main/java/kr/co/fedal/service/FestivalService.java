@@ -24,10 +24,4 @@ public interface FestivalService {
 	
 	//�럹�뒪�떚踰� 寃��깋
 	public List<FestivalVO> searchAllFestival(String keyword);
-	
-	//�럹�뒪�떚踰� 由щ럭 insert
-	public void insertFestivalComment(FreviewVO fvo);
-	
-	//페스티벌 댓글 select
-	public List<FreviewVO> selectFestivalComments(String fid);
 }

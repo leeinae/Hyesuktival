@@ -26,8 +26,7 @@ public class FestivalServiceImpl implements FestivalService {
 	@Autowired
 	private MusicDAO musicDao;
 	
-	@Autowired
-	private FreviewDAO freviewDao;
+
 	
 	@Override
 	public List<FestivalVO> selectAll() {
@@ -62,16 +61,6 @@ public class FestivalServiceImpl implements FestivalService {
 	@Override
 	public List<FestivalVO> searchAllFestival(String keyword) {
 		List<FestivalVO> list = festivalDao.searchFestival(keyword);
-		return list;
-	}
-	
-	public void insertFestivalComment(FreviewVO fvo) {
-		freviewDao.insertFestivalComment(fvo);
-	}
-
-	@Override
-	public List<FreviewVO> selectFestivalComments(String fid) {
-		List<FreviewVO> list = freviewDao.selectFestivalComments(fid);
 		return list;
 	}
 

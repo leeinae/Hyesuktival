@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.fedal.dao.FreviewDAO">
+
+	<resultMap type="FreviewVO" id="freviewMap">
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+
+	<!-- 페스티벌 후기 댓글 insert -->
+	<insert id="insertFestivalComment" parameterType="freviewVO">
+		insert into
+		f_review(no, content, reg_date, writer, fid)
+		values(f_review_seq.nextVal, #{content}, sysdate, #{writer}, #{fid})
+	</insert>
+
+	<!-- 페스티벌 후기 댓글 select -->
+	<select id="selectFestivalComments" resultMap="freviewMap" parameterType="String"
+		resultType="freviewVO">
+		select content, reg_date, writer, fid
+		from f_review
+		where fid = #{fid}
+		order by reg_date desc
+	</select>
+
+</mapper>

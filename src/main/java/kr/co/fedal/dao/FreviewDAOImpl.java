@@ -15,12 +15,12 @@ public class FreviewDAOImpl implements FreviewDAO {
 
 	@Override
 	public void insertFestivalComment(FreviewVO fvo) {
-		session.insert("kr.co.fedal.dao.FestivalDAO.insertFestivalComment", fvo);
+		session.insert("kr.co.fedal.dao.FreviewDAO.insertFestivalComment", fvo);
 	}
 
 	@Override
 	public List<FreviewVO> selectFestivalComments(String fid) {
-		List<FreviewVO> commentsList = session.selectList("kr.co.fedal.dao.FestivalDAO.selectFestivalComments", fid);
+		List<FreviewVO> commentsList = session.selectList("kr.co.fedal.dao.FreviewDAO.selectFestivalComments", fid);
 		return commentsList;
 	}
 	

@@ -5,52 +5,62 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<!-- <script src="/resources/js/jquery-3.4.1.min.js"></script> -->
 <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-	
- 	function getComments() {
-		var param = {
-				content : "${list.content}",
-				writer : "${list.writer}"
-		}
-		$.ajax({
-			url:"${pageContext.request.contextPath}/festival/${requestScope.festival.fid}",
-			type:"POST",
-			data : param,
-			dataType :"json",
-			success : function(data) {
-				console.log("댓글 실행");
-				var htmls ="";
-				if (data.length < 1) {
-					html.push("등록된 댓글 x");
-				} else {
-					$(data).each(function(){
-						htmls+="<h2>" +this.content+"</h2>"
-					})
-					$("#commentsList").html(htmls);
-				}
-			}
-		});
-	} 
 
+	$(document).ready(function(){
+		getComments();
+	});
+	
 	function btnClick() {
 		if($("#content").val().trim()==="") {
 			alert("댓글을 입력하세요");
-			$("#content").val("").focus();
+			$("#content").focus();
 		} else {
 			alert("실행 OK");
 			$.ajax({
-				url: "${pageContext.request.contextPath}/festival/${requestScope.festival.fid}",
+				url: "${pageContext.request.contextPath}/festival/comments/${requestScope.festival.fid}",
 				type : "POST",
 				data : $("#comments").serialize(),
 				success: function(data) {
-					$("#content").text("");
-					console.log("data 등록 완료~");
+					$("#content").val("");
+					$("#writer").val("");
+					alert("data 등록 완료~");
 					getComments();
+				},
+				error: function(error) {
+					console.log(error);
 				}
 			});
 		}
+	}
+	
+	function btnDelete() {
+		alert("삭제버튼");
+	}
+	
+	
+	
+	
+	function getComments() {
+		$.ajax({
+			type: "get",
+			url : "${pageContext.request.contextPath}/festival/comments/${requestScope.festival.fid}",
+			success: function(data) {
+				console.log(data);
+				var output = "";
+				for(var i in data) {
+					output += "<tr>";
+					output += "<td>"+data[i].writer +"</td>";
+					output += "<td>"+data[i].content +"</td>";
+					output += "<td>"+data[i].regDate +"</td>";
+					output += "<td><button type='button' id='btnDelete' onclick='btnDelete()'">삭제</button></td>"
+					output += "<td><button type='button' id='btnUpdate' onclick='btnUpdate()'">수정</button></td>"
+					output += "<tr>";
+				}
+				$("#commentsList").html(output);
+			}
+		});
 	}
 </script>
 
@@ -83,12 +93,20 @@
 		content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content">
 	</form>
 	<input id="btn" type="button" onclick="btnClick()" value="등록">
-	<br>
-	<div id="commentsList">
-		
+	<br><hr>
+	
+	<div>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>작성자
+					<th>댓글
+					<th>작성일
+				</tr>
+			</thead>
+			<tbody id="commentsList">
+			</tbody>
+		</table>
 	</div>
-	
-	
-
 </body>
 </html>
