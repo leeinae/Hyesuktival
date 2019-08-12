@@ -12,6 +12,14 @@
 		getComments();
 	});
 	
+	function deleteComment() {
+		alert("삭제 ");
+	}
+	
+	function updateComment(){
+		alert("수정이");
+	}
+	
 	function btnClick() {
 		if($("#content").val().trim()==="") {
 			alert("댓글을 입력하세요");
@@ -35,13 +43,6 @@
 		}
 	}
 	
-	function btnDelete() {
-		alert("삭제버튼");
-	}
-	
-	
-	
-	
 	function getComments() {
 		$.ajax({
 			type: "get",
@@ -54,13 +55,14 @@
 					output += "<td>"+data[i].writer +"</td>";
 					output += "<td>"+data[i].content +"</td>";
 					output += "<td>"+data[i].regDate +"</td>";
-					output += "<td><button type='button' id='btnDelete' onclick='btnDelete()'">삭제</button></td>"
-					output += "<td><button type='button' id='btnUpdate' onclick='btnUpdate()'">수정</button></td>"
+					output += "<td><button type='button' id='btnDelete' onclick='deleteComment()'>삭제</button></td>"
+					output += "<td><button type='button' id='btnUpdate' onclick='updateComment()'>수정</button></td>"
 					output += "<tr>";
 				}
 				$("#commentsList").html(output);
 			}
 		});
+
 	}
 </script>
 
