@@ -7,4 +7,7 @@ import kr.co.fedal.vo.FreviewVO;
 public interface FreviewDAO {
 	public void insertFestivalComment(FreviewVO fvo);
 	public List<FreviewVO> selectFestivalComments(String fid);
+	public void deleteFestivalComment(int no);
+	public void updateFestivalComment(FreviewVO fvo);
+	public int countFestivalComments(String fid);
 }

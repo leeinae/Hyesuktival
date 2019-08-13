@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kr.co.fedal.vo.FreviewVO;
+
 @Repository
 public class FreviewDAOImpl implements FreviewDAO {
-	
+
 	@Autowired
 	private SqlSessionTemplate session;
 
@@ -23,7 +24,22 @@ public class FreviewDAOImpl implements FreviewDAO {
 		List<FreviewVO> commentsList = session.selectList("kr.co.fedal.dao.FreviewDAO.selectFestivalComments", fid);
 		return commentsList;
 	}
-	
-	
 
+	@Override
+	public void deleteFestivalComment(int no) {
+		session.delete("kr.co.fedal.dao.FreviewDAO.deleteFestivalComment", no);
+	}
+
+	@Override
+	public void updateFestivalComment(FreviewVO fvo) {
+		session.update("kr.co.fedal.dao.FreviewDAO.updateFestivalComment", fvo);
+	}
+
+	@Override
+	public int countFestivalComments(String fid) {
+		int count = session.selectOne("kr.co.fedal.dao.FreviewDAO.countFestivalComments",fid);
+		return count;
+	}
+
+	
 }

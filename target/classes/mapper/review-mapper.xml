@@ -18,10 +18,21 @@
 	<!-- 페스티벌 후기 댓글 select -->
 	<select id="selectFestivalComments" resultMap="freviewMap" parameterType="String"
 		resultType="freviewVO">
-		select content, reg_date, writer, fid
+		select no, content, reg_date, writer, fid
 		from f_review
 		where fid = #{fid}
-		order by reg_date desc
+	</select>
+	
+	<delete id="deleteFestivalComment" parameterType="int">
+		delete from f_review where no = #{no}
+	</delete>
+	
+	<update id="updateFestivalComment" parameterType="freviewVO">
+		update f_review set content=#{content},reg_date=sysdate where no=#{no}
+	</update>
+	
+	<select id="countFestivalComments" resultType="int">
+		select count(*) from f_review where fid =#{fid}
 	</select>
 
 </mapper>

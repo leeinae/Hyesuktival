@@ -24,4 +24,20 @@ public class FreviewServiceImpl implements FreviewService {
 		return list;
 	}
 
+	@Override
+	public void deleteFestivalComment(int no) {
+		freviewDao.deleteFestivalComment(no);
+	}
+
+	@Override
+	public void updateFestivalComment(FreviewVO fvo) {
+		freviewDao.updateFestivalComment(fvo);
+	}
+
+	@Override
+	public int countFestivalComments(String fid) {
+		int count = freviewDao.countFestivalComments(fid);
+		return count;
+	}
+
 }
