@@ -78,7 +78,7 @@
 
 	<select id="selectMusic" resultType="musicVO"
 		parameterType="String">
-		select aid, mname, mcnt from music where aid =#{aid}
+		select aid, mname, mCnt, src, album, mid from music where aid =#{aid}
 	</select>
 
 	<!-- 페스티벌 검색 -->
@@ -93,4 +93,24 @@
 		insert into f_review(no, content, reg_date, writer, fid)
 		values(f_review_seq.nextVal, #{content}, sysdate, #{writer}, #{fid})
 	</insert>
+	
+	<update id="voteCnt" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt+1
+		where mid=#{mid}
+		]]>
+	</update>
+	
+	<update id="voteCntCancel" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt-1
+		where mid=#{mid}
+		]]>
+	</update>
+	
+	<select id="selectCnt" resultType="musicVO" parameterType="String">
+		select mCnt from music
+		where mid =#{mid}
+	</select>
+	
 </mapper>

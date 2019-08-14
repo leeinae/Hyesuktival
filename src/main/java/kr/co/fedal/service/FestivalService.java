@@ -11,28 +11,34 @@ import kr.co.fedal.vo.FreviewVO;
 import kr.co.fedal.vo.MusicVO;
 
 public interface FestivalService {
-	// Æä½ºÆ¼¹ú Á¤º¸
+	// ï¿½ä½ºÆ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	public List<FestivalVO> selectAll();
 
-	// fid°¡ ÀÏÄ¡ÇÏ´Â Æä½ºÆ¼¹ú
+	// fidï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ ï¿½ä½ºÆ¼ï¿½ï¿½
 	public FestivalVO selectDetail(String fid);
 
-	// fid°¡ µ¿ÀÏÇÑ Æä½ºÆ¼¹ú¿¡ Âü°¡ÇÏ´Â ¾ÆÆ¼½ºÆ®
+	// fidï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ä½ºÆ¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Æ¼ï¿½ï¿½Æ®
 	public List<ArtistVO> selectAllArtist(String fid);
 
-	// ¾ÆÆ¼½ºÆ® À½¿øÁ¤º¸
+	// ï¿½ï¿½Æ¼ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public List<MusicVO> selectAllMusic(String aid);
 
-	// ¾ÆÆ¼½ºÆ® Á¤º¸
+	// ï¿½ï¿½Æ¼ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 	public ArtistVO selectArtist(String aid);
 
-	// Æä½ºÆ¼¹ú °Ë»ö
+	// ï¿½ä½ºÆ¼ï¿½ï¿½ ï¿½Ë»ï¿½
 	public List<FestivalVO> searchAllFestival(String keyword);
 
-	// Æä½ºÆ¼¹ú ¸®ºä insert
+	// ï¿½ä½ºÆ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ insert
 	public void insertFestivalComment(FreviewVO fvo);
 
 	void signup(SignupRequest signReq) throws Exception;
 
 	AuthInfo loginAuth(LoginCommand loginCommand) throws Exception;
+	
+	public void voteCnt(String mid);
+	
+	public void voteCntCancel(String mid);
+	
+	public MusicVO selectCnt(String mid);
 }

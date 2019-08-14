@@ -107,4 +107,20 @@ public class FestivalServiceImpl implements FestivalService {
 
 		return new AuthInfo(user.getId(), user.getNickname());
 	}
+
+	@Override
+	public void voteCnt(String mid) {
+		musicDao.voteCnt(mid);
+	}
+	
+	@Override
+	public void voteCntCancel(String mid) {
+		musicDao.voteCntCancel(mid);
+	}
+	
+	@Override
+	public MusicVO selectCnt(String mid) {
+		MusicVO vo = musicDao.selectCnt(mid);
+		return vo;
+	}
 }

@@ -2,6 +2,9 @@ package kr.co.fedal.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -140,8 +143,34 @@ public class HomeController {
 			ModelAndView mav = new ModelAndView("/signup/signup");
 			return mav;
 		}
-		ModelAndView mav = new ModelAndView("/signup/signupSuccess");
+		ModelAndView mav = new ModelAndView("redirect:/");
 
 		return mav;
+	}
+
+	@RequestMapping(value = "/artist/{aid}/{mid}/up", method = RequestMethod.POST)
+	@ResponseBody
+	public int voteUp(@PathVariable("mid") String mid) {
+		System.out.println("mid: " + mid);
+		
+		MusicVO musicVO = service.selectCnt(mid);
+		int mCnt = musicVO.getmCnt();
+		mCnt++;
+		service.voteCnt(mid);
+		
+		return mCnt;
+	}
+	
+	@RequestMapping(value = "/artist/{aid}/{mid}/down", method = RequestMethod.POST)
+	@ResponseBody
+	public int voteDown(@PathVariable("mid") String mid) {
+		System.out.println("mid: " + mid);
+		
+		MusicVO musicVO = service.selectCnt(mid);
+		int mCnt = musicVO.getmCnt();
+		mCnt--;
+		service.voteCntCancel(mid);
+		
+		return mCnt;
 	}
 }
