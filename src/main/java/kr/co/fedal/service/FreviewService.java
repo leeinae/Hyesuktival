@@ -19,4 +19,7 @@ public interface FreviewService {
 	
 	//count festival comments
 	public int countFestivalComments(String fid);
+	
+	//festival comment insert between start and end
+	public List<FreviewVO> selectFestivalCommentsPaging(String fid, int start, int end);
 }

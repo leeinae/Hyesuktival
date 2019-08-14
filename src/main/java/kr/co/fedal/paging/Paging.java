@@ -33,14 +33,16 @@ public class Paging {
 		curBlock = 1;
 		this.curPage = curPage;
 		setTotalPage(count);
-		
+		setPageRange();
+		setTotalBlock();
+		setBlockRange();
 	}
 	
 	public void setBlockRange() {
 		//현재 페이지가 몇 번째 블록에 속하는지..
 		curBlock = (int)Math.ceil((curPage-1)/ BLOCK_SCALE)+1;
 		//현재 페이지 블록의 시작번호
-		blockBegin = (curBlock-10)*BLOCK_SCALE+1;
+		blockBegin = (curBlock-1)*BLOCK_SCALE+1;
 		blockEnd = blockBegin + BLOCK_SCALE-1;
 		//마지막 블록이 범위를 초과하지 않게...
 		if( blockEnd > totalPage ) blockEnd = totalPage;
@@ -89,7 +91,7 @@ public class Paging {
 	}
 
 	public void setTotalPage(int count) {
-		totalPage = (int)Math.ceil(count*1/PAGE_SCALE);
+		totalPage = (int)Math.ceil(count*1.0/PAGE_SCALE);
 	}
 
 	public int getTotalBlock() {

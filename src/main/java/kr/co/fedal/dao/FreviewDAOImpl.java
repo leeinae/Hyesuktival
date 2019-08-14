@@ -1,6 +1,8 @@
 package kr.co.fedal.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,16 @@ public class FreviewDAOImpl implements FreviewDAO {
 	public int countFestivalComments(String fid) {
 		int count = session.selectOne("kr.co.fedal.dao.FreviewDAO.countFestivalComments",fid);
 		return count;
+	}
+
+	@Override
+	public List<FreviewVO> selectFestivalCommentsPaging(String fid, int start, int end) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("fid",fid);
+		map.put("start",start);
+		map.put("end",end);
+		
+		return session.selectList("kr.co.fedal.dao.FreviewDAO.selectFestivalCommentsPage", map);
 	}
 
 	

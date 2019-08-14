@@ -9,7 +9,7 @@
 <script>
 
 	$(document).ready(function(){
-		getComments();
+		getComments("1");
 	});
 	
 	function deleteComment(no) {
@@ -19,7 +19,7 @@
 				type : "post",
 				success : function(data) {
 					alert("삭제 완료!");
-					getComments();
+					getComments(replyPage);
 				}
 			});			
 		} else {
@@ -41,7 +41,7 @@
 					'no' : no
 				},
 				success : function(data) {
-					getComments();
+					getComments(replyPage);
 				},
 			    error:function(request,status,error){
 			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);}
@@ -75,7 +75,7 @@
 				success: function(data) {
 					$("#content").val("");
 					$("#writer").val("");
-					getComments();
+					getComments("1");
 				},
 				error: function(error) {
 					console.log(error);
@@ -84,28 +84,48 @@
 		}
 	}
 	
-	function getComments() {
+	var replyPage = 1;
+	
+	function getComments(pageInfo) {
 		$.ajax({
-			type: "get",
-			url : "${pageContext.request.contextPath}/festival/comments/${requestScope.festival.fid}",
+			type: "post",
+			url : "${pageContext.request.contextPath}/festival/comments/${requestScope.festival.fid}/"+pageInfo,
 			success: function(data) {
+				printPaging(data.paging, $("#pagination"));
+				console.log(data);
 				var output = "";
-				for(var i in data) {
-					output += "<tr id='comment"+data[i].no+"'>";
-					output += "<td id='commentWriter'>"+data[i].writer +"</td>";
-					output += "<td id='commentContent'>"+data[i].content +"</td>";
-					output += "<td id='commentDate'>"+data[i].regDate +"</td>";
+				for(var i in data.list) {
+					output += "<tr id='comment"+data.list[i].no+"'>";
+					output += "<td id='commentWriter'>"+data.list[i].writer +"</td>";
+					output += "<td id='commentContent'>"+data.list[i].content +"</td>";
+					output += "<td id='commentDate'>"+data.list[i].regDate +"</td>";
 					output += "<td>";
-					output += "<button type='button' id='btnDelete' onclick='deleteComment("+data[i].no+")'>삭제</button>";
-					output += "<button type='button' id='btnUpdate' onclick='editComment("+data[i].no+",\""+data[i].content+"\")'>수정</button>";
+					output += "<button type='button' id='btnDelete' onclick='deleteComment("+data.list[i].no+")'>삭제</button>";
+					output += "<button type='button' id='btnUpdate' onclick='editComment("+data.list[i].no+",\""+data.list[i].content+"\")'>수정</button>";
 					output += "</td>";
 					output += "</tr>";
 				}
 				$("#commentsList").html(output);
 			}
 		});
-
 	}
+	
+	var printPaging= function(pageMaker, target) {
+		var str ="";
+		if (pageMaker.curPage > 1 ) {
+			str += str += "<li><a href='javascript:getComments(1)'> [이전] </a></li>";
+		}
+
+		for (var i = pageMaker.blockBegin; i <= pageMaker.blockEnd; i++) {
+			var strClass = pageMaker.curPage == i ? 'class=active' : '';
+			str += "<li "+strClass+"><a href='javascript:getComments("+i+")'>"+i+"</a></li>";
+		}
+
+		if (pageMaker.curBlock < pageMaker.blockEnd ) {
+			str += "<li><a href='javascript:getComments("+pageMaker.blockEnd+")'> [다음] </a></li>";
+		}
+		target.html(str);
+	} 
 </script>
 
 <title>Insert title here</title>
@@ -152,6 +172,11 @@
 			<tbody id="commentsList">
 			</tbody>
 		</table>
+		<div id="paging">
+			<ul id="pagination">
+			
+			</ul>
+		</div>
 	</div>
 </body>
 </html>

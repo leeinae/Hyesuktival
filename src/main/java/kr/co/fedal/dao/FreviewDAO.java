@@ -10,4 +10,5 @@ public interface FreviewDAO {
 	public void deleteFestivalComment(int no);
 	public void updateFestivalComment(FreviewVO fvo);
 	public int countFestivalComments(String fid);
+	public List<FreviewVO> selectFestivalCommentsPaging(String fid, int start, int end);
 }

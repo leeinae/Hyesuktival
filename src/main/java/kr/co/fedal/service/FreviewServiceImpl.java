@@ -40,4 +40,12 @@ public class FreviewServiceImpl implements FreviewService {
 		return count;
 	}
 
+	@Override
+	public List<FreviewVO> selectFestivalCommentsPaging(String fid, int start, int end) {
+		List<FreviewVO> list = freviewDao.selectFestivalCommentsPaging(fid, start, end);
+		return list;
+	}
+	
+	
+
 }

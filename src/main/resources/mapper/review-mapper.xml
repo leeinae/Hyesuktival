@@ -21,6 +21,7 @@
 		select no, content, reg_date, writer, fid
 		from f_review
 		where fid = #{fid}
+		order by no desc
 	</select>
 	
 	<delete id="deleteFestivalComment" parameterType="int">
@@ -35,4 +36,10 @@
 		select count(*) from f_review where fid =#{fid}
 	</select>
 
+	<select id="selectFestivalCommentsPage" resultMap="freviewMap" resultType="freviewVO">
+		select no, content, reg_date, writer, fid
+		from (select rownum numrow, a.* from 
+		(select * from f_review where fid=#{fid} order by no desc) a)
+		where numrow between #{start} and #{end}
+	</select>
 </mapper>
