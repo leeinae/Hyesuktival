@@ -2,15 +2,25 @@ package kr.co.fedal.dao;
 
 import java.util.List;
 
+import kr.co.fedal.util.SignupRequest;
 import kr.co.fedal.vo.FestivalVO;
+import kr.co.fedal.vo.SignupVO;
 
 public interface FestivalDAO {
 	/**
-	 * @return : festival ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¯
+	 * @return : festival ÀüÃ¼ ¸®½ºÆ® ¹ÝÈ¯
 	 */
-	public List<FestivalVO> selectAllFestival();
-	
+	List<FestivalVO> selectAllFestival();
+
+	public SignupVO selectByEmail(String email);
+
+	public SignupVO selectById(String id);
+
+	public SignupVO selectAllById(String id);
+
+	public void insertUser(SignupRequest signReq);
+
 	public FestivalVO selectDetailFestival(String fid);
-	
+
 	public List<FestivalVO> searchFestival(String keyword);
 }

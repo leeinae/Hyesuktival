@@ -18,6 +18,40 @@
 		from festival
 	</select>
 
+	<select id="selectByEmail" resultType="kr.co.fedal.vo.SignupVO">
+		select email,nickname
+		from u_data
+		where email = #{email}
+	</select>
+
+	<select id="selectById" resultType="kr.co.fedal.vo.SignupVO">
+		select id,nickname
+		from u_data
+		where id = #{id}
+	</select>
+
+	<insert id="insertMember" parameterType="kr.co.fedal.vo.SignupVO">
+		insert into u_data(
+		no,
+		id,
+		email,
+		nickname,
+		password
+		)values(
+		u_data_no_seq.nextval,
+		#{id},
+		#{email},
+		#{nickname},
+		#{password}
+		)
+	</insert>
+
+	<select id="selectAllById" resultType="kr.co.fedal.vo.SignupVO">
+		select *
+		from u_data
+		where id = #{id}
+	</select>
+
 	<select id="searchFestivalDetail" parameterType="string"
 		resultType="festivalVO">
 		select fid, fname,
@@ -44,7 +78,11 @@
 
 	<select id="selectMusic" resultType="musicVO"
 		parameterType="String">
+<<<<<<< HEAD
 		select aid, mname, mcnt, album, src from music where aid =#{aid}
+=======
+		select aid, mname, mCnt, src, album, mid from music where aid =#{aid}
+>>>>>>> origin/Vote
 	</select>
 
 	<!-- 페스티벌 검색 -->
@@ -54,5 +92,33 @@
 		select fid, fname from festival where fname like #{pattern}
 	</select>
 
+<<<<<<< HEAD
 
+=======
+	<!-- 페스티벌 후기 댓글 insert -->
+	<insert id="insertFestivalComment" parameterType="freviewVO">
+		insert into f_review(no, content, reg_date, writer, fid)
+		values(f_review_seq.nextVal, #{content}, sysdate, #{writer}, #{fid})
+	</insert>
+	
+	<update id="voteCnt" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt+1
+		where mid=#{mid}
+		]]>
+	</update>
+	
+	<update id="voteCntCancel" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt-1
+		where mid=#{mid}
+		]]>
+	</update>
+	
+	<select id="selectCnt" resultType="musicVO" parameterType="String">
+		select mCnt from music
+		where mid =#{mid}
+	</select>
+	
+>>>>>>> origin/Vote
 </mapper>

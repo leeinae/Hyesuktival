@@ -19,4 +19,19 @@ public class MusicDAOImpl implements MusicDAO {
 		return list;
 	}
 
+	@Override
+	public void voteCnt(String mid) {
+		session.update("kr.co.fedal.dao.FestivalDAO.voteCnt", mid);
+	}
+	
+	@Override
+	public void voteCntCancel(String mid) {
+		session.update("kr.co.fedal.dao.FestivalDAO.voteCntCancel", mid);
+	}
+	
+	@Override
+	public MusicVO selectCnt(String mid) {
+		MusicVO vo = session.selectOne("kr.co.fedal.dao.FestivalDAO.selectCnt", mid);
+		return vo;
+	}
 }

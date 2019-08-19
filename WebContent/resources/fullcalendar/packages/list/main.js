@@ -9,20 +9,18 @@ Docs & License: https://fullcalendar.io/
     (global = global || self, factory(global.FullCalendarList = {}, global.FullCalendar));
 }(this, function (exports, core) { 'use strict';
 
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation. All rights reserved.
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-    this file except in compliance with the License. You may obtain a copy of the
-    License at http://www.apache.org/licenses/LICENSE-2.0
-
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
-
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
-    ***************************************************************************** */
+    /***************************************************************************
+	 * ! Copyright (c) Microsoft Corporation. All rights reserved. Licensed
+	 * under the Apache License, Version 2.0 (the "License"); you may not use
+	 * this file except in compliance with the License. You may obtain a copy of
+	 * the License at http://www.apache.org/licenses/LICENSE-2.0 THIS CODE IS
+	 * PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	 * KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+	 * WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+	 * MERCHANTABLITY OR NON-INFRINGEMENT. See the Apache Version 2.0 License
+	 * for specific language governing permissions and limitations under the
+	 * License.
+	 **************************************************************************/
     /* global Reflect, Promise */
 
     var extendStatics = function(d, b) {
@@ -121,8 +119,9 @@ Docs & License: https://fullcalendar.io/
     }(core.FgEventRenderer));
 
     /*
-    Responsible for the scroller, and forwarding event-related actions into the "grid".
-    */
+	 * Responsible for the scroller, and forwarding event-related actions into
+	 * the "grid".
+	 */
     var ListView = /** @class */ (function (_super) {
         __extends(ListView, _super);
         function ListView(context, viewSpec, dateProfileGenerator, parentEl) {
@@ -132,7 +131,13 @@ Docs & License: https://fullcalendar.io/
             var eventRenderer = _this.eventRenderer = new ListEventRenderer(_this);
             _this.renderContent = core.memoizeRendering(eventRenderer.renderSegs.bind(eventRenderer), eventRenderer.unrender.bind(eventRenderer));
             _this.el.classList.add('fc-list-view');
-            var listViewClassNames = (_this.theme.getClass('listView') || '').split(' '); // wish we didn't have to do this
+            var listViewClassNames = (_this.theme.getClass('listView') || '').split(' '); // wish
+																							// we
+																							// didn't
+																							// have
+																							// to
+																							// do
+																							// this
             for (var _i = 0, listViewClassNames_1 = listViewClassNames; _i < listViewClassNames_1.length; _i++) {
                 var listViewClassName = listViewClassNames_1[_i];
                 if (listViewClassName) { // in case input was empty string
@@ -171,7 +176,11 @@ Docs & License: https://fullcalendar.io/
         };
         ListView.prototype.computeScrollerHeight = function (viewHeight) {
             return viewHeight -
-                core.subtractInnerElHeight(this.el, this.scroller.el); // everything that's NOT the scroller
+                core.subtractInnerElHeight(this.el, this.scroller.el); // everything
+																		// that's
+																		// NOT
+																		// the
+																		// scroller
         };
         ListView.prototype._eventStoreToSegs = function (eventStore, eventUiBases, dayRanges) {
             return this.eventRangesToSegs(core.sliceEventStore(eventStore, eventUiBases, this.props.dateProfile.activeRange, this.nextDayThreshold).fg, dayRanges);
@@ -263,29 +272,35 @@ Docs & License: https://fullcalendar.io/
             }
             return segsByDay;
         };
-        // generates the HTML for the day headers that live amongst the event rows
+        // generates the HTML for the day headers that live amongst the event
+		// rows
         ListView.prototype.buildDayHeaderRow = function (dayDate) {
             var dateEnv = this.dateEnv;
-            var mainFormat = core.createFormatter(this.opt('listDayFormat')); // TODO: cache
-            var altFormat = core.createFormatter(this.opt('listDayAltFormat')); // TODO: cache
+            var mainFormat = core.createFormatter(this.opt('listDayFormat')); // TODO:
+																				// cache
+            var altFormat = core.createFormatter(this.opt('listDayAltFormat')); // TODO:
+																				// cache
             return core.createElement('tr', {
                 className: 'fc-list-heading',
                 'data-date': dateEnv.formatIso(dayDate, { omitTime: true })
             }, '<td class="' + (this.calendar.theme.getClass('tableListHeading') ||
                 this.calendar.theme.getClass('widgetHeader')) + '" colspan="3">' +
                 (mainFormat ?
-                    core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-main' }, core.htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
+                    core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-main' }, core.htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner
+																																						// HTML
                     ) :
                     '') +
                 (altFormat ?
-                    core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-alt' }, core.htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
+                    core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-alt' }, core.htmlEscape(dateEnv.format(dayDate, altFormat)) // inner
+																																					// HTML
                     ) :
                     '') +
                 '</td>');
         };
         return ListView;
     }(core.View));
-    ListView.prototype.fgSegSelector = '.fc-list-item'; // which elements accept event actions
+    ListView.prototype.fgSegSelector = '.fc-list-item'; // which elements accept
+														// event actions
     function computeDateVars(dateProfile) {
         var dayStart = core.startOfDay(dateProfile.renderRange.start);
         var viewEnd = dateProfile.renderRange.end;
@@ -307,12 +322,17 @@ Docs & License: https://fullcalendar.io/
             list: {
                 class: ListView,
                 buttonTextKey: 'list',
-                listDayFormat: { month: 'long', day: 'numeric', year: 'numeric' } // like "January 1, 2016"
+                listDayFormat: { month: 'long', day: 'numeric', year: 'numeric' } // like
+																					// "January
+																					// 1,
+																					// 2016"
             },
             listDay: {
                 type: 'list',
                 duration: { days: 1 },
-                listDayFormat: { weekday: 'long' } // day-of-week is all we need. full date is probably in header
+                listDayFormat: { weekday: 'long' } // day-of-week is all we
+													// need. full date is
+													// probably in header
             },
             listWeek: {
                 type: 'list',
@@ -323,12 +343,14 @@ Docs & License: https://fullcalendar.io/
             listMonth: {
                 type: 'list',
                 duration: { month: 1 },
-                listDayAltFormat: { weekday: 'long' } // day-of-week is nice-to-have
+                listDayAltFormat: { weekday: 'long' } // day-of-week is
+														// nice-to-have
             },
             listYear: {
                 type: 'list',
                 duration: { year: 1 },
-                listDayAltFormat: { weekday: 'long' } // day-of-week is nice-to-have
+                listDayAltFormat: { weekday: 'long' } // day-of-week is
+														// nice-to-have
             }
         }
     });
