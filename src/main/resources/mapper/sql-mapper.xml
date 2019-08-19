@@ -87,7 +87,7 @@
 		<bind name="pattern" value="'%'+keyword +'%'" />
 		select fid, fname from festival where fname like #{pattern}
 	</select>
-	
+
 	<!-- 페스티벌 후기 댓글 insert -->
 	<insert id="insertFestivalComment" parameterType="freviewVO">
 		insert into f_review(no, content, reg_date, writer, fid)
@@ -112,5 +112,5 @@
 		select mCnt from music
 		where mid =#{mid}
 	</select>
-	
+
 </mapper>

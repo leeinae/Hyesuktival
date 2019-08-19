@@ -1,10 +1,6 @@
 package kr.co.fedal.controller;
 
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -18,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.co.fedal.exception.AlreadyExistingEmailException;
 import kr.co.fedal.exception.AlreadyExistingIdException;
 import kr.co.fedal.service.FestivalService;
-import kr.co.fedal.service.FreviewService;
 import kr.co.fedal.util.SignupRequest;
 import kr.co.fedal.util.SignupRequestValidator;
 import kr.co.fedal.vo.ArtistVO;
@@ -195,4 +190,5 @@ public class HomeController {
 		
 		return mCnt;
 	}
+	
 }
