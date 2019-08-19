@@ -51,13 +51,14 @@
 	
 	function editComment(no, content){
  		var date = $('#comment'+no+ '> #commentDate').text();
+ 		var content = $('#comment'+no+ '> #commentContent').text()
  		var writer = $('#comment'+no+ '> #commentWriter').text();
 	    var editForm ='';
 	    editForm += "<td>"+writer+"</td>";
-	    editForm += "<td><input type='text' placeholder='댓글을 입력하세요' name='content' id='content'></td>";
+	    editForm += "<td><input type='text' placeholder='댓글을 입력하세요' value='"+content+"' name='content' id='content'></td>";
 	    editForm += "<td>"+date+"</td>";	    
 	    editForm += "<td><input id='btn' type='button' onclick='updateComment("+no+")' value='수정'>";
-	    editForm += "<input id='btn' type='button' onclick='getComments()' value='취소'></td>";
+	    editForm += "<input id='btn' type='button' onclick='getComments("+replyPage+")' value='취소'></td>";
 	    
 	    $('#comment'+no).html(editForm);
 	}
@@ -100,8 +101,10 @@
 					output += "<td id='commentContent'>"+data.list[i].content +"</td>";
 					output += "<td id='commentDate'>"+data.list[i].regDate +"</td>";
 					output += "<td>";
-					output += "<button type='button' id='btnDelete' onclick='deleteComment("+data.list[i].no+")'>삭제</button>";
-					output += "<button type='button' id='btnUpdate' onclick='editComment("+data.list[i].no+",\""+data.list[i].content+"\")'>수정</button>";
+					if("${sessionScope.sessionName}" == data.list[i].writer) {
+						output += "<button type='button' id='btnDelete' onclick='deleteComment("+data.list[i].no+")'>삭제</button>";
+						output += "<button type='button' id='btnUpdate' onclick='editComment("+data.list[i].no+",\""+data.list[i].content+"\")'>수정</button>";
+					}
 					output += "</td>";
 					output += "</tr>";
 				}
@@ -151,12 +154,20 @@
 	</c:forEach>
 
 	<hr>
-	<h1>댓글</h1>
-	<form id="comments">
-		writer : <input type="text" placeholder="작성자" name="writer" id="writer"><br>
-		content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content">
-	</form>
-	<input id="btn" type="button" onclick="insertComment()" value="등록">
+	<c:choose>
+		<c:when test="${empty AuthInfo && empty sessionId }">
+			<h1>로그인 하세요 ~</h1>
+			<a href="${pageContext.request.contextPath }/login"><button>로그인</button></a>
+		</c:when>
+		<c:otherwise>
+			<h1>댓글</h1>
+			<form id="comments">
+				writer : <input type="text" value="${sessionName }" name="writer" id="writer" readOnly/><br>		
+				content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content"/>
+			</form>
+			<input id="btn" type="button" onclick="insertComment()" value="등록">		
+		</c:otherwise>
+	</c:choose>
 	<br><hr>
 	
 	<div>
@@ -178,5 +189,6 @@
 			</ul>
 		</div>
 	</div>
+
 </body>
 </html>

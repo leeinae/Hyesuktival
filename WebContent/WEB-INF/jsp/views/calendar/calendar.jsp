@@ -14,19 +14,15 @@
 <script src='/resources/fullcalendar/packages/interaction/main.js'></script>
 <script src='/resources/fullcalendar/packages/daygrid/main.js'></script>
 <script>
-
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'interaction', 'dayGrid' ],
-      editable: true,
       eventLimit: true, // allow "more" link when too many events
       events: [${requestScope.festivalList}]
     });
-
     calendar.render();
   });
-
 </script>
 <style>
 body {
@@ -45,6 +41,26 @@ body {
 </head>
 <body>
 	<h1>Calendar Page</h1>
+	<div id="topMenu" align="right">
+		<c:catch>
+			<c:choose>
+				<c:when	test="${empty AuthInfo && empty sessionId}">
+					<li><a href="/login"><i class="login"></i>로그인</a></li>
+					<li><a href="/signup"><i class="signup"></i>회원가입</a></li>
+				</c:when>
+				<c:when test="${sessionId != null}">
+					<li>${sessionName}님,반갑습니다!</li>
+					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
+				</c:when>
+				<c:otherwise>
+					<li>${AuthInfo.nickname }님,반갑습니다!</li>
+					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
+				</c:otherwise>
+			</c:choose>
+		</c:catch>
+	</div>
 	<br>
 	<form action="/search" method="get">
 		<input type="text" name="search">
@@ -53,4 +69,3 @@ body {
 
 	<div id="calendar"></div>
 </body>
-</html>
