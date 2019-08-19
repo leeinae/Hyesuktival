@@ -76,9 +76,18 @@
 		select aid, aname, src from artist where aid = #{aid}
 	</select>
 
+	<select id="selectAllMusic" resultType="musicVO"
+			parameterType="String">
+			<![CDATA[
+			select * from(select aid, mname, mCnt, src, album, mid from music where aid = #{aid})
+			where rownum<=5
+			]]>
+	</select>
+
 	<select id="selectMusic" resultType="musicVO"
 		parameterType="String">
-		select aid, mname, mCnt, src, album, mid from music where aid =#{aid}
+		select aid, mname, mCnt, src, album, mid from music where aid = #{aid}
+		order by mCnt desc
 	</select>
 
 	<!-- 페스티벌 검색 -->
@@ -112,5 +121,4 @@
 		select mCnt from music
 		where mid =#{mid}
 	</select>
-	
 </mapper>

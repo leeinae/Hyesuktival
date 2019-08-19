@@ -20,8 +20,10 @@ public interface FestivalService {
 	// fid�� ������ �佺Ƽ���� �����ϴ� ��Ƽ��Ʈ
 	public List<ArtistVO> selectAllArtist(String fid);
 
-	// ��Ƽ��Ʈ ��������
 	public List<MusicVO> selectAllMusic(String aid);
+	
+	// ��Ƽ��Ʈ ��������
+	public List<MusicVO> selectMusic(String aid);
 
 	// ��Ƽ��Ʈ ����
 	public ArtistVO selectArtist(String aid);

@@ -85,9 +85,11 @@ public class HomeController {
 		ArtistVO avo = service.selectArtist(aid);
 
 		// aid가 일치하는 music 가져오기
-		List<MusicVO> mvoList = service.selectAllMusic(aid);
+		List<MusicVO> mvo = service.selectAllMusic(aid);
+		List<MusicVO> mvoList = service.selectMusic(aid);
 
 		ModelAndView mav = new ModelAndView("festival/detailArtist");
+		mav.addObject("musicAll", mvo);
 		mav.addObject("musicList", mvoList);
 		mav.addObject("artist", avo);
 

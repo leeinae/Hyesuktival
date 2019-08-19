@@ -15,6 +15,12 @@ public class MusicDAOImpl implements MusicDAO {
 	
 	@Override
 	public List<MusicVO> selectAllMusic(String aid) {
+		List<MusicVO> list = session.selectList("kr.co.fedal.dao.FestivalDAO.selectAllMusic",aid);
+		return list;
+	}
+	
+	@Override
+	public List<MusicVO> selectMusic(String aid) {
 		List<MusicVO> list = session.selectList("kr.co.fedal.dao.FestivalDAO.selectMusic",aid);
 		return list;
 	}

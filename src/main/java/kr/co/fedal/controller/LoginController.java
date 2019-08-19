@@ -86,7 +86,7 @@ public class LoginController {
 	// 로그인 -> 로그인 성공
 	@RequestMapping(value = "/loginS", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ModelAndView loginSuccess(@Valid LoginCommand loginCommand, BindingResult bindingResult, HttpSession session,
-			HttpServletResponse response) throws Exception {
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("기본 로그인");
 		if (bindingResult.hasErrors()) {
 			ModelAndView mav = new ModelAndView("/login/login");
@@ -112,7 +112,7 @@ public class LoginController {
 			ModelAndView mav = new ModelAndView("/login/login");
 			return mav;
 		}
-
+		
 		ModelAndView mav = new ModelAndView("redirect:/");
 		return mav;
 	}

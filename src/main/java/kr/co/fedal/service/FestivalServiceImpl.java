@@ -65,6 +65,12 @@ public class FestivalServiceImpl implements FestivalService {
 		List<MusicVO> list = musicDao.selectAllMusic(aid);
 		return list;
 	}
+	
+	@Override
+	public List<MusicVO> selectMusic(String aid) {
+		List<MusicVO> list = musicDao.selectMusic(aid);
+		return list;
+	}
 
 	@Override
 	public ArtistVO selectArtist(String aid) {

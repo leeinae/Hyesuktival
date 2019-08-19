@@ -82,30 +82,54 @@
 	<br>
 	<h1>${requestScope.artist.aname }</h1>
 	<img alt="" src="${requestScope.artist.src }">
-
-	<table border="1">
-		<thead>
-			<tr>
-				<td colspan="2">곡 명</td>
-				<td>앨범 명</td>
-				<td>투표수</td>
-				<td>투표</td>
-			</tr>
-		</thead>
-		<tbody align="center">
-			<c:forEach items="${requestScope.musicList }" var="music">
+	<br>
+	<br>
+	
+	<div style="float: left; width: 50%;">
+		<table border="1">
+			<thead>
 				<tr>
-					<td id="mid" style="display:none">${music.mid }</td>
-					<td><img alt="" src="${music.src }" width="200px"></td>
-					<td>${music.mname }</td>
-					<td>${music.album }</td>
-					<td id="mCnt${music.mid}">${music.mCnt }</td>
-					<td><input type="button" id="voteBtn${music.mid}"
-						onclick="vote(${music.mid})" value="☆" /></td>
+					<td colspan="2">곡 명</td>
+					<td>앨범 명</td>
 				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+			</thead>
+			<tbody align="center">
+				<c:forEach items="${requestScope.musicAll }" var="musicAll">
+					<tr>
+						<td><img alt="" src="${musicAll.src }" width="200px"></td>
+						<td>${musicAll.mname }</td>
+						<td>${musicAll.album }</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div>
+	<div style="float: left; width: 50%;">
+		<table border="1">
+			<thead>
+				<tr>
+					<td colspan="2">곡 명</td>
+					<td>앨범 명</td>
+					<td>투표수</td>
+					<td>투표</td>
+				</tr>
+			</thead>
+			<tbody align="center">
+				<c:forEach items="${requestScope.musicList }" var="music">
+					<tr>
+						<td id="mid" style="display: none">${music.mid }</td>
+						<td><img alt="" src="${music.src }" width="200px"></td>
+						<td>${music.mname }</td>
+						<td>${music.album }</td>
+						<td id="mCnt${music.mid}">${music.mCnt }</td>
+						<td><input type="button" id="voteBtn${music.mid}"
+							onclick="vote(${music.mid})" value="☆" /></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div>
+
 	<a>로그인 하시면 댓글을 쓸 수 있습니다.</a>
 	<br>
 	<form>
