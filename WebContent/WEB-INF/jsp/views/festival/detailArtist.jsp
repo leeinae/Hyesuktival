@@ -86,7 +86,6 @@
 	<table border="1">
 		<thead>
 			<tr>
-				<td>mid</td>
 				<td colspan="2">°î ¸í</td>
 				<td>¾Ù¹ü ¸í</td>
 				<td>ÅõÇ¥¼ö</td>
@@ -96,7 +95,7 @@
 		<tbody align="center">
 			<c:forEach items="${requestScope.musicList }" var="music">
 				<tr>
-					<td id="mid">${music.mid }</td>
+					<td id="mid" style="display:none">${music.mid }</td>
 					<td><img alt="" src="${music.src }" width="200px"></td>
 					<td>${music.mname }</td>
 					<td>${music.album }</td>
