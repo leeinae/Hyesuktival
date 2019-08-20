@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -31,7 +32,8 @@ public class DBTest {
 	}
 	
 	@Test
-	public void 페스티벌출력() throws Exception {
+	@Ignore
+	public void festivalInfoTest() throws Exception {
 		List<FestivalVO> festivalList = session.selectList("kr.co.fedal.dao.FestivalDAO.selectFestival");
 		
 		for (FestivalVO vo : festivalList) {
