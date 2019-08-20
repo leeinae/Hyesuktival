@@ -37,32 +37,30 @@
 		var text = $('#voteBtn' + mid).val();
 		if (text == "투표") {
 			$('#voteBtn' + mid).val("취소");
-			$
-					.ajax({
-						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
-								+ mid + "/up",
-						type : "POST",
-						success : function(data) {
-							$('#mCnt' + mid).html(data);
-						},
-						error : function() {
-							alert('실패');
-						}
-					});
+			$.ajax({
+				url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
+						+ mid + "/up",
+				type : "POST",
+				success : function(data) {
+					$('#mCnt' + mid).html(data);
+				},
+				error : function() {
+					alert('실패');
+				}
+			});
 		} else if (text == "취소") {
 			$('#voteBtn' + mid).val("투표");
-			$
-					.ajax({
-						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
-								+ mid + "/down",
-						type : "POST",
-						success : function(data) {
-							$('#mCnt' + mid).html(data);
-						},
-						error : function() {
-							alert('실패');
-						}
-					});
+			$.ajax({
+				url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
+						+ mid + "/down",
+				type : "POST",
+				success : function(data) {
+					$('#mCnt' + mid).html(data);
+				},
+				error : function() {
+					alert('실패');
+				}
+			});
 		}
 	}
 </script>
@@ -203,7 +201,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${requestScope.musicAll }" begin="1" end="5"
+						<c:forEach items="${requestScope.musicAll }" begin="0" end="4"
 							var="musicAll" varStatus="status">
 							<tr>
 								<td>${ status.count }</td>
