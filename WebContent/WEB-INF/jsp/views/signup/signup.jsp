@@ -68,8 +68,8 @@
 				<br>
 
 				<button type="submit" class="btn btn-default">가입하기</button>
-				<button type="reset" class="btn btn-default">취소하기</button>
 			</form:form>
+				<a href="${pageContext.request.contextPath }/signupCancel"><button>취소하기</button></a>
 		</div>
 	</section>
 </body>

@@ -2,12 +2,8 @@ package kr.co.fedal.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,11 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import kr.co.fedal.exception.AlreadyExistingEmailException;
-import kr.co.fedal.exception.AlreadyExistingIdException;
 import kr.co.fedal.service.FestivalService;
-import kr.co.fedal.util.SignupRequest;
-import kr.co.fedal.util.SignupRequestValidator;
 import kr.co.fedal.vo.ArtistVO;
 import kr.co.fedal.vo.FestivalVO;
 import kr.co.fedal.vo.FreviewVO;
@@ -43,8 +35,28 @@ public class HomeController {
 		StringBuffer festivalList = new StringBuffer();
 
 		for (FestivalVO vo : list) {
+			String genre = vo.getGenre().trim();
+			String color = "";
+			switch (genre) {
+			case "R":
+				color = "purple";
+				break;
+			case "E":
+				color = "pink";
+				break;
+			case "H":
+				color = "blue";
+				break;
+			case "J":
+				color = "orange";
+				break;
+			default:
+				color = "red";
+				break;
+			}
+
 			festivalList.append("{ start : \"" + vo.getStartDate() + "\", end :\"" + vo.getEndDate() + "\", title : \""
-					+ vo.getFname() + "\", url : \"festival/" + vo.getFid() + "\" },");
+					+ vo.getFname() + "\", url : \"festival/" + vo.getFid() + "\", color : \"" + color + "\"},");
 		}
 
 		// ModelAndView 생성 + 넘겨줄 View 지정
@@ -110,69 +122,4 @@ public class HomeController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/festival/{fid}", method = RequestMethod.POST)
-	@ResponseBody
-	public void insertComment(FreviewVO review) {
-		System.out.println(review.toString());
-		System.out.println("post 방식 전송 완료");
-
-		service.insertFestivalComment(review);
-	}
-
-	@RequestMapping(value = "/signup", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-	public ModelAndView signupPage() {
-		ModelAndView mav = new ModelAndView("/signup/signup");
-
-		mav.addObject("signupRequest", new SignupRequest());
-		return mav;
-	}
-
-	@RequestMapping(value = "/signupSuccess", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	public ModelAndView signupSuccessPage(SignupRequest signReq, Errors errors) throws Exception {
-		new SignupRequestValidator().validate(signReq, errors);
-		if (errors.hasErrors()) {
-			ModelAndView mav = new ModelAndView("/signup/signup");
-			return mav;
-		}
-		try {
-			service.signup(signReq);
-		} catch (AlreadyExistingEmailException e) {
-			errors.rejectValue("email", "duplicate", "이미 가입된 이메일입니다.");
-			ModelAndView mav = new ModelAndView("/signup/signup");
-			return mav;
-		} catch (AlreadyExistingIdException e) {
-			errors.rejectValue("id", "duplicate", "이미 가입된 아이디입니다.");
-			ModelAndView mav = new ModelAndView("/signup/signup");
-			return mav;
-		}
-		ModelAndView mav = new ModelAndView("redirect:/");
-
-		return mav;
-	}
-
-	@RequestMapping(value = "/artist/{aid}/{mid}/up", method = RequestMethod.POST)
-	@ResponseBody
-	public int voteUp(@PathVariable("mid") String mid) {
-		System.out.println("mid: " + mid);
-		
-		MusicVO musicVO = service.selectCnt(mid);
-		int mCnt = musicVO.getmCnt();
-		mCnt++;
-		service.voteCnt(mid);
-		
-		return mCnt;
-	}
-	
-	@RequestMapping(value = "/artist/{aid}/{mid}/down", method = RequestMethod.POST)
-	@ResponseBody
-	public int voteDown(@PathVariable("mid") String mid) {
-		System.out.println("mid: " + mid);
-		
-		MusicVO musicVO = service.selectCnt(mid);
-		int mCnt = musicVO.getmCnt();
-		mCnt--;
-		service.voteCntCancel(mid);
-		
-		return mCnt;
-	}
 }

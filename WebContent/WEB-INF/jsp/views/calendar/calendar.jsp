@@ -16,11 +16,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-    var form = {
-    		title : "title",
-    		start : "2010-01-01",
-    		end : "2011-01-01"
-    }
     var calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'interaction', 'dayGrid' ],
       eventLimit: true, // allow "more" link when too many events
@@ -49,22 +44,19 @@ body {
 	<div id="topMenu" align="right">
 		<c:catch>
 			<c:choose>
-				<c:when
-					test="${empty AuthInfo && empty naverSessionId && empty googleSessionId}">
+				<c:when test="${empty AuthInfo && empty sessionId}">
 					<li><a href="/login"><i class="login"></i>로그인</a></li>
 					<li><a href="/signup"><i class="signup"></i>회원가입</a></li>
 				</c:when>
-				<c:when test="${naverSessionId != null}">
-					<li>${naverSessionId}님,반갑습니다!</li>
-					<li><a href="/logout"><i class="logout"></i>로그아웃</a></li>
-				</c:when>
-				<c:when test="${googleSessionId != null}">
-					<li>${googleSessionId}님,반갑습니다!</li>
+				<c:when test="${sessionId != null}">
+					<li>${sessionName}님,반갑습니다!</li>
 					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
 				</c:when>
 				<c:otherwise>
 					<li>${AuthInfo.nickname }님,반갑습니다!</li>
 					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
 				</c:otherwise>
 			</c:choose>
 		</c:catch>
@@ -77,3 +69,4 @@ body {
 
 	<div id="calendar"></div>
 </body>
+</html>

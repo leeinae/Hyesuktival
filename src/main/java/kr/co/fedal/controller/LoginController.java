@@ -1,7 +1,6 @@
 package kr.co.fedal.controller;
 
 import java.io.IOException;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,11 +57,13 @@ public class LoginController {
 
 	@Autowired
 	private OAuth2Parameters googleOAuth2Parameters;
+	
+	private String referer;
 
 	// 캘린더 -> 로그인
 	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	public ModelAndView loginForm(Model model, HttpSession session, LoginCommand loginCommand,
-			@CookieValue(value = "REMEMBER", required = false) Cookie rememberCookie) throws Exception {
+			@CookieValue(value = "REMEMBER", required = false) Cookie rememberCookie, HttpServletRequest request) throws Exception {
 
 		if (rememberCookie != null) {
 			loginCommand.setId(rememberCookie.getValue());
@@ -77,6 +78,9 @@ public class LoginController {
 		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
 		String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, googleOAuth2Parameters);
 		model.addAttribute("google_url", url);
+		
+		//이전 페이지 기억
+		referer = (String)request.getHeader("REFERER");
 
 		ModelAndView mav = new ModelAndView("/login/login");
 
@@ -86,7 +90,7 @@ public class LoginController {
 	// 로그인 -> 로그인 성공
 	@RequestMapping(value = "/loginS", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	public ModelAndView loginSuccess(@Valid LoginCommand loginCommand, BindingResult bindingResult, HttpSession session,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+			HttpServletResponse response, HttpServletRequest request) throws Exception {
 		System.out.println("기본 로그인");
 		if (bindingResult.hasErrors()) {
 			ModelAndView mav = new ModelAndView("/login/login");
@@ -112,8 +116,8 @@ public class LoginController {
 			ModelAndView mav = new ModelAndView("/login/login");
 			return mav;
 		}
-		
-		ModelAndView mav = new ModelAndView("redirect:/");
+
+		ModelAndView mav = new ModelAndView("redirect:"+ referer);
 		return mav;
 	}
 
@@ -137,14 +141,17 @@ public class LoginController {
 		// 3. 데이터 파싱
 		// Top레벨 단계 _response 파싱
 		JSONObject response_obj = (JSONObject) jsonObj.get("response");
+		
 		// response의 nickname값 파싱
 		String nickname = (String) response_obj.get("nickname");
-		System.out.println(nickname);
+		String id = (String) response_obj.get("id");
+		
 		// 4.파싱 닉네임 세션으로 저장
-		session.setAttribute("naverSessionId", nickname); // 세션 생성
+		session.setAttribute("sessionName", nickname); // 세션 생성
+		session.setAttribute("sessionId", id); // 세션 생성
 		model.addAttribute("result", apiResult);
-
-		ModelAndView mav = new ModelAndView("redirect:/");
+		
+		ModelAndView mav = new ModelAndView("redirect:"+ referer);
 		return mav;
 	}
 
@@ -171,10 +178,12 @@ public class LoginController {
 		PlusOperations plusOperations = google.plusOperations();
 		Person profile = plusOperations.getGoogleProfile();
 		String nickname = (String) profile.getDisplayName();
+		String id = (String)profile.getId();
 
-		session.setAttribute("googleSessionId", nickname);
+		session.setAttribute("sessionId", id);
+		session.setAttribute("sessionName", nickname);
 
-		ModelAndView mav = new ModelAndView("redirect:/");
+		ModelAndView mav = new ModelAndView("redirect:"+ referer);
 
 		return mav;
 	}

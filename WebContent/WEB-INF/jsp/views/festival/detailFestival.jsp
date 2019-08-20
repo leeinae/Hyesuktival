@@ -5,41 +5,129 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<script src="/resources/js/jquery-3.4.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-	function btnClick() {
-		if($("#content").val().trim()==="") {
-			alert("댓글을 입력하세요");
-			$("#content").val("").focus();
+	$(document).ready(function(){
+		getComments("1");
+	});
+	
+	function deleteComment(no) {
+		if(confirm("정말 삭제하시겠습니까?")==true) {
+	 		$.ajax({
+				url : "${pageContext.request.contextPath}/festival/comments/delete/" +no,
+				type : "post",
+				success : function(data) {
+					alert("삭제 완료!");
+					getComments(replyPage);
+				}
+			});			
 		} else {
-			alert("실행 OK");
+			return;
+		}
+	}
+	
+	function updateComment(no) {
+ 		var content = $('#comment'+no+' #content').val().trim();
+ 		if (content ==="") {
+			alert("댓글을 입력하세요");
+			$('#comment'+no+' #content').focus();
+ 		} else {
 			$.ajax({
-				url: "${pageContext.request.contextPath}/festival/${requestScope.festival.fid}",
+				url : "${pageContext.request.contextPath}/festival/comments/update/"+no,
+				type: "post",
+				data : {
+					'content' : content,
+					'no' : no
+				},
+				success : function(data) {
+					getComments(replyPage);
+				},
+			    error:function(request,status,error){
+			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);}
+			});	
+ 		}
+	}
+	
+	function editComment(no, content){
+ 		var date = $('#comment'+no+ '> #commentDate').text();
+ 		var content = $('#comment'+no+ '> #commentContent').text()
+ 		var writer = $('#comment'+no+ '> #commentWriter').text();
+	    var editForm ='';
+	    editForm += "<td>"+writer+"</td>";
+	    editForm += "<td><input type='text' placeholder='댓글을 입력하세요' value='"+content+"' name='content' id='content'></td>";
+	    editForm += "<td>"+date+"</td>";	    
+	    editForm += "<td><input id='btn' type='button' onclick='updateComment("+no+")' value='수정'>";
+	    editForm += "<input id='btn' type='button' onclick='getComments("+replyPage+")' value='취소'></td>";
+	    
+	    $('#comment'+no).html(editForm);
+	}
+	
+	function insertComment() {
+		var content = $("#content").val().trim();
+		if(content ==="") {
+			alert("댓글을 입력하세요");
+			$("#content").focus();
+		} else {
+			$.ajax({
+				url: "${pageContext.request.contextPath}/festival/comments/${requestScope.festival.fid}",
 				type : "POST",
 				data : $("#comments").serialize(),
 				success: function(data) {
-					console.log("data 등록 완료~");
+					$("#content").val("");
+					$("#writer").val("");
+					getComments("1");
+				},
+				error: function(error) {
+					console.log(error);
 				}
 			});
 		}
 	}
-</script>
-<script>
-/* 	function getComments() {
+	
+	var replyPage = 1;
+	
+	function getComments(pageInfo) {
 		$.ajax({
-			url:"${pageContext.request.contextPath}/festival/${requestScope.festival.fid}",
-			type:"POST",
-			data : {
-
-			},
-			dataType:"json",
-			success : function(result) {
-				
+			type: "post",
+			url : "${pageContext.request.contextPath}/festival/comments/${requestScope.festival.fid}/"+pageInfo,
+			success: function(data) {
+				printPaging(data.paging, $("#pagination"));
+				console.log(data);
+				var output = "";
+				for(var i in data.list) {
+					output += "<tr id='comment"+data.list[i].no+"'>";
+					output += "<td id='commentWriter'>"+data.list[i].writer +"</td>";
+					output += "<td id='commentContent'>"+data.list[i].content +"</td>";
+					output += "<td id='commentDate'>"+data.list[i].regDate +"</td>";
+					output += "<td>";
+					if("${sessionScope.sessionName}" == data.list[i].writer) {
+						output += "<button type='button' id='btnDelete' onclick='deleteComment("+data.list[i].no+")'>삭제</button>";
+						output += "<button type='button' id='btnUpdate' onclick='editComment("+data.list[i].no+",\""+data.list[i].content+"\")'>수정</button>";
+					}
+					output += "</td>";
+					output += "</tr>";
+				}
+				$("#commentsList").html(output);
 			}
-			
 		});
-	} */
+	}
+	
+	var printPaging= function(pageMaker, target) {
+		var str ="";
+		if (pageMaker.curPage > 1 ) {
+			str += str += "<li><a href='javascript:getComments(1)'> [이전] </a></li>";
+		}
+		for (var i = pageMaker.blockBegin; i <= pageMaker.blockEnd; i++) {
+			var strClass = pageMaker.curPage == i ? 'class=active' : '';
+			str += "<li "+strClass+"><a href='javascript:getComments("+i+")'>"+i+"</a></li>";
+		}
+		if (pageMaker.curBlock < pageMaker.blockEnd ) {
+			str += "<li><a href='javascript:getComments("+pageMaker.blockEnd+")'> [다음] </a></li>";
+		}
+		target.html(str);
+	} 
 </script>
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -63,18 +151,41 @@
 	</c:forEach>
 
 	<hr>
-	<h1>댓글</h1>
-	<form id="comments">
-		writer : <input type="text" placeholder="작성자" name="writer" id="writer"><br>
-		content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content">
-	</form>
-	<input id="btn" type="button" onclick="btnClick()" value="등록">
-	<br>
-	<div id="commentsList">
-		
+	<c:choose>
+		<c:when test="${empty AuthInfo && empty sessionId }">
+			<h1>로그인 하세요 ~</h1>
+			<a href="${pageContext.request.contextPath }/login"><button>로그인</button></a>
+		</c:when>
+		<c:otherwise>
+			<h1>댓글</h1>
+			<form id="comments">
+				writer : <input type="text" value="${sessionName }" name="writer" id="writer" readOnly/><br>		
+				content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content"/>
+			</form>
+			<input id="btn" type="button" onclick="insertComment()" value="등록">		
+		</c:otherwise>
+	</c:choose>
+	<br><hr>
+	
+	<div>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>작성자
+					<th>댓글
+					<th>작성일
+					<th>버튼?
+				</tr>
+			</thead>
+			<tbody id="commentsList">
+			</tbody>
+		</table>
+		<div id="paging">
+			<ul id="pagination">
+			
+			</ul>
+		</div>
 	</div>
-	
-	
 
 </body>
 </html>

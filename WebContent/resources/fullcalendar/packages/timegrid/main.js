@@ -9,18 +9,20 @@ Docs & License: https://fullcalendar.io/
     (global = global || self, factory(global.FullCalendarTimeGrid = {}, global.FullCalendar, global.FullCalendarDayGrid));
 }(this, function (exports, core, daygrid) { 'use strict';
 
-    /***************************************************************************
-	 * ! Copyright (c) Microsoft Corporation. All rights reserved. Licensed
-	 * under the Apache License, Version 2.0 (the "License"); you may not use
-	 * this file except in compliance with the License. You may obtain a copy of
-	 * the License at http://www.apache.org/licenses/LICENSE-2.0 THIS CODE IS
-	 * PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	 * KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-	 * WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-	 * MERCHANTABLITY OR NON-INFRINGEMENT. See the Apache Version 2.0 License
-	 * for specific language governing permissions and limitations under the
-	 * License.
-	 **************************************************************************/
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
     /* global Reflect, Promise */
 
     var extendStatics = function(d, b) {
@@ -48,9 +50,9 @@ Docs & License: https://fullcalendar.io/
     };
 
     /*
-	 * Only handles foreground segs. Does not own rendering. Use for low-level
-	 * util methods by TimeGrid.
-	 */
+    Only handles foreground segs.
+    Does not own rendering. Use for low-level util methods by TimeGrid.
+    */
     var TimeGridEventRenderer = /** @class */ (function (_super) {
         __extends(TimeGridEventRenderer, _super);
         function TimeGridEventRenderer(timeGrid) {
@@ -63,8 +65,7 @@ Docs & License: https://fullcalendar.io/
             });
             return _this;
         }
-        // Given an array of foreground segments, render a DOM element for each,
-		// computes position,
+        // Given an array of foreground segments, render a DOM element for each, computes position,
         // and attaches to the column inner-container elements.
         TimeGridEventRenderer.prototype.attachSegs = function (segs, mirrorInfo) {
             var segsByCol = this.timeGrid.groupSegsByCol(segs);
@@ -85,32 +86,24 @@ Docs & License: https://fullcalendar.io/
         TimeGridEventRenderer.prototype.computeSegSizes = function (allSegs) {
             var _a = this, timeGrid = _a.timeGrid, segsByCol = _a.segsByCol;
             var colCnt = timeGrid.colCnt;
-            timeGrid.computeSegVerticals(allSegs); // horizontals relies on
-													// this
+            timeGrid.computeSegVerticals(allSegs); // horizontals relies on this
             if (segsByCol) {
                 for (var col = 0; col < colCnt; col++) {
-                    this.computeSegHorizontals(segsByCol[col]); // compute
-																// horizontal
-																// coordinates,
-																// z-index's,
-																// and reorder
-																// the array
+                    this.computeSegHorizontals(segsByCol[col]); // compute horizontal coordinates, z-index's, and reorder the array
                 }
             }
         };
         TimeGridEventRenderer.prototype.assignSegSizes = function (allSegs) {
             var _a = this, timeGrid = _a.timeGrid, segsByCol = _a.segsByCol;
             var colCnt = timeGrid.colCnt;
-            timeGrid.assignSegVerticals(allSegs); // horizontals relies on
-													// this
+            timeGrid.assignSegVerticals(allSegs); // horizontals relies on this
             if (segsByCol) {
                 for (var col = 0; col < colCnt; col++) {
                     this.assignSegCss(segsByCol[col]);
                 }
             }
         };
-        // Computes a default event time formatting string if `eventTimeFormat`
-		// is not explicitly defined
+        // Computes a default event time formatting string if `eventTimeFormat` is not explicitly defined
         TimeGridEventRenderer.prototype.computeEventTimeFormat = function () {
             return {
                 hour: 'numeric',
@@ -118,8 +111,7 @@ Docs & License: https://fullcalendar.io/
                 meridiem: false
             };
         };
-        // Computes a default `displayEventEnd` value if one is not expliclty
-		// defined
+        // Computes a default `displayEventEnd` value if one is not expliclty defined
         TimeGridEventRenderer.prototype.computeDisplayEventEnd = function () {
             return true;
         };
@@ -135,24 +127,18 @@ Docs & License: https://fullcalendar.io/
             var classes = this.getSegClasses(seg, isDraggable, isResizableFromStart || isResizableFromEnd, mirrorInfo);
             var skinCss = core.cssToStr(this.getSkinCss(eventUi));
             var timeText;
-            var fullTimeText; // more verbose time text. for the print
-								// stylesheet
+            var fullTimeText; // more verbose time text. for the print stylesheet
             var startTimeText; // just the start time text
             classes.unshift('fc-time-grid-event');
             // if the event appears to span more than one day...
             if (core.isMultiDayRange(eventRange.range)) {
-                // Don't display time text on segments that run entirely through
-				// a day.
+                // Don't display time text on segments that run entirely through a day.
                 // That would appear as midnight-midnight and would look dumb.
-                // Otherwise, display the time text for the *segment's* times
-				// (like 6pm-midnight or midnight-10am)
+                // Otherwise, display the time text for the *segment's* times (like 6pm-midnight or midnight-10am)
                 if (seg.isStart || seg.isEnd) {
                     var unzonedStart = seg.start;
                     var unzonedEnd = seg.end;
-                    timeText = this._getTimeText(unzonedStart, unzonedEnd, allDay); // TODO:
-																					// give
-																					// the
-																					// timezones
+                    timeText = this._getTimeText(unzonedStart, unzonedEnd, allDay); // TODO: give the timezones
                     fullTimeText = this._getTimeText(unzonedStart, unzonedEnd, allDay, this.fullTimeFormat);
                     startTimeText = this._getTimeText(unzonedStart, unzonedEnd, allDay, null, false); // displayEnd=false
                 }
@@ -186,17 +172,18 @@ Docs & License: https://fullcalendar.io/
                         '</div>' :
                     '') +
                 '</div>' +
-                /*
-				 * TODO: write CSS for this (isResizableFromStart ? '<div
-				 * class="fc-resizer fc-start-resizer"></div>' : '' ) +
-				 */
+                /* TODO: write CSS for this
+                (isResizableFromStart ?
+                  '<div class="fc-resizer fc-start-resizer"></div>' :
+                  ''
+                  ) +
+                */
                 (isResizableFromEnd ?
                     '<div class="fc-resizer fc-end-resizer"></div>' :
                     '') +
                 '</a>';
         };
-        // Given an array of segments that are all in the same column, sets the
-		// backwardCoord and forwardCoord on each.
+        // Given an array of segments that are all in the same column, sets the backwardCoord and forwardCoord on each.
         // Assumed the segs are already ordered.
         // NOTE: Also reorders the given array by date!
         TimeGridEventRenderer.prototype.computeSegHorizontals = function (segs) {
@@ -214,48 +201,35 @@ Docs & License: https://fullcalendar.io/
                 }
             }
         };
-        // Calculate seg.forwardCoord and seg.backwardCoord for the segment,
-		// where both values range
-        // from 0 to 1. If the calendar is left-to-right, the seg.backwardCoord
-		// maps to "left" and
-        // seg.forwardCoord maps to "right" (via percentage). Vice-versa if the
-		// calendar is right-to-left.
+        // Calculate seg.forwardCoord and seg.backwardCoord for the segment, where both values range
+        // from 0 to 1. If the calendar is left-to-right, the seg.backwardCoord maps to "left" and
+        // seg.forwardCoord maps to "right" (via percentage). Vice-versa if the calendar is right-to-left.
         //
-        // The segment might be part of a "series", which means consecutive
-		// segments with the same pressure
-        // who's width is unknown until an edge has been hit.
-		// `seriesBackwardPressure` is the number of
-        // segments behind this one in the current series, and
-		// `seriesBackwardCoord` is the starting
+        // The segment might be part of a "series", which means consecutive segments with the same pressure
+        // who's width is unknown until an edge has been hit. `seriesBackwardPressure` is the number of
+        // segments behind this one in the current series, and `seriesBackwardCoord` is the starting
         // coordinate of the first segment in the series.
         TimeGridEventRenderer.prototype.computeSegForwardBack = function (seg, seriesBackwardPressure, seriesBackwardCoord) {
             var forwardSegs = seg.forwardSegs;
             var i;
             if (seg.forwardCoord === undefined) { // not already computed
                 if (!forwardSegs.length) {
-                    // if there are no forward segments, this segment should
-					// butt up against the edge
+                    // if there are no forward segments, this segment should butt up against the edge
                     seg.forwardCoord = 1;
                 }
                 else {
                     // sort highest pressure first
                     this.sortForwardSegs(forwardSegs);
-                    // this segment's forwardCoord will be calculated from the
-					// backwardCoord of the
+                    // this segment's forwardCoord will be calculated from the backwardCoord of the
                     // highest-pressure forward segment.
                     this.computeSegForwardBack(forwardSegs[0], seriesBackwardPressure + 1, seriesBackwardCoord);
                     seg.forwardCoord = forwardSegs[0].backwardCoord;
                 }
-                // calculate the backwardCoord from the forwardCoord. consider
-				// the series
+                // calculate the backwardCoord from the forwardCoord. consider the series
                 seg.backwardCoord = seg.forwardCoord -
-                    (seg.forwardCoord - seriesBackwardCoord) / // available
-																// width for
-																// series
-                        (seriesBackwardPressure + 1); // # of segments in the
-														// series
-                // use this segment's coordinates to computed the coordinates of
-				// the less-pressurized
+                    (seg.forwardCoord - seriesBackwardCoord) / // available width for series
+                        (seriesBackwardPressure + 1); // # of segments in the series
+                // use this segment's coordinates to computed the coordinates of the less-pressurized
                 // forward segments
                 for (i = 0; i < forwardSegs.length; i++) {
                     this.computeSegForwardBack(forwardSegs[i], 0, seg.forwardCoord);
@@ -267,8 +241,7 @@ Docs & License: https://fullcalendar.io/
             var specs = [
                 // put higher-pressure first
                 { field: 'forwardPressure', order: -1 },
-                // put segments that are closer to initial edge first (and favor
-				// ones with no coords yet)
+                // put segments that are closer to initial edge first (and favor ones with no coords yet)
                 { field: 'backwardCoord', order: 1 }
             ].concat(this.context.view.eventOrderSpecs);
             objs.sort(function (obj0, obj1) {
@@ -278,8 +251,7 @@ Docs & License: https://fullcalendar.io/
                 return c._seg;
             });
         };
-        // Given foreground event segments that have already had their position
-		// coordinates computed,
+        // Given foreground event segments that have already had their position coordinates computed,
         // assigns position-related CSS values to their elements.
         TimeGridEventRenderer.prototype.assignSegCss = function (segs) {
             for (var _i = 0, segs_1 = segs; _i < segs_1.length; _i++) {
@@ -289,37 +261,24 @@ Docs & License: https://fullcalendar.io/
                     seg.el.classList.add('fc-time-grid-event-inset');
                 }
                 // if the event is short that the title will be cut off,
-                // attach a className that condenses the title into the time
-				// area.
+                // attach a className that condenses the title into the time area.
                 if (seg.eventRange.def.title && seg.bottom - seg.top < 30) {
-                    seg.el.classList.add('fc-short'); // TODO: "condensed" is
-														// a better name
+                    seg.el.classList.add('fc-short'); // TODO: "condensed" is a better name
                 }
             }
         };
-        // Generates an object with CSS properties/values that should be applied
-		// to an event segment element.
-        // Contains important positioning-related properties that should be
-		// applied to any event element, customized or not.
+        // Generates an object with CSS properties/values that should be applied to an event segment element.
+        // Contains important positioning-related properties that should be applied to any event element, customized or not.
         TimeGridEventRenderer.prototype.generateSegCss = function (seg) {
             var shouldOverlap = this.context.options.slotEventOverlap;
-            var backwardCoord = seg.backwardCoord; // the left side if LTR. the
-													// right side if RTL.
-													// floating-point
-            var forwardCoord = seg.forwardCoord; // the right side if LTR.
-													// the left side if RTL.
-													// floating-point
-            var props = this.timeGrid.generateSegVerticalCss(seg); // get
-																	// top/bottom
-																	// first
+            var backwardCoord = seg.backwardCoord; // the left side if LTR. the right side if RTL. floating-point
+            var forwardCoord = seg.forwardCoord; // the right side if LTR. the left side if RTL. floating-point
+            var props = this.timeGrid.generateSegVerticalCss(seg); // get top/bottom first
             var isRtl = this.timeGrid.isRtl;
-            var left; // amount of space from left edge, a fraction of the
-						// total width
-            var right; // amount of space from right edge, a fraction of the
-						// total width
+            var left; // amount of space from left edge, a fraction of the total width
+            var right; // amount of space from right edge, a fraction of the total width
             if (shouldOverlap) {
-                // double the width, but don't go beyond the maximum forward
-				// coordinate (1.0)
+                // double the width, but don't go beyond the maximum forward coordinate (1.0)
                 forwardCoord = Math.min(1, backwardCoord + (forwardCoord - backwardCoord) * 2);
             }
             if (isRtl) {
@@ -334,24 +293,15 @@ Docs & License: https://fullcalendar.io/
             props.left = left * 100 + '%';
             props.right = right * 100 + '%';
             if (shouldOverlap && seg.forwardPressure) {
-                // add padding to the edge so that forward stacked events don't
-				// cover the resizer's icon
-                props[isRtl ? 'marginLeft' : 'marginRight'] = 10 * 2; // 10 is
-																		// a
-																		// guesstimate
-																		// of
-																		// the
-																		// icon's
-																		// width
+                // add padding to the edge so that forward stacked events don't cover the resizer's icon
+                props[isRtl ? 'marginLeft' : 'marginRight'] = 10 * 2; // 10 is a guesstimate of the icon's width
             }
             return props;
         };
         return TimeGridEventRenderer;
     }(core.FgEventRenderer));
-    // Builds an array of segments "levels". The first level will be the
-	// leftmost tier of segments if the calendar is
-    // left-to-right, or the rightmost if the calendar is right-to-left. Assumes
-	// the segments are already ordered by date.
+    // Builds an array of segments "levels". The first level will be the leftmost tier of segments if the calendar is
+    // left-to-right, or the rightmost if the calendar is right-to-left. Assumes the segments are already ordered by date.
     function buildSlotSegLevels(segs) {
         var levels = [];
         var i;
@@ -359,8 +309,7 @@ Docs & License: https://fullcalendar.io/
         var j;
         for (i = 0; i < segs.length; i++) {
             seg = segs[i];
-            // go through all the levels and stop on the first level where there
-			// are no collisions
+            // go through all the levels and stop on the first level where there are no collisions
             for (j = 0; j < levels.length; j++) {
                 if (!computeSlotSegCollisions(seg, levels[j]).length) {
                     break;
@@ -372,8 +321,7 @@ Docs & License: https://fullcalendar.io/
         return levels;
     }
     // For every segment, figure out the other segments that are in subsequent
-    // levels that also occupy the same vertical space. Accumulate in
-	// seg.forwardSegs
+    // levels that also occupy the same vertical space. Accumulate in seg.forwardSegs
     function computeForwardSlotSegs(levels) {
         var i;
         var level;
@@ -391,10 +339,8 @@ Docs & License: https://fullcalendar.io/
             }
         }
     }
-    // Figure out which path forward (via seg.forwardSegs) results in the
-	// longest path until
-    // the furthest edge is reached. The number of segments in this path will be
-	// seg.forwardPressure
+    // Figure out which path forward (via seg.forwardSegs) results in the longest path until
+    // the furthest edge is reached. The number of segments in this path will be seg.forwardPressure
     function computeSlotSegPressures(seg) {
         var forwardSegs = seg.forwardSegs;
         var forwardPressure = 0;
@@ -405,8 +351,7 @@ Docs & License: https://fullcalendar.io/
                 forwardSeg = forwardSegs[i];
                 // figure out the child's maximum forward path
                 computeSlotSegPressures(forwardSeg);
-                // either use the existing maximum, or use the child's forward
-				// pressure
+                // either use the existing maximum, or use the child's forward pressure
                 // plus one (for the forwardSeg itself)
                 forwardPressure = Math.max(forwardPressure, 1 + forwardSeg.forwardPressure);
             }
@@ -494,10 +439,8 @@ Docs & License: https://fullcalendar.io/
         return TimeGridFillRenderer;
     }(core.FillRenderer));
 
-    /*
-	 * A component that renders one or more columns of vertical time slots
-	 * ----------------------------------------------------------------------------------------------------------------------
-	 */
+    /* A component that renders one or more columns of vertical time slots
+    ----------------------------------------------------------------------------------------------------------------------*/
     // potential nice values for the slot-duration and interval-duration
     // from largest to smallest
     var AGENDA_STOCK_SUB_DURATIONS = [
@@ -536,10 +479,8 @@ Docs & License: https://fullcalendar.io/
             _this.renderProps = renderProps;
             return _this;
         }
-        /*
-		 * Options
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Options
+        ------------------------------------------------------------------------------------------------------------------*/
         // Parses various options into properties of this object
         TimeGrid.prototype.processOptions = function () {
             var slotDuration = this.opt('slotDuration');
@@ -579,8 +520,7 @@ Docs & License: https://fullcalendar.io/
             var i;
             var labelInterval;
             var slotsPerLabel;
-            // find the smallest stock label interval that results in more than
-			// one slots-per-label
+            // find the smallest stock label interval that results in more than one slots-per-label
             for (i = AGENDA_STOCK_SUB_DURATIONS.length - 1; i >= 0; i--) {
                 labelInterval = core.createDuration(AGENDA_STOCK_SUB_DURATIONS[i]);
                 slotsPerLabel = core.wholeDivideDurations(labelInterval, slotDuration);
@@ -590,10 +530,8 @@ Docs & License: https://fullcalendar.io/
             }
             return slotDuration; // fall back
         };
-        /*
-		 * Rendering
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Rendering
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGrid.prototype.render = function (props) {
             var cells = props.cells;
             this.colCnt = cells.length;
@@ -641,16 +579,14 @@ Docs & License: https://fullcalendar.io/
             );
             this.isSlatSizesDirty = true;
         };
-        // Generates the HTML for the horizontal "slats" that run width-wise.
-		// Has a time axis on a side. Depends on RTL.
+        // Generates the HTML for the horizontal "slats" that run width-wise. Has a time axis on a side. Depends on RTL.
         TimeGrid.prototype.renderSlatRowHtml = function (dateProfile) {
             var _a = this, dateEnv = _a.dateEnv, theme = _a.theme, isRtl = _a.isRtl;
             var html = '';
             var dayStart = core.startOfDay(dateProfile.renderRange.start);
             var slotTime = dateProfile.minTime;
             var slotIterator = core.createDuration(0);
-            var slotDate; // will be on the view's first day, but we only care
-							// about its time
+            var slotDate; // will be on the view's first day, but we only care about its time
             var isLabeled;
             var axisHtml;
             // Calculate the time for each slot
@@ -710,10 +646,8 @@ Docs & License: https://fullcalendar.io/
         TimeGrid.prototype._unrenderColumns = function () {
             this.unrenderContentSkeleton();
         };
-        /*
-		 * Content Skeleton
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Content Skeleton
+        ------------------------------------------------------------------------------------------------------------------*/
         // Renders the DOM that the view's content will live in
         TimeGrid.prototype.renderContentSkeleton = function () {
             var parts = [];
@@ -757,8 +691,7 @@ Docs & License: https://fullcalendar.io/
         TimeGrid.prototype.unrenderContentSkeleton = function () {
             core.removeElement(this.contentSkeletonEl);
         };
-        // Given a flat array of segments, return an array of sub-arrays,
-		// grouped by each segment's col
+        // Given a flat array of segments, return an array of sub-arrays, grouped by each segment's col
         TimeGrid.prototype.groupSegsByCol = function (segs) {
             var segsByCol = [];
             var i;
@@ -770,25 +703,21 @@ Docs & License: https://fullcalendar.io/
             }
             return segsByCol;
         };
-        // Given segments grouped by column, insert the segments' elements into
-		// a parallel array of container
+        // Given segments grouped by column, insert the segments' elements into a parallel array of container
         // elements, each living within a column.
         TimeGrid.prototype.attachSegsByCol = function (segsByCol, containerEls) {
             var col;
             var segs;
             var i;
-            for (col = 0; col < this.colCnt; col++) { // iterate each column
-														// grouping
+            for (col = 0; col < this.colCnt; col++) { // iterate each column grouping
                 segs = segsByCol[col];
                 for (i = 0; i < segs.length; i++) {
                     containerEls[col].appendChild(segs[i].el);
                 }
             }
         };
-        /*
-		 * Now Indicator
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Now Indicator
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGrid.prototype.getNowIndicatorUnit = function () {
             return 'minute'; // will refresh on the minute
         };
@@ -822,38 +751,27 @@ Docs & License: https://fullcalendar.io/
                 this.nowIndicatorEls = null;
             }
         };
-        /*
-		 * Coordinates
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Coordinates
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGrid.prototype.getTotalSlatHeight = function () {
             return this.slatContainerEl.offsetHeight;
         };
-        // Computes the top coordinate, relative to the bounds of the grid, of
-		// the given date.
-        // A `startOfDayDate` must be given for avoiding ambiguity over how to
-		// treat midnight.
+        // Computes the top coordinate, relative to the bounds of the grid, of the given date.
+        // A `startOfDayDate` must be given for avoiding ambiguity over how to treat midnight.
         TimeGrid.prototype.computeDateTop = function (when, startOfDayDate) {
             if (!startOfDayDate) {
                 startOfDayDate = core.startOfDay(when);
             }
             return this.computeTimeTop(when.valueOf() - startOfDayDate.valueOf());
         };
-        // Computes the top coordinate, relative to the bounds of the grid, of
-		// the given time (a Duration).
+        // Computes the top coordinate, relative to the bounds of the grid, of the given time (a Duration).
         TimeGrid.prototype.computeTimeTop = function (timeMs) {
             var len = this.slatEls.length;
             var dateProfile = this.props.dateProfile;
-            var slatCoverage = (timeMs - core.asRoughMs(dateProfile.minTime)) / core.asRoughMs(this.slotDuration); // floating-point
-																													// value
-																													// of #
-																													// of
-																													// slots
-																													// covered
+            var slatCoverage = (timeMs - core.asRoughMs(dateProfile.minTime)) / core.asRoughMs(this.slotDuration); // floating-point value of # of slots covered
             var slatIndex;
             var slatRemainder;
-            // compute a floating-point number for how many slats should be
-			// progressed through.
+            // compute a floating-point number for how many slats should be progressed through.
             // from 0 to number of slats (inclusive)
             // constrained because minTime/maxTime might be customized.
             slatCoverage = Math.max(0, slatCoverage);
@@ -862,15 +780,13 @@ Docs & License: https://fullcalendar.io/
             // from 0 to number slats (*exclusive*, so len-1)
             slatIndex = Math.floor(slatCoverage);
             slatIndex = Math.min(slatIndex, len - 1);
-            // how much further through the slatIndex slat (from 0.0-1.0) must
-			// be covered in addition.
+            // how much further through the slatIndex slat (from 0.0-1.0) must be covered in addition.
             // could be 1.0 if slatCoverage is covering *all* the slots
             slatRemainder = slatCoverage - slatIndex;
             return this.slatPositions.tops[slatIndex] +
                 this.slatPositions.getHeight(slatIndex) * slatRemainder;
         };
-        // For each segment in an array, computes and assigns its top and bottom
-		// properties
+        // For each segment in an array, computes and assigns its top and bottom properties
         TimeGrid.prototype.computeSegVerticals = function (segs) {
             var eventMinHeight = this.opt('timeGridEventMinHeight');
             var i;
@@ -883,8 +799,7 @@ Docs & License: https://fullcalendar.io/
                 seg.bottom = Math.max(seg.top + eventMinHeight, this.computeDateTop(seg.end, dayDate));
             }
         };
-        // Given segments that already have their top/bottom properties
-		// computed, applies those values to
+        // Given segments that already have their top/bottom properties computed, applies those values to
         // the segments' elements.
         TimeGrid.prototype.assignSegVerticals = function (segs) {
             var i;
@@ -894,19 +809,15 @@ Docs & License: https://fullcalendar.io/
                 core.applyStyle(seg.el, this.generateSegVerticalCss(seg));
             }
         };
-        // Generates an object with CSS properties for the top/bottom
-		// coordinates of a segment element
+        // Generates an object with CSS properties for the top/bottom coordinates of a segment element
         TimeGrid.prototype.generateSegVerticalCss = function (seg) {
             return {
                 top: seg.top,
-                bottom: -seg.bottom // flipped because needs to be space beyond
-									// bottom edge of event container
+                bottom: -seg.bottom // flipped because needs to be space beyond bottom edge of event container
             };
         };
-        /*
-		 * Sizing
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Sizing
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGrid.prototype.buildPositionCaches = function () {
             this.buildColPositions();
             this.buildSlatPositions();
@@ -917,10 +828,8 @@ Docs & License: https://fullcalendar.io/
         TimeGrid.prototype.buildSlatPositions = function () {
             this.slatPositions.build();
         };
-        /*
-		 * Hit System
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Hit System
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGrid.prototype.positionToHit = function (positionLeft, positionTop) {
             var _a = this, dateEnv = _a.dateEnv, snapsPerSlot = _a.snapsPerSlot, slatPositions = _a.slatPositions, colPositions = _a.colPositions;
             var colIndex = colPositions.leftToIndex(positionLeft);
@@ -928,19 +837,8 @@ Docs & License: https://fullcalendar.io/
             if (colIndex != null && slatIndex != null) {
                 var slatTop = slatPositions.tops[slatIndex];
                 var slatHeight = slatPositions.getHeight(slatIndex);
-                var partial = (positionTop - slatTop) / slatHeight; // floating
-																	// point
-																	// number
-																	// between 0
-																	// and 1
-                var localSnapIndex = Math.floor(partial * snapsPerSlot); // the
-																			// snap
-																			// #
-																			// relative
-																			// to
-																			// start
-																			// of
-																			// slat
+                var partial = (positionTop - slatTop) / slatHeight; // floating point number between 0 and 1
+                var localSnapIndex = Math.floor(partial * snapsPerSlot); // the snap # relative to start of slat
                 var snapIndex = slatIndex * snapsPerSlot + localSnapIndex;
                 var dayDate = this.props.cells[colIndex].date;
                 var time = core.addDurations(this.props.dateProfile.minTime, core.multiplyDuration(this.snapDuration, snapIndex));
@@ -962,10 +860,8 @@ Docs & License: https://fullcalendar.io/
                 };
             }
         };
-        /*
-		 * Event Drag Visualization
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Event Drag Visualization
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGrid.prototype._renderEventDrag = function (state) {
             if (state) {
                 this.eventRenderer.hideByHash(state.affectedInstances);
@@ -984,10 +880,8 @@ Docs & License: https://fullcalendar.io/
                 this.fillRenderer.unrender('highlight');
             }
         };
-        /*
-		 * Event Resize Visualization
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Event Resize Visualization
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGrid.prototype._renderEventResize = function (state) {
             if (state) {
                 this.eventRenderer.hideByHash(state.affectedInstances);
@@ -1000,12 +894,9 @@ Docs & License: https://fullcalendar.io/
                 this.mirrorRenderer.unrender(state.segs, { isResizing: true, sourceSeg: state.sourceSeg });
             }
         };
-        /*
-		 * Selection
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
-        // Renders a visual indication of a selection. Overrides the default,
-		// which was to simply render a highlight.
+        /* Selection
+        ------------------------------------------------------------------------------------------------------------------*/
+        // Renders a visual indication of a selection. Overrides the default, which was to simply render a highlight.
         TimeGrid.prototype._renderDateSelection = function (segs) {
             if (segs) {
                 if (this.opt('selectMirror')) {
@@ -1058,25 +949,18 @@ Docs & License: https://fullcalendar.io/
 
     var TIMEGRID_ALL_DAY_EVENT_LIMIT = 5;
     var WEEK_HEADER_FORMAT = core.createFormatter({ week: 'short' });
-    /*
-	 * An abstract class for all timegrid-related views. Displays one more
-	 * columns with time slots running vertically.
-	 * ----------------------------------------------------------------------------------------------------------------------
-	 */
-    // Is a manager for the TimeGrid subcomponent and possibly the DayGrid
-	// subcomponent (if allDaySlot is on).
+    /* An abstract class for all timegrid-related views. Displays one more columns with time slots running vertically.
+    ----------------------------------------------------------------------------------------------------------------------*/
+    // Is a manager for the TimeGrid subcomponent and possibly the DayGrid subcomponent (if allDaySlot is on).
     // Responsible for managing width/height.
     var TimeGridView = /** @class */ (function (_super) {
         __extends(TimeGridView, _super);
         function TimeGridView(context, viewSpec, dateProfileGenerator, parentEl) {
             var _this = _super.call(this, context, viewSpec, dateProfileGenerator, parentEl) || this;
             _this.splitter = new AllDaySplitter();
-            /*
-			 * Header Render Methods
-			 * ------------------------------------------------------------------------------------------------------------------
-			 */
-            // Generates the HTML that will go before the day-of week header
-			// cells
+            /* Header Render Methods
+            ------------------------------------------------------------------------------------------------------------------*/
+            // Generates the HTML that will go before the day-of week header cells
             _this.renderHeadIntroHtml = function () {
                 var _a = _this, theme = _a.theme, dateEnv = _a.dateEnv;
                 var range = _this.props.dateProfile.renderRange;
@@ -1086,11 +970,8 @@ Docs & License: https://fullcalendar.io/
                     weekText = dateEnv.format(range.start, WEEK_HEADER_FORMAT);
                     return '' +
                         '<th class="fc-axis fc-week-number ' + theme.getClass('widgetHeader') + '" ' + _this.axisStyleAttr() + '>' +
-                        core.buildGotoAnchorHtml(// aside from link,
-													// important for
-													// matchCellWidths
-                        _this, { date: range.start, type: 'week', forceOff: dayCnt > 1 }, core.htmlEscape(weekText) // inner
-																													// HTML
+                        core.buildGotoAnchorHtml(// aside from link, important for matchCellWidths
+                        _this, { date: range.start, type: 'week', forceOff: dayCnt > 1 }, core.htmlEscape(weekText) // inner HTML
                         ) +
                         '</th>';
                 }
@@ -1098,26 +979,20 @@ Docs & License: https://fullcalendar.io/
                     return '<th class="fc-axis ' + theme.getClass('widgetHeader') + '" ' + _this.axisStyleAttr() + '></th>';
                 }
             };
-            /*
-			 * Time Grid Render Methods
-			 * ------------------------------------------------------------------------------------------------------------------
-			 */
-            // Generates the HTML that goes before the bg of the TimeGrid slot
-			// area. Long vertical column.
+            /* Time Grid Render Methods
+            ------------------------------------------------------------------------------------------------------------------*/
+            // Generates the HTML that goes before the bg of the TimeGrid slot area. Long vertical column.
             _this.renderTimeGridBgIntroHtml = function () {
                 var theme = _this.theme;
                 return '<td class="fc-axis ' + theme.getClass('widgetContent') + '" ' + _this.axisStyleAttr() + '></td>';
             };
             // Generates the HTML that goes before all other types of cells.
-            // Affects content-skeleton, mirror-skeleton, highlight-skeleton for
-			// both the time-grid and day-grid.
+            // Affects content-skeleton, mirror-skeleton, highlight-skeleton for both the time-grid and day-grid.
             _this.renderTimeGridIntroHtml = function () {
                 return '<td class="fc-axis" ' + _this.axisStyleAttr() + '></td>';
             };
-            /*
-			 * Day Grid Render Methods
-			 * ------------------------------------------------------------------------------------------------------------------
-			 */
+            /* Day Grid Render Methods
+            ------------------------------------------------------------------------------------------------------------------*/
             // Generates the HTML that goes before the all-day cells
             _this.renderDayGridBgIntroHtml = function () {
                 var theme = _this.theme;
@@ -1129,8 +1004,7 @@ Docs & License: https://fullcalendar.io/
                     '</td>';
             };
             // Generates the HTML that goes before all other types of cells.
-            // Affects content-skeleton, mirror-skeleton, highlight-skeleton for
-			// both the time-grid and day-grid.
+            // Affects content-skeleton, mirror-skeleton, highlight-skeleton for both the time-grid and day-grid.
             _this.renderDayGridIntroHtml = function () {
                 return '<td class="fc-axis" ' + _this.axisStyleAttr() + '></td>';
             };
@@ -1148,10 +1022,8 @@ Docs & License: https://fullcalendar.io/
                 renderBgIntroHtml: _this.renderTimeGridBgIntroHtml,
                 renderIntroHtml: _this.renderTimeGridIntroHtml
             });
-            if (_this.opt('allDaySlot')) { // should we display the "all-day"
-											// area?
-                _this.dayGrid = new daygrid.DayGrid(// the all-day subcomponent
-													// of this view
+            if (_this.opt('allDaySlot')) { // should we display the "all-day" area?
+                _this.dayGrid = new daygrid.DayGrid(// the all-day subcomponent of this view
                 _this.context, _this.el.querySelector('.fc-day-grid'), {
                     renderNumberIntroHtml: _this.renderDayGridIntroHtml,
                     renderBgIntroHtml: _this.renderDayGridBgIntroHtml,
@@ -1159,8 +1031,7 @@ Docs & License: https://fullcalendar.io/
                     colWeekNumbersVisible: false,
                     cellWeekNumbersVisible: false
                 });
-                // have the day-grid extend it's coordinate area over the <hr>
-				// dividing the two grids
+                // have the day-grid extend it's coordinate area over the <hr> dividing the two grids
                 _this.dayGrid.bottomCoordPadding = _this.el.querySelector('.fc-divider').offsetHeight;
             }
             return _this;
@@ -1173,13 +1044,10 @@ Docs & License: https://fullcalendar.io/
             }
             this.scroller.destroy();
         };
-        /*
-		 * Rendering
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Rendering
+        ------------------------------------------------------------------------------------------------------------------*/
         // Builds the HTML skeleton for the view.
-        // The day-grid and time-grid components will render inside containers
-		// defined by this HTML.
+        // The day-grid and time-grid components will render inside containers defined by this HTML.
         TimeGridView.prototype.renderSkeletonHtml = function () {
             var theme = this.theme;
             return '' +
@@ -1203,10 +1071,8 @@ Docs & License: https://fullcalendar.io/
                 '</tbody>' +
                 '</table>';
         };
-        /*
-		 * Now Indicator
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Now Indicator
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGridView.prototype.getNowIndicatorUnit = function () {
             return this.timeGrid.getNowIndicatorUnit();
         };
@@ -1216,18 +1082,10 @@ Docs & License: https://fullcalendar.io/
         TimeGridView.prototype.unrenderNowIndicator = function () {
             this.timeGrid.unrenderNowIndicator();
         };
-        /*
-		 * Dimensions
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
+        /* Dimensions
+        ------------------------------------------------------------------------------------------------------------------*/
         TimeGridView.prototype.updateSize = function (isResize, viewHeight, isAuto) {
-            _super.prototype.updateSize.call(this, isResize, viewHeight, isAuto); // will
-																					// call
-																					// updateBaseSize.
-																					// important
-																					// that
-																					// executes
-																					// first
+            _super.prototype.updateSize.call(this, isResize, viewHeight, isAuto); // will call updateBaseSize. important that executes first
             this.timeGrid.updateSize(isResize);
             if (this.dayGrid) {
                 this.dayGrid.updateSize(isResize);
@@ -1241,8 +1099,7 @@ Docs & License: https://fullcalendar.io/
             var scrollbarWidths;
             // make all axis cells line up
             this.axisWidth = core.matchCellWidths(core.findElements(this.el, '.fc-axis'));
-            // hack to give the view some height prior to timeGrid's columns
-			// being rendered
+            // hack to give the view some height prior to timeGrid's columns being rendered
             // TODO: separate setting height from scroller VS timeGrid.
             if (!this.timeGrid.colEls) {
                 if (!isAuto) {
@@ -1251,85 +1108,62 @@ Docs & License: https://fullcalendar.io/
                 }
                 return;
             }
-            // set of fake row elements that must compensate when scroller has
-			// scrollbars
+            // set of fake row elements that must compensate when scroller has scrollbars
             var noScrollRowEls = core.findElements(this.el, '.fc-row').filter(function (node) {
                 return !_this.scroller.el.contains(node);
             });
             // reset all dimensions back to the original state
-            this.timeGrid.bottomRuleEl.style.display = 'none'; // will be shown
-																// later if this
-																// <hr> is
-																// necessary
+            this.timeGrid.bottomRuleEl.style.display = 'none'; // will be shown later if this <hr> is necessary
             this.scroller.clear(); // sets height to 'auto' and clears overflow
             noScrollRowEls.forEach(core.uncompensateScroll);
             // limit number of events in the all-day area
             if (this.dayGrid) {
-                this.dayGrid.removeSegPopover(); // kill the "more" popover
-													// if displayed
+                this.dayGrid.removeSegPopover(); // kill the "more" popover if displayed
                 eventLimit = this.opt('eventLimit');
                 if (eventLimit && typeof eventLimit !== 'number') {
-                    eventLimit = TIMEGRID_ALL_DAY_EVENT_LIMIT; // make sure
-																// "auto" goes
-																// to a real
-																// number
+                    eventLimit = TIMEGRID_ALL_DAY_EVENT_LIMIT; // make sure "auto" goes to a real number
                 }
                 if (eventLimit) {
                     this.dayGrid.limitRows(eventLimit);
                 }
             }
-            if (!isAuto) { // should we force dimensions of the scroll
-							// container?
+            if (!isAuto) { // should we force dimensions of the scroll container?
                 scrollerHeight = this.computeScrollerHeight(viewHeight);
                 this.scroller.setHeight(scrollerHeight);
                 scrollbarWidths = this.scroller.getScrollbarWidths();
-                if (scrollbarWidths.left || scrollbarWidths.right) { // using
-																		// scrollbars?
+                if (scrollbarWidths.left || scrollbarWidths.right) { // using scrollbars?
                     // make the all-day and header rows lines up
                     noScrollRowEls.forEach(function (rowEl) {
                         core.compensateScroll(rowEl, scrollbarWidths);
                     });
-                    // the scrollbar compensation might have changed text flow,
-					// which might affect height, so recalculate
+                    // the scrollbar compensation might have changed text flow, which might affect height, so recalculate
                     // and reapply the desired height to the scroller.
                     scrollerHeight = this.computeScrollerHeight(viewHeight);
                     this.scroller.setHeight(scrollerHeight);
                 }
                 // guarantees the same scrollbar widths
                 this.scroller.lockOverflow(scrollbarWidths);
-                // if there's any space below the slats, show the horizontal
-				// rule.
-                // this won't cause any new overflow, because lockOverflow
-				// already called.
+                // if there's any space below the slats, show the horizontal rule.
+                // this won't cause any new overflow, because lockOverflow already called.
                 if (this.timeGrid.getTotalSlatHeight() < scrollerHeight) {
                     this.timeGrid.bottomRuleEl.style.display = '';
                 }
             }
         };
-        // given a desired total height of the view, returns what the height of
-		// the scroller should be
+        // given a desired total height of the view, returns what the height of the scroller should be
         TimeGridView.prototype.computeScrollerHeight = function (viewHeight) {
             return viewHeight -
-                core.subtractInnerElHeight(this.el, this.scroller.el); // everything
-																		// that's
-																		// NOT
-																		// the
-																		// scroller
+                core.subtractInnerElHeight(this.el, this.scroller.el); // everything that's NOT the scroller
         };
-        /*
-		 * Scroll
-		 * ------------------------------------------------------------------------------------------------------------------
-		 */
-        // Computes the initial pre-configured scroll state prior to allowing
-		// the user to change it
+        /* Scroll
+        ------------------------------------------------------------------------------------------------------------------*/
+        // Computes the initial pre-configured scroll state prior to allowing the user to change it
         TimeGridView.prototype.computeDateScroll = function (timeMs) {
             var top = this.timeGrid.computeTimeTop(timeMs);
-            // zoom can give weird floating-point values. rather scroll a little
-			// bit further
+            // zoom can give weird floating-point values. rather scroll a little bit further
             top = Math.ceil(top);
             if (top) {
-                top++; // to overcome top border that slots beyond the first
-						// have. looks better
+                top++; // to overcome top border that slots beyond the first have. looks better
             }
             return { top: top };
         };
@@ -1341,8 +1175,7 @@ Docs & License: https://fullcalendar.io/
                 this.scroller.setScrollTop(scroll.top);
             }
         };
-        // Generates an HTML attribute string for setting the width of the axis,
-		// if it is known
+        // Generates an HTML attribute string for setting the width of the axis, if it is known
         TimeGridView.prototype.axisStyleAttr = function () {
             if (this.axisWidth != null) {
                 return 'style="width:' + this.axisWidth + 'px"';
@@ -1351,9 +1184,7 @@ Docs & License: https://fullcalendar.io/
         };
         return TimeGridView;
     }(core.View));
-    TimeGridView.prototype.usesMinMaxTime = true; // indicates that
-													// minTime/maxTime affects
-													// rendering
+    TimeGridView.prototype.usesMinMaxTime = true; // indicates that minTime/maxTime affects rendering
 
     var SimpleTimeGrid = /** @class */ (function (_super) {
         __extends(SimpleTimeGrid, _super);
@@ -1461,8 +1292,7 @@ Docs & License: https://fullcalendar.io/
             }
         };
         TimeGridView.prototype.render = function (props) {
-            _super.prototype.render.call(this, props); // for flags for
-														// updateSize
+            _super.prototype.render.call(this, props); // for flags for updateSize
             var dateProfile = this.props.dateProfile;
             var dayTable = this.buildDayTable(dateProfile, this.dateProfileGenerator);
             var splitProps = this.splitter.splitProps(props);
@@ -1498,8 +1328,7 @@ Docs & License: https://fullcalendar.io/
                 class: TimeGridView$1,
                 allDaySlot: true,
                 slotDuration: '00:30:00',
-                slotEventOverlap: true // a bad name. confused with
-										// overlap/constraint system
+                slotEventOverlap: true // a bad name. confused with overlap/constraint system
             },
             timeGridDay: {
                 type: 'timeGrid',

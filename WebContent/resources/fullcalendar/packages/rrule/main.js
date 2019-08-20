@@ -9,18 +9,20 @@ Docs & License: https://fullcalendar.io/
     (global = global || self, factory(global.FullCalendarRrule = {}, global.rrule, global.FullCalendar));
 }(this, function (exports, rrule, core) { 'use strict';
 
-    /***************************************************************************
-	 * ! Copyright (c) Microsoft Corporation. All rights reserved. Licensed
-	 * under the Apache License, Version 2.0 (the "License"); you may not use
-	 * this file except in compliance with the License. You may obtain a copy of
-	 * the License at http://www.apache.org/licenses/LICENSE-2.0 THIS CODE IS
-	 * PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	 * KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-	 * WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-	 * MERCHANTABLITY OR NON-INFRINGEMENT. See the Apache Version 2.0 License
-	 * for specific language governing permissions and limitations under the
-	 * License.
-	 **************************************************************************/
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
 
     var __assign = function() {
         __assign = Object.assign || function __assign(t) {
@@ -53,12 +55,9 @@ Docs & License: https://fullcalendar.io/
             return null;
         },
         expand: function (rrule, framingRange) {
-            // we WANT an inclusive start and in exclusive end, but the js rrule
-			// lib will only do either BOTH
-            // inclusive or BOTH exclusive, which is stupid:
-			// https://github.com/jakubroztocil/rrule/issues/84
-            // Workaround: make inclusive, which will generate extra occurences,
-			// and then trim.
+            // we WANT an inclusive start and in exclusive end, but the js rrule lib will only do either BOTH
+            // inclusive or BOTH exclusive, which is stupid: https://github.com/jakubroztocil/rrule/issues/84
+            // Workaround: make inclusive, which will generate extra occurences, and then trim.
             return rrule.between(framingRange.start, framingRange.end, true)
                 .filter(function (date) {
                 return date.valueOf() < framingRange.end.valueOf();
@@ -96,15 +95,10 @@ Docs & License: https://fullcalendar.io/
                 refined.wkst = convertConstant(refined.wkst);
             }
             else {
-                refined.wkst = (dateEnv.weekDow - 1 + 7) % 7; // convert
-																// Sunday-first
-																// to
-																// Monday-first
+                refined.wkst = (dateEnv.weekDow - 1 + 7) % 7; // convert Sunday-first to Monday-first
             }
             if (refined.byweekday != null) {
-                refined.byweekday = convertConstants(refined.byweekday); // the
-																			// plural
-																			// version
+                refined.byweekday = convertConstants(refined.byweekday); // the plural version
             }
             rrule$1 = new rrule.RRule(refined);
         }

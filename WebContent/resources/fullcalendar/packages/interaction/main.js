@@ -9,18 +9,20 @@ Docs & License: https://fullcalendar.io/
     (global = global || self, factory(global.FullCalendarInteraction = {}, global.FullCalendar));
 }(this, function (exports, core) { 'use strict';
 
-    /***************************************************************************
-	 * ! Copyright (c) Microsoft Corporation. All rights reserved. Licensed
-	 * under the Apache License, Version 2.0 (the "License"); you may not use
-	 * this file except in compliance with the License. You may obtain a copy of
-	 * the License at http://www.apache.org/licenses/LICENSE-2.0 THIS CODE IS
-	 * PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	 * KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-	 * WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-	 * MERCHANTABLITY OR NON-INFRINGEMENT. See the Apache Version 2.0 License
-	 * for specific language governing permissions and limitations under the
-	 * License.
-	 **************************************************************************/
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
     /* global Reflect, Promise */
 
     var extendStatics = function(d, b) {
@@ -52,25 +54,28 @@ Docs & License: https://fullcalendar.io/
     var listenerCnt = 0;
     var isWindowTouchMoveCancelled = false;
     /*
-	 * Uses a "pointer" abstraction, which monitors UI events for both mouse and
-	 * touch. Tracks when the pointer "drags" on a certain element, meaning
-	 * down+move+up. Also, tracks if there was touch-scrolling. Also, can
-	 * prevent touch-scrolling from happening. Also, can fire pointermove events
-	 * when scrolling happens underneath, even when no real pointer movement.
-	 * emits: - pointerdown - pointermove - pointerup
-	 */
+    Uses a "pointer" abstraction, which monitors UI events for both mouse and touch.
+    Tracks when the pointer "drags" on a certain element, meaning down+move+up.
+
+    Also, tracks if there was touch-scrolling.
+    Also, can prevent touch-scrolling from happening.
+    Also, can fire pointermove events when scrolling happens underneath, even when no real pointer movement.
+
+    emits:
+    - pointerdown
+    - pointermove
+    - pointerup
+    */
     var PointerDragging = /** @class */ (function () {
         function PointerDragging(containerEl) {
             var _this = this;
             this.subjectEl = null;
             this.downEl = null;
             // options that can be directly assigned by caller
-            this.selector = ''; // will cause subjectEl in all emitted events to
-								// be this element
+            this.selector = ''; // will cause subjectEl in all emitted events to be this element
             this.handleSelector = '';
             this.shouldIgnoreMove = false;
-            this.shouldWatchScroll = true; // for simulating pointermove on
-											// scroll
+            this.shouldWatchScroll = true; // for simulating pointermove on scroll
             // internal states
             this.isDragging = false;
             this.isTouchDragging = false;
@@ -99,8 +104,7 @@ Docs & License: https://fullcalendar.io/
                 document.removeEventListener('mousemove', _this.handleMouseMove);
                 document.removeEventListener('mouseup', _this.handleMouseUp);
                 _this.emitter.trigger('pointerup', _this.createEventFromMouse(ev));
-                _this.cleanup(); // call last so that pointerup has access to
-									// props
+                _this.cleanup(); // call last so that pointerup has access to props
             };
             // Touch
             // ----------------------------------------------------------------------------------------------------
@@ -117,15 +121,9 @@ Docs & License: https://fullcalendar.io/
                         target.addEventListener('touchmove', _this.handleTouchMove);
                     }
                     target.addEventListener('touchend', _this.handleTouchEnd);
-                    target.addEventListener('touchcancel', _this.handleTouchEnd); // treat
-																					// it
-																					// as a
-																					// touch
-																					// end
-                    // attach a handler to get called when ANY scroll action
-					// happens on the page.
-                    // this was impossible to do with normal on/off because
-					// 'scroll' doesn't bubble.
+                    target.addEventListener('touchcancel', _this.handleTouchEnd); // treat it as a touch end
+                    // attach a handler to get called when ANY scroll action happens on the page.
+                    // this was impossible to do with normal on/off because 'scroll' doesn't bubble.
                     // http://stackoverflow.com/a/32954565/96342
                     window.addEventListener('scroll', _this.handleTouchScroll, true // useCapture
                     );
@@ -137,16 +135,14 @@ Docs & License: https://fullcalendar.io/
                 _this.emitter.trigger('pointermove', pev);
             };
             this.handleTouchEnd = function (ev) {
-                if (_this.isDragging) { // done to guard against touchend
-										// followed by touchcancel
+                if (_this.isDragging) { // done to guard against touchend followed by touchcancel
                     var target = ev.target;
                     target.removeEventListener('touchmove', _this.handleTouchMove);
                     target.removeEventListener('touchend', _this.handleTouchEnd);
                     target.removeEventListener('touchcancel', _this.handleTouchEnd);
                     window.removeEventListener('scroll', _this.handleTouchScroll, true); // useCaptured=true
                     _this.emitter.trigger('pointerup', _this.createEventFromTouch(ev));
-                    _this.cleanup(); // call last so that pointerup has
-										// access to props
+                    _this.cleanup(); // call last so that pointerup has access to props
                     _this.isTouchDragging = false;
                     startIgnoringMouse();
                 }
@@ -187,8 +183,7 @@ Docs & License: https://fullcalendar.io/
                 (!this.handleSelector || core.elementClosest(downEl, this.handleSelector))) {
                 this.subjectEl = subjectEl;
                 this.downEl = downEl;
-                this.isDragging = true; // do this first so cancelTouchScroll
-										// will work
+                this.isDragging = true; // do this first so cancelTouchScroll will work
                 this.wasTouchScroll = false;
                 return true;
             }
@@ -213,8 +208,7 @@ Docs & License: https://fullcalendar.io/
         PointerDragging.prototype.shouldIgnoreMouse = function () {
             return ignoreMouseDepth || this.isTouchDragging;
         };
-        // can be called by user of this class, to cancel touch-based scrolling
-		// for the current drag
+        // can be called by user of this class, to cancel touch-based scrolling for the current drag
         PointerDragging.prototype.cancelTouchScroll = function () {
             if (this.isDragging) {
                 isWindowTouchMoveCancelled = true;
@@ -302,8 +296,7 @@ Docs & License: https://fullcalendar.io/
         };
         return PointerDragging;
     }());
-    // Returns a boolean whether this was a left mouse click and no ctrl key
-	// (which means right click on Mac)
+    // Returns a boolean whether this was a left mouse click and no ctrl key (which means right click on Mac)
     function isPrimaryMouseButton(ev) {
         return ev.button === 0 && !ev.ctrlKey;
     }
@@ -334,10 +327,10 @@ Docs & License: https://fullcalendar.io/
     }
 
     /*
-	 * An effect in which an element follows the movement of a pointer across
-	 * the screen. The moving element is a clone of some other element. Must
-	 * call start + handleMove + stop.
-	 */
+    An effect in which an element follows the movement of a pointer across the screen.
+    The moving element is a clone of some other element.
+    Must call start + handleMove + stop.
+    */
     var ElementMirror = /** @class */ (function () {
         function ElementMirror() {
             this.isVisible = false; // must be explicitly enabled
@@ -370,10 +363,8 @@ Docs & License: https://fullcalendar.io/
                     if (this.mirrorEl) {
                         this.mirrorEl.style.display = '';
                     }
-                    this.isVisible = bool; // needs to happen before
-											// updateElPosition
-                    this.updateElPosition(); // because was not updating the
-												// position while invisible
+                    this.isVisible = bool; // needs to happen before updateElPosition
+                    this.updateElPosition(); // because was not updating the position while invisible
                 }
             }
             else {
@@ -396,8 +387,7 @@ Docs & License: https://fullcalendar.io/
                 this.mirrorEl &&
                 this.isVisible &&
                 this.revertDuration && // if 0, transition won't work
-                (this.deltaX || this.deltaY) // if same coords, transition
-												// won't work
+                (this.deltaX || this.deltaY) // if same coords, transition won't work
             ) {
                 this.doRevertAnimation(done, this.revertDuration);
             }
@@ -407,11 +397,7 @@ Docs & License: https://fullcalendar.io/
         };
         ElementMirror.prototype.doRevertAnimation = function (callback, revertDuration) {
             var mirrorEl = this.mirrorEl;
-            var finalSourceElRect = this.sourceEl.getBoundingClientRect(); // because
-																			// autoscrolling
-																			// might
-																			// have
-																			// happened
+            var finalSourceElRect = this.sourceEl.getBoundingClientRect(); // because autoscrolling might have happened
             mirrorEl.style.transition =
                 'top ' + revertDuration + 'ms,' +
                     'left ' + revertDuration + 'ms';
@@ -444,10 +430,8 @@ Docs & License: https://fullcalendar.io/
             var mirrorEl = this.mirrorEl;
             if (!mirrorEl) {
                 mirrorEl = this.mirrorEl = this.sourceEl.cloneNode(true); // cloneChildren=true
-                // we don't want long taps or any mouse interaction causing
-				// selection/menus.
-                // would use preventSelection(), but that prevents selectstart,
-				// causing problems.
+                // we don't want long taps or any mouse interaction causing selection/menus.
+                // would use preventSelection(), but that prevents selectstart, causing problems.
                 mirrorEl.classList.add('fc-unselectable');
                 mirrorEl.classList.add('fc-dragging');
                 core.applyStyle(mirrorEl, {
@@ -469,13 +453,13 @@ Docs & License: https://fullcalendar.io/
     }());
 
     /*
-	 * Is a cache for a given element's scroll information (all the info that
-	 * ScrollController stores) in addition the "client rectangle" of the
-	 * element.. the area within the scrollbars. The cache can be in one of two
-	 * modes: - doesListening:false - ignores when the container is scrolled by
-	 * someone else - doesListening:true - watch for scrolling and update the
-	 * cache
-	 */
+    Is a cache for a given element's scroll information (all the info that ScrollController stores)
+    in addition the "client rectangle" of the element.. the area within the scrollbars.
+
+    The cache can be in one of two modes:
+    - doesListening:false - ignores when the container is scrolled by someone else
+    - doesListening:true - watch for scrolling and update the cache
+    */
     var ScrollGeomCache = /** @class */ (function (_super) {
         __extends(ScrollGeomCache, _super);
         function ScrollGeomCache(scrollController, doesListening) {
@@ -493,9 +477,7 @@ Docs & License: https://fullcalendar.io/
             _this.scrollHeight = scrollController.getScrollHeight();
             _this.clientWidth = scrollController.getClientWidth();
             _this.clientHeight = scrollController.getClientHeight();
-            _this.clientRect = _this.computeClientRect(); // do last in case
-															// it needs cached
-															// values
+            _this.clientRect = _this.computeClientRect(); // do last in case it needs cached values
             if (_this.doesListening) {
                 _this.getEventTarget().addEventListener('scroll', _this.handleScroll);
             }
@@ -515,8 +497,7 @@ Docs & License: https://fullcalendar.io/
         ScrollGeomCache.prototype.setScrollTop = function (top) {
             this.scrollController.setScrollTop(top);
             if (!this.doesListening) {
-                // we are not relying on the element to normalize out-of-bounds
-				// scroll values
+                // we are not relying on the element to normalize out-of-bounds scroll values
                 // so we need to sanitize ourselves
                 this.scrollTop = Math.max(Math.min(top, this.getMaxScrollTop()), 0);
                 this.handleScrollChange();
@@ -525,8 +506,7 @@ Docs & License: https://fullcalendar.io/
         ScrollGeomCache.prototype.setScrollLeft = function (top) {
             this.scrollController.setScrollLeft(top);
             if (!this.doesListening) {
-                // we are not relying on the element to normalize out-of-bounds
-				// scroll values
+                // we are not relying on the element to normalize out-of-bounds scroll values
                 // so we need to sanitize ourselves
                 this.scrollLeft = Math.max(Math.min(top, this.getMaxScrollLeft()), 0);
                 this.handleScrollChange();
@@ -577,8 +557,7 @@ Docs & License: https://fullcalendar.io/
                 bottom: this.scrollTop + this.clientHeight
             };
         };
-        // the window is the only scroll object that changes it's rectangle
-		// relative
+        // the window is the only scroll object that changes it's rectangle relative
         // to the document's topleft as it scrolls
         WindowScrollGeomCache.prototype.handleScrollChange = function () {
             this.clientRect = this.computeClientRect();
@@ -591,10 +570,11 @@ Docs & License: https://fullcalendar.io/
     // https://developer.mozilla.org/en-US/docs/Web/API/Performance
     var getTime = typeof performance === 'function' ? performance.now : Date.now;
     /*
-	 * For a pointer interaction, automatically scrolls certain scroll
-	 * containers when the pointer approaches the edge. The caller must call
-	 * start + handleMove + stop.
-	 */
+    For a pointer interaction, automatically scrolls certain scroll containers when the pointer
+    approaches the edge.
+
+    The caller must call start + handleMove + stop.
+    */
     var AutoScroller = /** @class */ (function () {
         function AutoScroller() {
             var _this = this;
@@ -608,15 +588,13 @@ Docs & License: https://fullcalendar.io/
             this.pointerScreenY = null;
             this.isAnimating = false;
             this.scrollCaches = null;
-            // protect against the initial pointerdown being too close to an
-			// edge and starting the scroll
+            // protect against the initial pointerdown being too close to an edge and starting the scroll
             this.everMovedUp = false;
             this.everMovedDown = false;
             this.everMovedLeft = false;
             this.everMovedRight = false;
             this.animate = function () {
-                if (_this.isAnimating) { // wasn't cancelled between
-											// animation calls
+                if (_this.isAnimating) { // wasn't cancelled between animation calls
                     var edge = _this.computeBestEdge(_this.pointerScreenX + window.pageXOffset, _this.pointerScreenY + window.pageYOffset);
                     if (edge) {
                         var now = getTime();
@@ -740,17 +718,10 @@ Docs & License: https://fullcalendar.io/
         AutoScroller.prototype.buildCaches = function () {
             return this.queryScrollEls().map(function (el) {
                 if (el === window) {
-                    return new WindowScrollGeomCache(false); // false = don't
-																// listen to
-																// user-generated
-																// scrolls
+                    return new WindowScrollGeomCache(false); // false = don't listen to user-generated scrolls
                 }
                 else {
-                    return new ElementScrollGeomCache(el, false); // false =
-																	// don't
-																	// listen to
-																	// user-generated
-																	// scrolls
+                    return new ElementScrollGeomCache(el, false); // false = don't listen to user-generated scrolls
                 }
             });
         };
@@ -771,10 +742,11 @@ Docs & License: https://fullcalendar.io/
     }());
 
     /*
-	 * Monitors dragging on an element. Has a number of high-level features: -
-	 * minimum distance required before dragging - minimum wait time ("delay")
-	 * before dragging - a mirror element that follows the pointer
-	 */
+    Monitors dragging on an element. Has a number of high-level features:
+    - minimum distance required before dragging
+    - minimum wait time ("delay") before dragging
+    - a mirror element that follows the pointer
+    */
     var FeaturefulElementDragging = /** @class */ (function (_super) {
         __extends(FeaturefulElementDragging, _super);
         function FeaturefulElementDragging(containerEl) {
@@ -783,45 +755,31 @@ Docs & License: https://fullcalendar.io/
             // the caller can also set the PointerDragging's options as well
             _this.delay = null;
             _this.minDistance = 0;
-            _this.touchScrollAllowed = true; // prevents drag from starting
-												// and blocks scrolling during
-												// drag
+            _this.touchScrollAllowed = true; // prevents drag from starting and blocks scrolling during drag
             _this.mirrorNeedsRevert = false;
-            _this.isInteracting = false; // is the user validly moving the
-											// pointer? lasts until pointerup
-            _this.isDragging = false; // is it INTENTFULLY dragging? lasts
-										// until after revert animation
+            _this.isInteracting = false; // is the user validly moving the pointer? lasts until pointerup
+            _this.isDragging = false; // is it INTENTFULLY dragging? lasts until after revert animation
             _this.isDelayEnded = false;
             _this.isDistanceSurpassed = false;
             _this.delayTimeoutId = null;
             _this.onPointerDown = function (ev) {
-                if (!_this.isDragging) { // so new drag doesn't happen while
-											// revert animation is going
+                if (!_this.isDragging) { // so new drag doesn't happen while revert animation is going
                     _this.isInteracting = true;
                     _this.isDelayEnded = false;
                     _this.isDistanceSurpassed = false;
                     core.preventSelection(document.body);
                     core.preventContextMenu(document.body);
-                    // prevent links from being visited if there's an eventual
-					// drag.
+                    // prevent links from being visited if there's an eventual drag.
                     // also prevents selection in older browsers (maybe?).
-                    // not necessary for touch, besides, browser would complain
-					// about passiveness.
+                    // not necessary for touch, besides, browser would complain about passiveness.
                     if (!ev.isTouch) {
                         ev.origEvent.preventDefault();
                     }
                     _this.emitter.trigger('pointerdown', ev);
                     if (!_this.pointer.shouldIgnoreMove) {
-                        // actions related to initiating
-						// dragstart+dragmove+dragend...
-                        _this.mirror.setIsVisible(false); // reset. caller
-															// must set-visible
-                        _this.mirror.start(ev.subjectEl, ev.pageX, ev.pageY); // must
-																				// happen
-																				// on
-																				// first
-																				// pointer
-																				// down
+                        // actions related to initiating dragstart+dragmove+dragend...
+                        _this.mirror.setIsVisible(false); // reset. caller must set-visible
+                        _this.mirror.start(ev.subjectEl, ev.pageX, ev.pageY); // must happen on first pointer down
                         _this.startDelay(ev);
                         if (!_this.minDistance) {
                             _this.handleDistanceSurpassed(ev);
@@ -830,18 +788,14 @@ Docs & License: https://fullcalendar.io/
                 }
             };
             _this.onPointerMove = function (ev) {
-                if (_this.isInteracting) { // if false, still waiting for
-											// previous drag's revert
+                if (_this.isInteracting) { // if false, still waiting for previous drag's revert
                     _this.emitter.trigger('pointermove', ev);
                     if (!_this.isDistanceSurpassed) {
                         var minDistance = _this.minDistance;
-                        var distanceSq = void 0; // current distance from the
-													// origin, squared
+                        var distanceSq = void 0; // current distance from the origin, squared
                         var deltaX = ev.deltaX, deltaY = ev.deltaY;
                         distanceSq = deltaX * deltaX + deltaY * deltaY;
-                        if (distanceSq >= minDistance * minDistance) { // use
-																		// pythagorean
-																		// theorem
+                        if (distanceSq >= minDistance * minDistance) { // use pythagorean theorem
                             _this.handleDistanceSurpassed(ev);
                         }
                     }
@@ -856,14 +810,11 @@ Docs & License: https://fullcalendar.io/
                 }
             };
             _this.onPointerUp = function (ev) {
-                if (_this.isInteracting) { // if false, still waiting for
-											// previous drag's revert
+                if (_this.isInteracting) { // if false, still waiting for previous drag's revert
                     _this.isInteracting = false;
                     core.allowSelection(document.body);
                     core.allowContextMenu(document.body);
-                    _this.emitter.trigger('pointerup', ev); // can potentially
-															// set
-															// mirrorNeedsRevert
+                    _this.emitter.trigger('pointerup', ev); // can potentially set mirrorNeedsRevert
                     if (_this.isDragging) {
                         _this.autoScroller.stop();
                         _this.tryStopDrag(ev); // which will stop the mirror
@@ -919,13 +870,9 @@ Docs & License: https://fullcalendar.io/
             }
         };
         FeaturefulElementDragging.prototype.tryStopDrag = function (ev) {
-            // .stop() is ALWAYS asynchronous, which we NEED because we want all
-			// pointerup events
-            // that come from the document to fire beforehand. much more
-			// convenient this way.
-            this.mirror.stop(this.mirrorNeedsRevert, this.stopDrag.bind(this, ev) // bound
-																					// with
-																					// args
+            // .stop() is ALWAYS asynchronous, which we NEED because we want all pointerup events
+            // that come from the document to fire beforehand. much more convenient this way.
+            this.mirror.stop(this.mirrorNeedsRevert, this.stopDrag.bind(this, ev) // bound with args
             );
         };
         FeaturefulElementDragging.prototype.stopDrag = function (ev) {
@@ -949,14 +896,13 @@ Docs & License: https://fullcalendar.io/
     }(core.ElementDragging));
 
     /*
-	 * When this class is instantiated, it records the offset of an element
-	 * (relative to the document topleft), and continues to monitor scrolling,
-	 * updating the cached coordinates if it needs to. Does not access the DOM
-	 * after instantiation, so highly performant. Also keeps track of all
-	 * scrolling/overflow:hidden containers that are parents of the given
-	 * element and an determine if a given point is inside the combined clipping
-	 * rectangle.
-	 */
+    When this class is instantiated, it records the offset of an element (relative to the document topleft),
+    and continues to monitor scrolling, updating the cached coordinates if it needs to.
+    Does not access the DOM after instantiation, so highly performant.
+
+    Also keeps track of all scrolling/overflow:hidden containers that are parents of the given element
+    and an determine if a given point is inside the combined clipping rectangle.
+    */
     var OffsetTracker = /** @class */ (function () {
         function OffsetTracker(el) {
             this.origRect = core.computeRect(el);
@@ -1000,8 +946,7 @@ Docs & License: https://fullcalendar.io/
         };
         return OffsetTracker;
     }());
-    // certain clipping containers should never constrain interactions, like
-	// <html> and <body>
+    // certain clipping containers should never constrain interactions, like <html> and <body>
     // https://github.com/fullcalendar/fullcalendar/issues/3615
     function isIgnoredClipping(node) {
         var tagName = node.tagName;
@@ -1009,23 +954,27 @@ Docs & License: https://fullcalendar.io/
     }
 
     /*
-	 * Tracks movement over multiple droppable areas (aka "hits") that exist in
-	 * one or more DateComponents. Relies on an existing draggable. emits: -
-	 * pointerdown - dragstart - hitchange - fires initially, even if not over a
-	 * hit - pointerup - (hitchange - again, to null, if ended over a hit) -
-	 * dragend
-	 */
+    Tracks movement over multiple droppable areas (aka "hits")
+    that exist in one or more DateComponents.
+    Relies on an existing draggable.
+
+    emits:
+    - pointerdown
+    - dragstart
+    - hitchange - fires initially, even if not over a hit
+    - pointerup
+    - (hitchange - again, to null, if ended over a hit)
+    - dragend
+    */
     var HitDragging = /** @class */ (function () {
         function HitDragging(dragging, droppableStore) {
             var _this = this;
             // options that can be set by caller
             this.useSubjectCenter = false;
-            this.requireInitial = true; // if doesn't start out on a hit, won't
-										// emit any events
+            this.requireInitial = true; // if doesn't start out on a hit, won't emit any events
             this.initialHit = null;
             this.movingHit = null;
-            this.finalHit = null; // won't ever be populated if
-									// shouldIgnoreMove
+            this.finalHit = null; // won't ever be populated if shouldIgnoreMove
             this.handlePointerDown = function (ev) {
                 var dragging = _this.dragging;
                 _this.initialHit = null;
@@ -1035,16 +984,7 @@ Docs & License: https://fullcalendar.io/
                 _this.processFirstCoord(ev);
                 if (_this.initialHit || !_this.requireInitial) {
                     dragging.setIgnoreMove(false);
-                    _this.emitter.trigger('pointerdown', ev); // TODO: fire
-																// this before
-																// computing
-																// processFirstCoord,
-																// so listeners
-																// can cancel.
-																// this gets
-																// fired by
-																// almost every
-																// handler :(
+                    _this.emitter.trigger('pointerdown', ev); // TODO: fire this before computing processFirstCoord, so listeners can cancel. this gets fired by almost every handler :(
                 }
                 else {
                     dragging.setIgnoreMove(true);
@@ -1052,8 +992,7 @@ Docs & License: https://fullcalendar.io/
             };
             this.handleDragStart = function (ev) {
                 _this.emitter.trigger('dragstart', ev);
-                _this.handleMove(ev, true); // force = fire even if initially
-											// null
+                _this.handleMove(ev, true); // force = fire even if initially null
             };
             this.handleDragMove = function (ev) {
                 _this.emitter.trigger('dragmove', ev);
@@ -1146,8 +1085,7 @@ Docs & License: https://fullcalendar.io/
                         var hit = component.queryHit(positionLeft, positionTop, width, height);
                         if (hit &&
                             (
-                            // make sure the hit is within activeRange, meaning
-							// it's not a deal cell
+                            // make sure the hit is within activeRange, meaning it's not a deal cell
                             !component.props.dateProfile || // hack for DayTile
                                 core.rangeContainsRange(component.props.dateProfile.activeRange, hit.dateSpan.range)) &&
                             (!bestHit || hit.layer > bestHit.layer)) {
@@ -1176,17 +1114,16 @@ Docs & License: https://fullcalendar.io/
     }
 
     /*
-	 * Monitors when the user clicks on a specific date/time of a component. A
-	 * pointerdown+pointerup on the same "hit" constitutes a click.
-	 */
+    Monitors when the user clicks on a specific date/time of a component.
+    A pointerdown+pointerup on the same "hit" constitutes a click.
+    */
     var DateClicking = /** @class */ (function (_super) {
         __extends(DateClicking, _super);
         function DateClicking(settings) {
             var _this = _super.call(this, settings) || this;
             _this.handlePointerDown = function (ev) {
                 var dragging = _this.dragging;
-                // do this in pointerdown (not dragend) because DOM might be
-				// mutated by the time dragend is fired
+                // do this in pointerdown (not dragend) because DOM might be mutated by the time dragend is fired
                 dragging.setIgnoreMove(!_this.component.isValidDateDownEl(dragging.pointer.downEl));
             };
             // won't even fire if moving was ignored
@@ -1201,8 +1138,7 @@ Docs & License: https://fullcalendar.io/
                 }
             };
             var component = settings.component;
-            // we DO want to watch pointer moves because otherwise finalHit
-			// won't get populated
+            // we DO want to watch pointer moves because otherwise finalHit won't get populated
             _this.dragging = new FeaturefulElementDragging(component.el);
             _this.dragging.autoScroller.isEnabled = false;
             var hitDragging = _this.hitDragging = new HitDragging(_this.dragging, core.interactionSettingsToStore(settings));
@@ -1217,10 +1153,9 @@ Docs & License: https://fullcalendar.io/
     }(core.Interaction));
 
     /*
-	 * Tracks when the user selects a portion of time of a component,
-	 * constituted by a drag over date cells, with a possible delay at the
-	 * beginning of the drag.
-	 */
+    Tracks when the user selects a portion of time of a component,
+    constituted by a drag over date cells, with a possible delay at the beginning of the drag.
+    */
     var DateSelecting = /** @class */ (function (_super) {
         __extends(DateSelecting, _super);
         function DateSelecting(settings) {
@@ -1230,15 +1165,13 @@ Docs & License: https://fullcalendar.io/
                 var _a = _this, component = _a.component, dragging = _a.dragging;
                 var canSelect = component.opt('selectable') &&
                     component.isValidDateDownEl(ev.origEvent.target);
-                // don't bother to watch expensive moves if component won't do
-				// selection
+                // don't bother to watch expensive moves if component won't do selection
                 dragging.setIgnoreMove(!canSelect);
                 // if touch, require user to hold down
                 dragging.delay = ev.isTouch ? getComponentTouchDelay(component) : null;
             };
             _this.handleDragStart = function (ev) {
-                _this.component.calendar.unselect(ev); // unselect previous
-														// selections
+                _this.component.calendar.unselect(ev); // unselect previous selections
             };
             _this.handleHitUpdate = function (hit, isFinal) {
                 var calendar = _this.component.calendar;
@@ -1254,8 +1187,7 @@ Docs & License: https://fullcalendar.io/
                 if (dragSelection) {
                     calendar.dispatch({ type: 'SELECT_DATES', selection: dragSelection });
                 }
-                else if (!isFinal) { // only unselect if moved away while
-										// dragging
+                else if (!isFinal) { // only unselect if moved away while dragging
                     calendar.dispatch({ type: 'UNSELECT_DATES' });
                 }
                 if (!isInvalid) {
@@ -1265,16 +1197,12 @@ Docs & License: https://fullcalendar.io/
                     core.disableCursor();
                 }
                 if (!isFinal) {
-                    _this.dragSelection = dragSelection; // only clear if
-															// moved away from
-															// all hits while
-															// dragging
+                    _this.dragSelection = dragSelection; // only clear if moved away from all hits while dragging
                 }
             };
             _this.handlePointerUp = function (pev) {
                 if (_this.dragSelection) {
-                    // selection is already rendered, so just need to report
-					// selection
+                    // selection is already rendered, so just need to report selection
                     _this.component.calendar.triggerDateSelect(_this.dragSelection, pev);
                     _this.dragSelection = null;
                 }
@@ -1352,8 +1280,7 @@ Docs & License: https://fullcalendar.io/
                 _this.relevantEvents = core.getRelevantEvents(initialCalendar.state.eventStore, eventInstanceId);
                 dragging.minDistance = ev.isTouch ? 0 : component.opt('eventDragMinDistance');
                 dragging.delay =
-                    // only do a touch delay if touch and this event hasn't been
-					// selected yet
+                    // only do a touch delay if touch and this event hasn't been selected yet
                     (ev.isTouch && eventInstanceId !== component.props.eventSelection) ?
                         getComponentTouchDelay$1(component) :
                         null;
@@ -1362,8 +1289,7 @@ Docs & License: https://fullcalendar.io/
                 var isValid = component.isValidSegDownEl(origTarget) &&
                     !core.elementClosest(origTarget, '.fc-resizer');
                 dragging.setIgnoreMove(!isValid);
-                // disable dragging for elements that are resizable (ie,
-				// selectable)
+                // disable dragging for elements that are resizable (ie, selectable)
                 // but are not draggable
                 _this.isDragging = isValid &&
                     ev.subjectEl.classList.contains('fc-draggable');
@@ -1379,8 +1305,7 @@ Docs & License: https://fullcalendar.io/
                     }
                 }
                 else {
-                    // if now using mouse, but was previous touch interaction,
-					// clear selected event
+                    // if now using mouse, but was previous touch interaction, clear selected event
                     initialCalendar.dispatch({ type: 'UNSELECT_EVENT' });
                 }
                 if (_this.isDragging) {
@@ -1442,17 +1367,13 @@ Docs & License: https://fullcalendar.io/
                     core.disableCursor();
                 }
                 if (!isFinal) {
-                    if (initialCalendar === receivingCalendar && // TODO:
-																	// write
-																	// test for
-																	// this
+                    if (initialCalendar === receivingCalendar && // TODO: write test for this
                         isHitsEqual(initialHit, hit)) {
                         mutation = null;
                     }
                     _this.dragging.setMirrorNeedsRevert(!mutation);
                     // render the mirror if no already-rendered mirror
-                    // TODO: wish we could somehow wait for dispatch to
-					// guarantee render
+                    // TODO: wish we could somehow wait for dispatch to guarantee render
                     _this.dragging.setMirrorIsVisible(!hit || !document.querySelector('.fc-mirror'));
                     // assign states based on new hit
                     _this.receivingCalendar = receivingCalendar;
@@ -1497,11 +1418,7 @@ Docs & License: https://fullcalendar.io/
                                 var transformer = _a[_i];
                                 __assign(transformed, transformer(_this.validMutation, initialCalendar_1));
                             }
-                            var eventDropArg = __assign({}, transformed, { el: ev.subjectEl, delta: _this.validMutation.startDelta, oldEvent: eventApi, event: new core.EventApi(// the
-																																													// data
-																																													// AFTER
-																																													// the
-																																													// mutation
+                            var eventDropArg = __assign({}, transformed, { el: ev.subjectEl, delta: _this.validMutation.startDelta, oldEvent: eventApi, event: new core.EventApi(// the data AFTER the mutation
                                 initialCalendar_1, mutatedRelevantEvents.defs[eventDef.defId], eventInstance ? mutatedRelevantEvents.instances[eventInstance.instanceId] : null), revert: function () {
                                     initialCalendar_1.dispatch({
                                         type: 'MERGE_EVENTS',
@@ -1533,25 +1450,15 @@ Docs & License: https://fullcalendar.io/
                                     eventInstanceId: eventInstance.instanceId
                                 });
                             }
-                            var dropArg = __assign({}, receivingCalendar.buildDatePointApi(finalHit.dateSpan), { draggedEl: ev.subjectEl, jsEvent: ev.origEvent, view: finalHit.component // should
-																																															// this
-																																															// be
-																																															// finalHit.component.view?
-																																															// See
-																																															// #4644
+                            var dropArg = __assign({}, receivingCalendar.buildDatePointApi(finalHit.dateSpan), { draggedEl: ev.subjectEl, jsEvent: ev.origEvent, view: finalHit.component // should this be finalHit.component.view? See #4644
                              });
                             receivingCalendar.publiclyTrigger('drop', [dropArg]);
                             receivingCalendar.publiclyTrigger('eventReceive', [
                                 {
                                     draggedEl: ev.subjectEl,
-                                    event: new core.EventApi(// the data
-																// AFTER the
-																// mutation
+                                    event: new core.EventApi(// the data AFTER the mutation
                                     receivingCalendar, mutatedRelevantEvents.defs[eventDef.defId], mutatedRelevantEvents.instances[eventInstance.instanceId]),
-                                    view: finalHit.component // should this
-																// be
-																// finalHit.component.view?
-																// See #4644
+                                    view: finalHit.component // should this be finalHit.component.view? See #4644
                                 }
                             ]);
                         }
@@ -1586,8 +1493,7 @@ Docs & License: https://fullcalendar.io/
             // does the previous calendar need to be cleared?
             if (prevCalendar && prevCalendar !== nextCalendar) {
                 // does the initial calendar need to be cleared?
-                // if so, don't clear all the way. we still need to to hide the
-				// affectedEvents
+                // if so, don't clear all the way. we still need to to hide the affectedEvents
                 if (prevCalendar === initialCalendar) {
                     prevCalendar.dispatch({
                         type: 'SET_EVENT_DRAG',
@@ -1598,8 +1504,7 @@ Docs & License: https://fullcalendar.io/
                             origSeg: state.origSeg
                         }
                     });
-                    // completely clear the old calendar if it wasn't the
-					// initial
+                    // completely clear the old calendar if it wasn't the initial
                 }
                 else {
                     prevCalendar.dispatch({ type: 'UNSET_EVENT_DRAG' });
@@ -1615,8 +1520,7 @@ Docs & License: https://fullcalendar.io/
             if (receivingCalendar) {
                 receivingCalendar.dispatch({ type: 'UNSET_EVENT_DRAG' });
             }
-            // the initial calendar might have an dummy drag state from
-			// displayDrag
+            // the initial calendar might have an dummy drag state from displayDrag
             if (initialCalendar !== receivingCalendar) {
                 initialCalendar.dispatch({ type: 'UNSET_EVENT_DRAG' });
             }
@@ -1630,9 +1534,7 @@ Docs & License: https://fullcalendar.io/
             this.validMutation = null;
             this.mutatedRelevantEvents = null;
         };
-        EventDragging.SELECTOR = '.fc-draggable, .fc-resizable'; // TODO:
-																	// test this
-																	// in IE11
+        EventDragging.SELECTOR = '.fc-draggable, .fc-resizable'; // TODO: test this in IE11
         return EventDragging;
     }(core.Interaction));
     function computeEventMutation(hit0, hit1, massagers) {
@@ -1680,8 +1582,7 @@ Docs & License: https://fullcalendar.io/
         function EventDragging(settings) {
             var _this = _super.call(this, settings) || this;
             // internal state
-            _this.draggingSeg = null; // TODO: rename to resizingSeg?
-										// subjectSeg?
+            _this.draggingSeg = null; // TODO: rename to resizingSeg? subjectSeg?
             _this.eventRange = null;
             _this.relevantEvents = null;
             _this.validMutation = null;
@@ -1787,8 +1688,7 @@ Docs & License: https://fullcalendar.io/
                             startDelta: _this.validMutation.startDelta || core.createDuration(0),
                             endDelta: _this.validMutation.endDelta || core.createDuration(0),
                             prevEvent: eventApi,
-                            event: new core.EventApi(// the data AFTER the
-														// mutation
+                            event: new core.EventApi(// the data AFTER the mutation
                             calendar, mutatedRelevantEvents.defs[eventDef.defId], eventInstance ? mutatedRelevantEvents.instances[eventInstance.instanceId] : null),
                             revert: function () {
                                 calendar.dispatch({
@@ -1808,8 +1708,7 @@ Docs & License: https://fullcalendar.io/
                 _this.draggingSeg = null;
                 _this.relevantEvents = null;
                 _this.validMutation = null;
-                // okay to keep eventInstance around. useful to set it in
-				// handlePointerDown
+                // okay to keep eventInstance around. useful to set it in handlePointerDown
             };
             var component = settings.component;
             var dragging = _this.dragging = new FeaturefulElementDragging(component.el);
@@ -1865,10 +1764,7 @@ Docs & License: https://fullcalendar.io/
     var UnselectAuto = /** @class */ (function () {
         function UnselectAuto(calendar) {
             var _this = this;
-            this.isRecentPointerDateSelect = false; // wish we could use a
-													// selector to detect date
-													// selection, but uses hit
-													// system
+            this.isRecentPointerDateSelect = false; // wish we could use a selector to detect date selection, but uses hit system
             this.onSelect = function (selectInfo) {
                 if (selectInfo.jsEvent) {
                     _this.isRecentPointerDateSelect = true;
@@ -1880,11 +1776,7 @@ Docs & License: https://fullcalendar.io/
                 // touch-scrolling should never unfocus any type of selection
                 if (!documentPointer.wasTouchScroll) {
                     if (state.dateSelection && // an existing date selection?
-                        !_this.isRecentPointerDateSelect // a new
-															// pointer-initiated
-															// date selection
-															// since last
-															// onDocumentPointerUp?
+                        !_this.isRecentPointerDateSelect // a new pointer-initiated date selection since last onDocumentPointerUp?
                     ) {
                         var unselectAuto = calendar.viewOpt('unselectAuto');
                         var unselectCancel = calendar.viewOpt('unselectCancel');
@@ -1893,12 +1785,7 @@ Docs & License: https://fullcalendar.io/
                         }
                     }
                     if (state.eventSelection && // an existing event selected?
-                        !core.elementClosest(documentPointer.downEl, EventDragging.SELECTOR) // interaction
-																								// DIDN'T
-																								// start
-																								// on
-																								// an
-																								// event
+                        !core.elementClosest(documentPointer.downEl, EventDragging.SELECTOR) // interaction DIDN'T start on an event
                     ) {
                         calendar.dispatch({ type: 'UNSELECT_EVENT' });
                     }
@@ -1911,9 +1798,8 @@ Docs & License: https://fullcalendar.io/
             documentPointer.shouldWatchScroll = false;
             documentPointer.emitter.on('pointerup', this.onDocumentPointerUp);
             /*
-			 * TODO: better way to know about whether there was a selection with
-			 * the pointer
-			 */
+            TODO: better way to know about whether there was a selection with the pointer
+            */
             calendar.on('select', this.onSelect);
         }
         UnselectAuto.prototype.destroy = function () {
@@ -1924,16 +1810,15 @@ Docs & License: https://fullcalendar.io/
     }());
 
     /*
-	 * Given an already instantiated draggable object for one-or-more elements,
-	 * Interprets any dragging as an attempt to drag an events that lives
-	 * outside of a calendar onto a calendar.
-	 */
+    Given an already instantiated draggable object for one-or-more elements,
+    Interprets any dragging as an attempt to drag an events that lives outside
+    of a calendar onto a calendar.
+    */
     var ExternalElementDragging = /** @class */ (function () {
         function ExternalElementDragging(dragging, suppliedDragMeta) {
             var _this = this;
             this.receivingCalendar = null;
-            this.droppableEvent = null; // will exist for all drags, even if
-										// create:false
+            this.droppableEvent = null; // will exist for all drags, even if create:false
             this.suppliedDragMeta = null;
             this.dragMeta = null;
             this.handleDragStart = function (ev) {
@@ -1963,10 +1848,8 @@ Docs & License: https://fullcalendar.io/
                     }
                 }
                 _this.displayDrag(receivingCalendar, interaction);
-                // show mirror if no already-rendered mirror element OR if we
-				// are shutting down the mirror (?)
-                // TODO: wish we could somehow wait for dispatch to guarantee
-				// render
+                // show mirror if no already-rendered mirror element OR if we are shutting down the mirror (?)
+                // TODO: wish we could somehow wait for dispatch to guarantee render
                 dragging.setMirrorIsVisible(isFinal || !droppableEvent || !document.querySelector('.fc-mirror'));
                 if (!isInvalid) {
                     core.enableCursor();
@@ -2014,8 +1897,7 @@ Docs & License: https://fullcalendar.io/
                 _this.droppableEvent = null;
             };
             var hitDragging = this.hitDragging = new HitDragging(dragging, core.interactionSettingsStore);
-            hitDragging.requireInitial = false; // will start outside of a
-												// component
+            hitDragging.requireInitial = false; // will start outside of a component
             hitDragging.emitter.on('dragstart', this.handleDragStart);
             hitDragging.emitter.on('hitupdate', this.handleHitUpdate);
             hitDragging.emitter.on('dragend', this.handleDragEnd);
@@ -2097,11 +1979,10 @@ Docs & License: https://fullcalendar.io/
     }
 
     /*
-	 * Makes an element (that is *external* to any calendar) draggable. Can pass
-	 * in data that determines how an event will be created when dropped onto a
-	 * calendar. Leverages FullCalendar's internal drag-n-drop functionality
-	 * WITHOUT a third-party drag system.
-	 */
+    Makes an element (that is *external* to any calendar) draggable.
+    Can pass in data that determines how an event will be created when dropped onto a calendar.
+    Leverages FullCalendar's internal drag-n-drop functionality WITHOUT a third-party drag system.
+    */
     var ExternalDraggable = /** @class */ (function () {
         function ExternalDraggable(el, settings) {
             var _this = this;
@@ -2114,8 +1995,7 @@ Docs & License: https://fullcalendar.io/
                         minDistance :
                         (ev.isTouch ? 0 : core.globalDefaults.eventDragMinDistance);
                 dragging.delay =
-                    ev.isTouch ? // TODO: eventually read eventLongPressDelay
-									// instead vvv
+                    ev.isTouch ? // TODO: eventually read eventLongPressDelay instead vvv
                         (longPressDelay != null ? longPressDelay : core.globalDefaults.longPressDelay) :
                         0;
             };
@@ -2133,8 +2013,7 @@ Docs & License: https://fullcalendar.io/
                 dragging.pointer.selector = settings.itemSelector;
             }
             if (settings.appendTo != null) {
-                dragging.mirror.parentNode = settings.appendTo; // TODO: write
-																// tests
+                dragging.mirror.parentNode = settings.appendTo; // TODO: write tests
             }
             dragging.emitter.on('pointerdown', this.handlePointerDown);
             dragging.emitter.on('dragstart', this.handleDragStart);
@@ -2147,12 +2026,11 @@ Docs & License: https://fullcalendar.io/
     }());
 
     /*
-	 * Detects when a *THIRD-PARTY* drag-n-drop system interacts with elements.
-	 * The third-party system is responsible for drawing the visuals effects of
-	 * the drag. This class simply monitors for pointer movements and fires
-	 * events. It also has the ability to hide the moving element (the "mirror")
-	 * during the drag.
-	 */
+    Detects when a *THIRD-PARTY* drag-n-drop system interacts with elements.
+    The third-party system is responsible for drawing the visuals effects of the drag.
+    This class simply monitors for pointer movements and fires events.
+    It also has the ability to hide the moving element (the "mirror") during the drag.
+    */
     var InferredElementDragging = /** @class */ (function (_super) {
         __extends(InferredElementDragging, _super);
         function InferredElementDragging(containerEl) {
@@ -2163,8 +2041,7 @@ Docs & License: https://fullcalendar.io/
             _this.handlePointerDown = function (ev) {
                 _this.emitter.trigger('pointerdown', ev);
                 if (!_this.shouldIgnoreMove) {
-                    // fire dragstart right away. does not support delay or
-					// min-distance
+                    // fire dragstart right away. does not support delay or min-distance
                     _this.emitter.trigger('dragstart', ev);
                 }
             };
@@ -2176,8 +2053,7 @@ Docs & License: https://fullcalendar.io/
             _this.handlePointerUp = function (ev) {
                 _this.emitter.trigger('pointerup', ev);
                 if (!_this.shouldIgnoreMove) {
-                    // fire dragend right away. does not support a revert
-					// animation
+                    // fire dragend right away. does not support a revert animation
                     _this.emitter.trigger('dragend', ev);
                 }
             };
@@ -2196,8 +2072,7 @@ Docs & License: https://fullcalendar.io/
         InferredElementDragging.prototype.setMirrorIsVisible = function (bool) {
             if (bool) {
                 // restore a previously hidden element.
-                // use the reference in case the selector class has already been
-				// removed.
+                // use the reference in case the selector class has already been removed.
                 if (this.currentMirrorEl) {
                     this.currentMirrorEl.style.visibility = '';
                     this.currentMirrorEl = null;
@@ -2217,15 +2092,14 @@ Docs & License: https://fullcalendar.io/
     }(core.ElementDragging));
 
     /*
-	 * Bridges third-party drag-n-drop systems with FullCalendar. Must be
-	 * instantiated and destroyed by caller.
-	 */
+    Bridges third-party drag-n-drop systems with FullCalendar.
+    Must be instantiated and destroyed by caller.
+    */
     var ThirdPartyDraggable = /** @class */ (function () {
         function ThirdPartyDraggable(containerOrSettings, settings) {
             var containerEl = document;
             if (
-            // wish we could just test instanceof EventTarget, but doesn't work
-			// in IE11
+            // wish we could just test instanceof EventTarget, but doesn't work in IE11
             containerOrSettings === document ||
                 containerOrSettings instanceof Element) {
                 containerEl = containerOrSettings;

@@ -65,7 +65,7 @@ public class FestivalServiceImpl implements FestivalService {
 		List<MusicVO> list = musicDao.selectAllMusic(aid);
 		return list;
 	}
-	
+
 	@Override
 	public List<MusicVO> selectMusic(String aid) {
 		List<MusicVO> list = musicDao.selectMusic(aid);
@@ -118,12 +118,12 @@ public class FestivalServiceImpl implements FestivalService {
 	public void voteCnt(String mid) {
 		musicDao.voteCnt(mid);
 	}
-	
+
 	@Override
 	public void voteCntCancel(String mid) {
 		musicDao.voteCntCancel(mid);
 	}
-	
+
 	@Override
 	public MusicVO selectCnt(String mid) {
 		MusicVO vo = musicDao.selectCnt(mid);
