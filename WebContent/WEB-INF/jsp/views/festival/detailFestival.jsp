@@ -81,7 +81,6 @@
 				data : $("#comments").serialize(),
 				success : function(data) {
 					$("#content").val("");
-					/* 					$("#writer").val(""); */
 					getComments("1");
 				},
 				error : function(error) {

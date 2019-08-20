@@ -81,10 +81,8 @@
 
 	<select id="selectAllMusic" resultType="musicVO"
 		parameterType="String">
-			<![CDATA[
-			select * from(select aid, mname, mCnt, src, album, mid from music where aid = #{aid})
-			where rownum<=5
-			]]>
+		select aid, mname, mCnt, src, album, mid from music
+		where aid = #{aid}
 	</select>
 
 	<select id="selectMusic" resultType="musicVO"
@@ -125,6 +123,7 @@
 		select mCnt from music
 		where mid =#{mid}
 	</select>
+	
 	<update id="updateUserInfo" parameterType="signupVO">
 		update u_data SET
 		email=#{email}, nickname=#{nickname}, password=#{password} where

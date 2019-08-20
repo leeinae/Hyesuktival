@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.fedal.paging.Paging;
@@ -45,11 +46,13 @@ public class ReplyController {
 	}
 
 	@RequestMapping(value = "/delete/{no}", method = RequestMethod.POST)
+	@ResponseBody
 	public void deleteComment(@PathVariable("no") int no) {
 		service.deleteFestivalComment(no);
 	}
 
 	@RequestMapping(value = "/update/{no}", method = RequestMethod.POST)
+	@ResponseBody
 	public void updateComment(@PathVariable("no") int no, FreviewVO fvo) {
 		service.updateFestivalComment(fvo);
 	}
