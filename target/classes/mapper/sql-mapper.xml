@@ -129,5 +129,4 @@
 		email=#{email}, nickname=#{nickname}, password=#{password} where
 		id=#{id}
 	</update>
-
 </mapper>
