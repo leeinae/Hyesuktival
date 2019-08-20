@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,18 +14,15 @@
 <script src='/resources/fullcalendar/packages/interaction/main.js'></script>
 <script src='/resources/fullcalendar/packages/daygrid/main.js'></script>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		var calendarEl = document.getElementById('calendar');
-
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-			plugins : [ 'interaction', 'dayGrid' ],
-			defaultDate : '2019-06-12',
-			editable : true,
-			eventLimit : true, // allow "more" link when too many events
-			events : []
-		});
-		calendar.render();
-	});
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      plugins: [ 'interaction', 'dayGrid' ],
+      eventLimit: true, // allow "more" link when too many events
+      events: [${requestScope.festivalList}]
+    });
+    calendar.render();
+  });
 </script>
 <style>
 body {
@@ -44,14 +41,32 @@ body {
 </head>
 <body>
 	<h1>Calendar Page</h1>
-	<a href="/signup"><i class="signup"></i>ȸ������</a>
+	<div id="topMenu" align="right">
+		<c:catch>
+			<c:choose>
+				<c:when test="${empty AuthInfoId && empty sessionId}">
+					<li><a href="/login"><i class="login"></i>로그인</a></li>
+					<li><a href="/signup"><i class="signup"></i>회원가입</a></li>
+				</c:when>
+				<c:when test="${sessionId != null}">
+					<li>${sessionName}님,반갑습니다!</li>
+					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
+				</c:when>
+				<c:otherwise>
+					<li>${AuthInfoNickname }님,반갑습니다!</li>
+					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
+					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
+				</c:otherwise>
+			</c:choose>
+		</c:catch>
+	</div>
+	<br>
+	<form action="/search" method="get">
+		<input type="text" name="search">
+		<button type="submit">검색!</button>
+	</form>
+
 	<div id="calendar"></div>
-	<table border=1>
-		<c:forEach items="${requestScope.festivalList}" var="fest">
-			<tr>
-				<td>${fest }</td>
-			</tr>
-		</c:forEach>
-	</table>
 </body>
 </html>

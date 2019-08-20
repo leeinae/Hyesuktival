@@ -28,4 +28,22 @@
 		class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
+
+	<!-- Google 소셜 로그인 연결 설정 -->
+	<bean id="googleConnectionFactory"
+		class="org.springframework.social.google.connect.GoogleConnectionFactory">
+		<constructor-arg
+			value="327725197170-72s4ihbc5r3ldsjji62ds1vd63fbvot3.apps.googleusercontent.com" />
+		<constructor-arg value="mtjT6-bAfWondKVQvJs0zvjl" />
+	</bean>
+	
+	<!-- 승인된 자바스크립트 원본과 승인된 리디렉션 URI -->
+	<bean id="googleOAuth2Parameters"
+		class="org.springframework.social.oauth2.OAuth2Parameters">
+		<property name="scope"
+			value="https://www.googleapis.com/auth/plus.login" />
+		<property name="redirectUri"
+			value="http://localhost:9999/googleCallback" />
+	</bean>
+
 </beans>

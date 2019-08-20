@@ -64,4 +64,7 @@ public class SignupVO {
 		// TODO Auto-generated constructor stub
 	}
 
+	public boolean matchPassword(String pw) {
+		return this.password.equals(pw);
+	}
 }

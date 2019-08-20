@@ -18,7 +18,7 @@ public class FestivalDAOImpl implements FestivalDAO {
 	@Autowired
 	private SqlSessionTemplate session;
 
-	//Äõ¸®¹® ½ÇÇàÀ» À§ÇÑ ÄÚµå
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
 	protected Log log = LogFactory.getLog(FestivalDAOImpl.class);
 
 	protected void printQueryId(String queryId) {
@@ -37,11 +37,23 @@ public class FestivalDAOImpl implements FestivalDAO {
 		return session.insert(queryId, params);
 	}
 
-	//DAO
+	// DAO
 	@Override
 	public List<FestivalVO> selectAllFestival() {
 		List<FestivalVO> festivalList = session.selectList("kr.co.fedal.dao.FestivalDAO.selectFestival");
 		return festivalList;
+	}
+
+	@Override
+	public FestivalVO selectDetailFestival(String fid) {
+		FestivalVO vo = session.selectOne("kr.co.fedal.dao.FestivalDAO.searchFestivalDetail", fid);
+		return vo;
+	}
+
+	@Override
+	public List<FestivalVO> searchFestival(String keyword) {
+		List<FestivalVO> searchList = session.selectList("kr.co.fedal.dao.FestivalDAO.searchFestival", keyword);
+		return searchList;
 	}
 
 	@Override
@@ -58,4 +70,16 @@ public class FestivalDAOImpl implements FestivalDAO {
 	public void insertUser(SignupRequest signReq) {
 		insert("kr.co.fedal.dao.FestivalDAO.insertMember", signReq);
 	}
+
+	@Override
+	public SignupVO selectAllById(String id) {
+		return (SignupVO) selectOne("kr.co.fedal.dao.FestivalDAO.selectAllById", id);
+	}
+
+	@Override
+	public void updateUserInfo(SignupVO vo) {
+		session.update("kr.co.fedal.dao.FestivalDAO.updateUserInfo", vo);
+	}
+	
+	
 }

@@ -20,7 +20,8 @@
 
 	<select id="selectByEmail" resultType="kr.co.fedal.vo.SignupVO">
 		select email,nickname
-		from u_data
+		from
+		u_data
 		where email = #{email}
 	</select>
 
@@ -30,7 +31,8 @@
 		where id = #{id}
 	</select>
 
-	<insert id="insertMember" parameterType="kr.co.fedal.vo.SignupVO">
+	<insert id="insertMember"
+		parameterType="kr.co.fedal.vo.SignupVO">
 		insert into u_data(
 		no,
 		id,
@@ -45,5 +47,87 @@
 		#{password}
 		)
 	</insert>
+
+	<select id="selectAllById" resultType="kr.co.fedal.vo.SignupVO">
+		select *
+		from u_data
+		where
+		id = #{id}
+	</select>
+
+	<select id="searchFestivalDetail" parameterType="string"
+		resultType="festivalVO">
+		select fid, fname,
+		to_char(start_date,'yyyy-mm-dd') as
+		startDate,
+		to_char(end_date, 'yyyy-mm-dd') as endDate,
+		floc, genre, src
+		from festival
+		where fid =#{fid}
+	</select>
+
+	<select id="selectArtistList" resultType="artistVO"
+		parameterType="string">
+		select aid, aname, src from artist where aid in (select
+		aid from
+		festival JOIN relation on festival.fid = relation.fid where
+		relation.fid=#{fid})
+	</select>
+
+	<select id="selectArtist" resultType="artistVO"
+		parameterType="String">
+		select aid, aname, src from artist where aid = #{aid}
+	</select>
+
+	<select id="selectAllMusic" resultType="musicVO"
+		parameterType="String">
+		select aid, mname, mCnt, src, album, mid from music
+		where aid = #{aid}
+	</select>
+
+	<select id="selectMusic" resultType="musicVO"
+		parameterType="String">
+		select aid, mname, mCnt, src, album, mid from music
+		where aid = #{aid}
+		order by mCnt desc
+	</select>
+
+	<select id="searchFestival" resultType="festivalVO"
+		parameterType="String">
+		<bind name="pattern" value="'%'+keyword +'%'" />
+		select fid, fname from festival where fname like #{pattern}
+	</select>
+
+	<insert id="insertFestivalComment" parameterType="freviewVO">
+		insert into
+		f_review(no, content, reg_date, writer, fid)
+		values(f_review_seq.nextVal, #{content}, sysdate, #{writer}, #{fid})
+	</insert>
+
+	<update id="voteCnt" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt+1
+		where mid=#{mid}
+		]]>
+	</update>
+
+	<update id="voteCntCancel" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt-1
+		where mid=#{mid}
+		]]>
+	</update>
+
+	<select id="selectCnt" resultType="musicVO"
+		parameterType="String">
+		select mCnt from music
+		where mid =#{mid}
+	</select>
+	
+	<update id="updateUserInfo" parameterType="signupVO">
+		update u_data SET
+		email=#{email}, nickname=#{nickname}, password=#{password} where
+		id=#{id}
+	</update>
 
 </mapper>

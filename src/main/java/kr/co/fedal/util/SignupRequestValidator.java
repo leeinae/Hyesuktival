@@ -7,17 +7,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-//signup.jsp¿¡¼­ ÀÛ¼ºÇÑ °ÍµéÀÇ À¯È¿¼ºÀ» °Ë»ç
+//signup.jspì—ì„œ ì‘ì„±í•œ ê²ƒë“¤ì˜ ìœ íš¨ì„±ì„ ê²€ì‚¬
 public class SignupRequestValidator implements Validator {
-	//ÀÌ¸ŞÀÏÀÇ Á¤±ÔÇ¥Çö
-	private static final String emailRegExp =
-			"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+	// ì´ë©”ì¼ì˜ ì •ê·œí‘œí˜„
+	private static final String emailRegExp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	private Pattern pattern;
 
 	public SignupRequestValidator() {
-	        pattern = Pattern.compile(emailRegExp);
-	    }
+		pattern = Pattern.compile(emailRegExp);
+	}
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -29,20 +28,20 @@ public class SignupRequestValidator implements Validator {
 		SignupRequest regReq = (SignupRequest) target;
 
 		if (regReq.getEmail() == null || regReq.getEmail().trim().isEmpty()) {
-			errors.rejectValue("email", "required", "ÇÊ¼ö Á¤º¸ ÀÔ´Ï´Ù.");
+			errors.rejectValue("email", "required", "í•„ìˆ˜ ì •ë³´ ì…ë‹ˆë‹¤.");
 		} else {
 			Matcher matcher = pattern.matcher(regReq.getEmail());
 			if (!matcher.matches()) {
-				errors.rejectValue("email", "bad", "¿Ã¹Ù¸£Áö ¾ÊÀº Çü½ÄÀÔ´Ï´Ù.");
+				errors.rejectValue("email", "bad", "ì˜¬ë°”ë¥´ì§€ ì•Šì€ í˜•ì‹ì…ë‹ˆë‹¤.");
 			}
 		}
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required", "¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		ValidationUtils.rejectIfEmpty(errors, "password", "required", "ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
-		ValidationUtils.rejectIfEmpty(errors, "password2", "required", "ÆĞ½º¿öµå°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
-		ValidationUtils.rejectIfEmpty(errors, "nickname", "required", "´Ğ³×ÀÓÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required", "ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		ValidationUtils.rejectIfEmpty(errors, "password", "required", "íŒ¨ìŠ¤ì›Œë“œë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
+		ValidationUtils.rejectIfEmpty(errors, "password2", "required", "íŒ¨ìŠ¤ì›Œë“œê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
+		ValidationUtils.rejectIfEmpty(errors, "nickname", "required", "ë‹‰ë„¤ì„ì„ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 		if (!regReq.getPassword().isEmpty()) {
 			if (!regReq.isPwEqualToCheckPw()) {
-				errors.rejectValue("password2", "nomatch", "ÆĞ½º¿öµå°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+				errors.rejectValue("password2", "nomatch", "íŒ¨ìŠ¤ì›Œë“œê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 			}
 		}
 	}
