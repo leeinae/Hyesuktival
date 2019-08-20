@@ -24,7 +24,6 @@
 				}
 			});
 		}
-		
 		else if(text == "¡Ú"){
 			$('#voteBtn'+mid).val("¡Ù");
 			$.ajax({
