@@ -18,7 +18,7 @@ public class FestivalDAOImpl implements FestivalDAO {
 	@Autowired
 	private SqlSessionTemplate session;
 
-	// Äõ¸®¹® ½ÇÇàÀ» À§ÇÑ ÄÚµå
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
 	protected Log log = LogFactory.getLog(FestivalDAOImpl.class);
 
 	protected void printQueryId(String queryId) {
@@ -75,4 +75,11 @@ public class FestivalDAOImpl implements FestivalDAO {
 	public SignupVO selectAllById(String id) {
 		return (SignupVO) selectOne("kr.co.fedal.dao.FestivalDAO.selectAllById", id);
 	}
+
+	@Override
+	public void updateUserInfo(SignupVO vo) {
+		session.update("kr.co.fedal.dao.FestivalDAO.updateUserInfo", vo);
+	}
+	
+	
 }

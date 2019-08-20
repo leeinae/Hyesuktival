@@ -9,5 +9,6 @@
 		<typeAlias type="kr.co.fedal.vo.ArtistVO" alias="artistVO" />
 		<typeAlias type="kr.co.fedal.vo.MusicVO" alias="musicVO" />
 		<typeAlias type="kr.co.fedal.vo.FreviewVO" alias="freviewVO" />
+		<typeAlias type="kr.co.fedal.vo.SignupVO" alias="signupVO" />
 	</typeAliases>
 </configuration>

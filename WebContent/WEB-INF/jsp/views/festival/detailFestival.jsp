@@ -75,7 +75,7 @@
 				data : $("#comments").serialize(),
 				success: function(data) {
 					$("#content").val("");
-					$("#writer").val("");
+/* 					$("#writer").val(""); */
 					getComments("1");
 				},
 				error: function(error) {
@@ -94,6 +94,7 @@
 			success: function(data) {
 				printPaging(data.paging, $("#pagination"));
 				console.log(data);
+				replyPage = pageInfo;
 				var output = "";
 				for(var i in data.list) {
 					output += "<tr id='comment"+data.list[i].no+"'>";
@@ -101,7 +102,7 @@
 					output += "<td id='commentContent'>"+data.list[i].content +"</td>";
 					output += "<td id='commentDate'>"+data.list[i].regDate +"</td>";
 					output += "<td>";
-					if("${sessionScope.sessionName}" == data.list[i].writer) {
+					if("${sessionScope.sessionName}" == data.list[i].writer || "${sessionScope.AuthInfoNickname}" == data.list[i].writer) {
 						output += "<button type='button' id='btnDelete' onclick='deleteComment("+data.list[i].no+")'>삭제</button>";
 						output += "<button type='button' id='btnUpdate' onclick='editComment("+data.list[i].no+",\""+data.list[i].content+"\")'>수정</button>";
 					}
@@ -155,18 +156,26 @@
 
 	<hr>
 	<c:choose>
-		<c:when test="${empty AuthInfo && empty sessionId }">
+		<c:when test="${empty AuthInfoId && empty sessionId }">
 			<h1>로그인 하세요 ~</h1>
 			<a href="${pageContext.request.contextPath }/login"><button>로그인</button></a>
 		</c:when>
-		<c:otherwise>
-			<h1>댓글</h1>
-			<form id="comments">
-				writer : <input type="text" value="${sessionName }" name="writer" id="writer" readOnly/><br>		
-				content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content"/>
-			</form>
-			<input id="btn" type="button" onclick="insertComment()" value="등록">		
-		</c:otherwise>
+				<c:when test="${sessionId != null}">
+					<h1>댓글</h1>
+					<form id="comments">
+						writer : <input type="text" value="${sessionName }" name="writer" id="writer" readOnly/><br>		
+						content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content"/>
+					</form>
+					<input id="btn" type="button" onclick="insertComment()" value="등록">		
+				</c:when>
+				<c:otherwise>
+					<h1>댓글</h1>
+					<form id="comments">
+						writer : <input type="text" value="${AuthInfoNickname }" name="writer" id="writer" readOnly/><br>		
+						content : <input type="text" placeholder="댓글을 입력하세요" name="content" id="content"/>
+					</form>
+					<input id="btn" type="button" onclick="insertComment()" value="등록">		
+				</c:otherwise>
 	</c:choose>
 	<br><hr>
 	

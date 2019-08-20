@@ -25,21 +25,20 @@ public class ReplyController {
 	@Autowired
 	private FreviewService service;
 	
-	//´ñ±Û ÀÔ·Â -> DB ÀúÀå
+	//ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ -> DB ï¿½ï¿½ï¿½ï¿½
 	@RequestMapping(value="/{fid}", method=RequestMethod.POST)
 	public void insertComment(@PathVariable("fid") String fid, FreviewVO review){	
-		//´ñ±Û db¿¡ ÀúÀå
+		//ï¿½ï¿½ï¿½ dbï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		service.insertFestivalComment(review);
-		System.out.println("´ñ±Û ÀúÀå ¿Ï·á");
 	}
 	
-	//DB¿¡ ÀúÀåµÈ ÇØ´ç Æä½ºÆ¼¹ú ÈÄ±â ´ñ±Û ¹Þ¾Æ¿À±â
+	//DBï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ä½ºÆ¼ï¿½ï¿½ ï¿½Ä±ï¿½ ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
 	@RequestMapping(value="/{fid}/{page}", method=RequestMethod.POST)
 	public Map<String, Object> getComments(
 			@PathVariable("fid") String fid,
 			@PathVariable("page") Integer page)	
 	{
-		//db¿¡¼­ ´ñ±Û °³¼ö ¹Þ¾Æ¿À±â, paging °´Ã¼ »ý¼º ÈÄ ÇöÀç ÆäÀÌÁö, ÀüÃ¼ ÆäÀÌÁö ¼ö ¼³Á¤
+		//dbï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½, paging ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		int count = service.countFestivalComments(fid);
 		Paging paging = new Paging(count ,page);
 		int start = paging.getPageBegin();

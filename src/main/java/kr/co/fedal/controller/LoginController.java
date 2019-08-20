@@ -100,7 +100,8 @@ public class LoginController {
 		try {
 
 			AuthInfo AuthInfo = service.loginAuth(loginCommand);
-			session.setAttribute("AuthInfo", AuthInfo);
+			session.setAttribute("AuthInfoNickname", AuthInfo.getNickname());
+			session.setAttribute("AuthInfoId", AuthInfo.getId());
 
 			Cookie rememberCookie = new Cookie("REMEMBER", loginCommand.getId());
 			rememberCookie.setPath("/");

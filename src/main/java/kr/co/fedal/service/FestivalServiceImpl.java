@@ -123,4 +123,19 @@ public class FestivalServiceImpl implements FestivalService {
 		MusicVO vo = musicDao.selectCnt(mid);
 		return vo;
 	}
+
+	@Override
+	public SignupVO selectUserDataById(String id) {
+		SignupVO vo = festivalDao.selectAllById(id);
+		return vo;
+	}
+
+	@Override
+	public void updateUserInfo(SignupVO vo) {
+		festivalDao.updateUserInfo(vo);
+	}
+	
+	
+	
+	
 }
