@@ -8,13 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.fedal.service.FestivalService;
 import kr.co.fedal.vo.ArtistVO;
 import kr.co.fedal.vo.FestivalVO;
-import kr.co.fedal.vo.FreviewVO;
 import kr.co.fedal.vo.MusicVO;
 
 @Controller

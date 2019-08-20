@@ -125,4 +125,10 @@
 		select mCnt from music
 		where mid =#{mid}
 	</select>
+	<update id="updateUserInfo" parameterType="signupVO">
+		update u_data SET
+		email=#{email}, nickname=#{nickname}, password=#{password} where
+		id=#{id}
+	</update>
+
 </mapper>

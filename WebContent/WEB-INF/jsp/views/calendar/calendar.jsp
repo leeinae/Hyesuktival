@@ -44,7 +44,7 @@ body {
 	<div id="topMenu" align="right">
 		<c:catch>
 			<c:choose>
-				<c:when test="${empty AuthInfo && empty sessionId}">
+				<c:when test="${empty AuthInfoId && empty sessionId}">
 					<li><a href="/login"><i class="login"></i>로그인</a></li>
 					<li><a href="/signup"><i class="signup"></i>회원가입</a></li>
 				</c:when>
@@ -54,7 +54,7 @@ body {
 					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
 				</c:when>
 				<c:otherwise>
-					<li>${AuthInfo.nickname }님,반갑습니다!</li>
+					<li>${AuthInfoNickname }님,반갑습니다!</li>
 					<li><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
 					<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
 				</c:otherwise>

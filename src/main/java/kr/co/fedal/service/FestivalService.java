@@ -9,6 +9,7 @@ import kr.co.fedal.vo.ArtistVO;
 import kr.co.fedal.vo.FestivalVO;
 import kr.co.fedal.vo.FreviewVO;
 import kr.co.fedal.vo.MusicVO;
+import kr.co.fedal.vo.SignupVO;
 
 public interface FestivalService {
 
@@ -37,4 +38,8 @@ public interface FestivalService {
 	public void voteCntCancel(String mid);
 
 	public MusicVO selectCnt(String mid);
+
+	public SignupVO selectUserDataById(String id);
+
+	public void updateUserInfo(SignupVO vo);
 }

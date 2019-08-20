@@ -8,7 +8,7 @@ import kr.co.fedal.vo.SignupVO;
 
 public interface FestivalDAO {
 	/**
-	 * @return : festival ÀüÃ¼ ¸®½ºÆ® ¹ÝÈ¯
+	 * @return : festival ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¯
 	 */
 	List<FestivalVO> selectAllFestival();
 
@@ -23,4 +23,6 @@ public interface FestivalDAO {
 	public FestivalVO selectDetailFestival(String fid);
 
 	public List<FestivalVO> searchFestival(String keyword);
+	
+	public void updateUserInfo(SignupVO vo);
 }
