@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.fedal.dao.AreviewDAO">
+
+	<resultMap type="AreviewVO" id="AreviewMap">
+		<result column="reg_date" property="regDate" />
+	</resultMap>
+
+	<!-- 페스티벌 후기 댓글 insert -->
+	<insert id="insertArtistComment" parameterType="AreviewVO">
+		insert into
+		a_review(no, url, cnt, content, reg_date, writer, aid)
+		values(a_review_seq.nextVal, #{url}, #{cnt}, #{content}, sysdate, #{writer}, #{aid})
+	</insert>
+
+	<!-- 페스티벌 후기 댓글 select -->
+	<select id="selectArtistComments" resultMap="AreviewMap" parameterType="String"
+		resultType="AreviewVO">
+		select no, url, cnt, content, reg_date, writer, aid
+		from a_review
+		where aid = #{aid}
+		order by no desc
+	</select>
+	
+	<delete id="deleteArtistComment" parameterType="int">
+		delete from a_review where no = #{no}
+	</delete>
+	
+	<update id="updateArtistComment" parameterType="AreviewVO">
+		update a_review set content=#{content},reg_date=sysdate where no=#{no}
+	</update>
+	
+	<select id="countArtistComments" resultType="int">
+		select count(*) from a_review where aid =#{aid}
+	</select>
+
+	<select id="selectArtistCommentsPage" resultMap="AreviewMap" resultType="AreviewVO">
+		select no, url, cnt, content, reg_date, writer, aid
+		from (select rownum numrow, a.* from 
+		(select * from a_review where aid=#{aid} order by no desc) a)
+		where numrow between #{start} and #{end}
+	</select>
+</mapper>
