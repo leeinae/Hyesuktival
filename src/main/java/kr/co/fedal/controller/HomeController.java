@@ -115,7 +115,7 @@ public class HomeController {
 		List<FestivalVO> searchList = service.searchAllFestival(keyword);
 
 		ModelAndView mav = new ModelAndView("search/searchFestival");
-		
+
 		mav.addObject("searchList", searchList);
 		return mav;
 	}
