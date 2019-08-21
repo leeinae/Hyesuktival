@@ -55,7 +55,7 @@
 
 	function editComment(no, content) {
 		var date = $('#comment' + no + '> #commentDate').text();
-		var content = $('#comment' + no + '> #commentContent').text()
+		var content = $('#comment' + no + '> #commentContent').text();
 		var writer = $('#comment' + no + '> #commentWriter').text();
 		var editForm = '';
 		editForm += "<td>" + writer + "</td>";
@@ -71,6 +71,7 @@
 
 	function insertComment() {
 		var content = $("#content").val().trim();
+		var writer = $("#id").text().trim();
 		if (content === "") {
 			alert("댓글을 입력하세요");
 			$("#content").focus();
@@ -78,7 +79,10 @@
 			$.ajax({
 				url : "${pageContext.request.contextPath}/festival/comments/${requestScope.festival.fid}",
 				type : "POST",
-				data : $("#comments").serialize(),
+				data : {
+					"content" : content,
+					"writer" : writer
+				},
 				success : function(data) {
 					$("#content").val("");
 					getComments("1");
@@ -111,8 +115,8 @@
 					output += "<td id='commentDate'>"
 							+ data.list[i].regDate + "</td>";
 					output += "<td>";
-					if ("${sessionScope.sessionName}" == data.list[i].writer
-							|| "${sessionScope.AuthInfoNickname}" == data.list[i].writer) {
+					if ("${sessionScope.sessionId}" == data.list[i].writer
+							|| "${sessionScope.AuthInfoId}" == data.list[i].writer) {
 						output += "<button type='button' id='btnDelete' onclick='deleteComment("
 								+ data.list[i].no + ")'>삭제</button>";
 						output += "<button type='button' id='btnUpdate' onclick='editComment("
@@ -163,13 +167,20 @@
 	<h1>---라인업----</h1>
 	<!-- 이미지 엑박 처리 필요 -->
 	<c:forEach items="${requestScope.artistList }" var="artist">
-		<span> <a
-			href="${pageContext.request.contextPath}/artist/${artist.aid }">
-				<img src="${artist.src }" width="150" height="150">
-		</a>
+		<span>
+      		<a href="${pageContext.request.contextPath}/artist/${artist.aid }">
+        		<c:choose>
+					<c:when test="${artist.src == 'https://cdnticket.melon.co.kr/melon/thumbnail/320x300'}">
+						<img src="/resources/Detail/img/user.png" width="150" height="150">				
+					</c:when>
+			    	<c:otherwise>
+			        	<img src="${artist.src }" width="150" height="150">          
+			        </c:otherwise>
+	         	</c:choose>
+			</a>
 			<h5>${artist.aname }</h5>
-		</span>
-	</c:forEach>
+      </span>
+   </c:forEach>
 
 	<hr>
 	<c:choose>
@@ -180,8 +191,8 @@
 		<c:when test="${sessionId != null}">
 			<h1>댓글</h1>
 			<form id="comments">
-				writer : <input type="text" value="${sessionName }" name="writer"
-					id="writer" readOnly /><br> content : <input type="text"
+					<h3 id="id">${sessionName }</h3>
+					<br> content : <input type="text"
 					placeholder="댓글을 입력하세요" name="content" id="content" />
 			</form>
 			<input id="btn" type="button" onclick="insertComment()" value="등록">
@@ -189,8 +200,8 @@
 		<c:otherwise>
 			<h1>댓글</h1>
 			<form id="comments">
-				writer : <input type="text" value="${AuthInfoNickname }"
-					name="writer" id="writer" readOnly /><br> content : <input
+					<h3 id="id">${AuthInfoId }</h3>
+					<br> content : <input
 					type="text" placeholder="댓글을 입력하세요" name="content" id="content" />
 			</form>
 			<input id="btn" type="button" onclick="insertComment()" value="등록">

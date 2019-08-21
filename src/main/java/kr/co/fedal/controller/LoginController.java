@@ -147,6 +147,7 @@ public class LoginController {
 		String nickname = (String) response_obj.get("nickname");
 		String id = (String) response_obj.get("id");
 		
+		System.out.println(response_obj);
 		// 4.파싱 닉네임 세션으로 저장
 		session.setAttribute("sessionName", nickname); // 세션 생성
 		session.setAttribute("sessionId", id); // 세션 생성
