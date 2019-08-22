@@ -1,5 +1,10 @@
 package kr.co.fedal.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +23,22 @@ public class VoteController {
 
 	@RequestMapping(value = "/artist/{aid}/{mid}/up", method = RequestMethod.POST)
 	@ResponseBody
-	public int voteUp(@PathVariable("mid") String mid) {
+	public int voteUp(@PathVariable("mid") String mid, HttpSession session) {
 		System.out.println("mid: " + mid);
+		String id;
+		
+		if(session.getAttribute("AuthInfoId")== null ) {
+			id = (String) session.getAttribute("sessionName");
+		} else {
+			id = (String) session.getAttribute("AuthInfoId");
+		}
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("mid",mid);
+		map.put("id", id);
 
+		service.insertLike(map);
+		
 		MusicVO musicVO = service.selectCnt(mid);
 		int mCnt = musicVO.getmCnt();
 		mCnt++;
@@ -29,16 +47,4 @@ public class VoteController {
 		return mCnt;
 	}
 
-	@RequestMapping(value = "/artist/{aid}/{mid}/down", method = RequestMethod.POST)
-	@ResponseBody
-	public int voteDown(@PathVariable("mid") String mid) {
-		System.out.println("mid: " + mid);
-
-		MusicVO musicVO = service.selectCnt(mid);
-		int mCnt = musicVO.getmCnt();
-		mCnt--;
-		service.voteCntCancel(mid);
-
-		return mCnt;
-	}
 }

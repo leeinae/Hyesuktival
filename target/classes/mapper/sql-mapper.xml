@@ -129,4 +129,12 @@
 		email=#{email}, nickname=#{nickname}, password=#{password} where
 		id=#{id}
 	</update>
+	
+	<select id="selectLikeCheck" resultType="Map" parameterType="String">
+		select mid from v_like where id=#{id}
+	</select>
+	
+	<insert id="insertLikeCheck" parameterType="Map">
+		insert into v_like(mid, id) values(#{mid}, #{id})
+	</insert>
 </mapper>

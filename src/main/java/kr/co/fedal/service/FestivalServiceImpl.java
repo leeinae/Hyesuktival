@@ -1,6 +1,7 @@
 package kr.co.fedal.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -140,5 +141,18 @@ public class FestivalServiceImpl implements FestivalService {
 	public void updateUserInfo(SignupVO vo) {
 		festivalDao.updateUserInfo(vo);
 	}
+
+	@Override
+	public List<Map<String,String>> selectLikeCheck(String id) {
+		List<Map<String,String>> list = musicDao.selectLikeCheck(id);
+		return list;
+	}
+
+	@Override
+	public void insertLike(Map<String, String> map) {
+		musicDao.insertLike(map);
+	}
+	
+	
 
 }

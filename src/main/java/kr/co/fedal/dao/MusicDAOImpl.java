@@ -1,6 +1,7 @@
 package kr.co.fedal.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +42,17 @@ public class MusicDAOImpl implements MusicDAO {
 		MusicVO vo = session.selectOne("kr.co.fedal.dao.FestivalDAO.selectCnt", mid);
 		return vo;
 	}
+
+	@Override
+	public List<Map<String,String>> selectLikeCheck(String id) {
+		List<Map<String,String>> list = session.selectList("kr.co.fedal.dao.FestivalDAO.selectLikeCheck",id);
+		return list;
+	}
+
+	@Override
+	public void insertLike(Map<String, String> map) {
+		session.insert("kr.co.fedal.dao.FestivalDAO.insertLikeCheck", map);
+		
+	}
+	
 }

@@ -1,6 +1,7 @@
 package kr.co.fedal.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.co.fedal.util.AuthInfo;
 import kr.co.fedal.util.LoginCommand;
@@ -42,4 +43,8 @@ public interface FestivalService {
 	public SignupVO selectUserDataById(String id);
 
 	public void updateUserInfo(SignupVO vo);
+	
+	public List<Map<String,String>> selectLikeCheck(String id);
+	
+	public void insertLike(Map<String, String> map);
 }

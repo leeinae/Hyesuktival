@@ -34,35 +34,26 @@
 	type="text/javascript"></script>
 <script>
 	function vote(mid) {
-		var text = $('#voteBtn' + mid).val();
-		if (text == "투표") {
-			$.ajax({
-						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
-								+ mid + "/up",
-						type : "POST",
-						success : function(data) {
-							$('#mCnt' + mid).html(data);
-							$('#voteBtn' + mid).val("취소");
-							$('#voteBtn' + mid).attr("disabled","disabled");
-						},
-						error : function() {
-							alert('실패');
-						}
-					});
-		} /* else if (text == "취소") {
-			$.ajax({
-						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
-								+ mid + "/down",
-						type : "POST",
-						success : function(data) {
-							$('#mCnt' + mid).html(data);
-							$('#voteBtn' + mid).val("투표");
-						},
-						error : function() {
-							alert('실패');
-						}
-					});
-		} */
+		if("${AuthInfoId }" == "" && "${sessionName }" == "") {
+			alert("로그인 후 투표하세요!");
+		} else {
+			var text = $('#voteBtn' + mid).val();
+			if (text == "투표") {
+				$.ajax({
+							url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
+									+ mid + "/up",
+							type : "POST",
+							success : function(data) {
+								$('#mCnt' + mid).html(data);
+								$('#voteBtn' + mid).val("투표 완료");
+								$('#voteBtn' + mid).attr("disabled","disabled");
+							},
+							error : function() {
+								alert('실패');
+							}
+						});
+			}
+		}
 	}
 </script>
 <script>
@@ -242,9 +233,17 @@
                               <h6 style="text-align: center; color: red;"
                                  id="mCnt${music.mid}">${music.mCnt }</h6>
                               <div>
-                                 <input class="btn btn-primary btn-sm" type="button"
-                                    style="width: 100px" id="voteBtn${music.mid}"
-                                    onclick="vote(${music.mid})" value="투표">
+                              	<c:choose>
+                              		<c:when test="${music.like == true}">
+                              			<input class="btn btn-primary btn-sm" type="button"
+	                                    style="width: 100px" disabled="disabled" value="투표 완료">
+                              		</c:when>
+                              		<c:otherwise>
+		                                 <input class="btn btn-primary btn-sm" type="button"
+		                                    style="width: 100px" id="voteBtn${music.mid}"
+		                                    onclick="vote(${music.mid})" value="투표">
+                              		</c:otherwise>
+                              	</c:choose>
                               </div>
 
                            </div>
@@ -269,11 +268,19 @@
                                        <br>${music.mname }</c:otherwise>
                                  </c:choose>
                               </h6>
-                              <h6 style="text-align: center; color: red;"
-                                 id="mCnt${music.mid}">${music.mCnt }</h6>
-                              <input class="btn btn-primary btn-sm" type="button"
-                                 style="width: 100px" id="voteBtn${music.mid}"
-                                 onclick="vote(${music.mid})" value="투표">
+                              <div>
+                              	<c:choose>
+                              		<c:when test="${music.like == true}">
+                              			<input class="btn btn-primary btn-sm" type="button"
+	                                    style="width: 100px" disabled="disabled" value="투표 완료">
+                              		</c:when>
+                              		<c:otherwise>
+		                                 <input class="btn btn-primary btn-sm" type="button"
+		                                    style="width: 100px" id="voteBtn${music.mid}"
+		                                    onclick="vote(${music.mid})" value="투표">
+                              		</c:otherwise>
+                              	</c:choose>
+                              </div>
                            </div>
                         </td>
                      </c:forEach>
@@ -296,11 +303,19 @@
                                        <br>${music.mname }</c:otherwise>
                                  </c:choose>
                               </h6>
-                              <h6 style="text-align: center; color: red;"
-                                 id="mCnt${music.mid}">${music.mCnt }</h6>
-                              <input class="btn btn-primary btn-sm" type="button"
-                                 style="width: 100px" id="voteBtn${music.mid}"
-                                 onclick="vote(${music.mid})" value="투표">
+                              <div>
+                              	<c:choose>
+                              		<c:when test="${music.like == true}">
+                              			<input class="btn btn-primary btn-sm" type="button"
+	                                    style="width: 100px" disabled="disabled" value="투표 완료">
+                              		</c:when>
+                              		<c:otherwise>
+		                                 <input class="btn btn-primary btn-sm" type="button"
+		                                    style="width: 100px" id="voteBtn${music.mid}"
+		                                    onclick="vote(${music.mid})" value="투표">
+                              		</c:otherwise>
+                              	</c:choose>
+                              </div>
                            </div>
 
                         </td>

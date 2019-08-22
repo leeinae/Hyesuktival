@@ -1,6 +1,9 @@
 package kr.co.fedal.controller;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,7 +92,7 @@ public class HomeController {
 
 	// 아티스트 상세정보 페이지 (페스티벌 -> 아티스트)
 	@RequestMapping(value = "/artist/{aid}", method = RequestMethod.GET)
-	public ModelAndView viewArtist(@PathVariable("aid") String aid) {
+	public ModelAndView viewArtist(@PathVariable("aid") String aid, HttpSession session) {
 
 		// aid 일치하는 아티스트 정보
 		ArtistVO avo = service.selectArtist(aid);
@@ -97,8 +100,28 @@ public class HomeController {
 		// aid가 일치하는 music 가져오기
 		List<MusicVO> mvo = service.selectAllMusic(aid);
 		List<MusicVO> mvoList = service.selectMusic(aid);
-
+		
+		String id;
+		
+		if(session.getId() != null && session.getAttribute("sessionName") != null) {
+			id = (String) session.getAttribute("sessionName");
+		} else if(session.getId() != null && session.getAttribute("AuthInfoId") != null) {
+			id = (String) session.getAttribute("AuthInfoId");
+		} else {
+			id ="";
+		}
+		
+		List<Map<String,String>> likeList = service.selectLikeCheck(id);
 		ModelAndView mav = new ModelAndView("festival/detailArtist");
+
+		for(Map<String,String> map : likeList) {
+			for(MusicVO vo : mvoList) {
+				if(map.get("MID").equals(vo.getMid())) {
+					vo.setLike(true);
+				}
+			}
+		}
+		
 		mav.addObject("musicAll", mvo);
 		mav.addObject("musicList", mvoList);
 		mav.addObject("artist", avo);

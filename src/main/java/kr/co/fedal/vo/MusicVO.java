@@ -7,6 +7,15 @@ public class MusicVO {
 	private int mCnt;
 	private String src;
 	private String album;
+	private boolean like;
+
+	public boolean isLike() {
+		return like;
+	}
+
+	public void setLike(boolean like) {
+		this.like = like;
+	}
 
 	public String getAid() {
 		return aid;
@@ -59,7 +68,9 @@ public class MusicVO {
 	@Override
 	public String toString() {
 		return "MusicVO [mid=" + mid + ", aid=" + aid + ", mname=" + mname + ", mCnt=" + mCnt + ", src=" + src
-				+ ", album=" + album + "]";
+				+ ", album=" + album + ", like=" + like + "]";
 	}
+
+
 
 }
