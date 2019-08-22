@@ -115,7 +115,7 @@
 					output += "<td id='commentDate'>"
 							+ data.list[i].regDate + "</td>";
 					output += "<td>";
-					if ("${sessionScope.sessionId}" == data.list[i].writer
+					if ("${sessionScope.sessionName}" == data.list[i].writer
 							|| "${sessionScope.AuthInfoId}" == data.list[i].writer) {
 						output += "<button type='button' id='btnDelete' onclick='deleteComment("
 								+ data.list[i].no + ")'>삭제</button>";
@@ -165,7 +165,6 @@
 	<h2>${requestScope.festival.floc}</h2>
 
 	<h1>---라인업----</h1>
-	<!-- 이미지 엑박 처리 필요 -->
 	<c:forEach items="${requestScope.artistList }" var="artist">
 		<span>
       		<a href="${pageContext.request.contextPath}/artist/${artist.aid }">

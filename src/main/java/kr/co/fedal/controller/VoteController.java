@@ -1,7 +1,5 @@
 package kr.co.fedal.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,17 +15,8 @@ public class VoteController {
 
 	@Autowired
 	private FestivalService service;
-	
-	@RequestMapping(value="/artist/{aid}/rank", method=RequestMethod.POST)
-	@ResponseBody
-	public List<MusicVO> rank(@PathVariable("aid") String aid) {
-		System.out.println("rank 호출");
-		List<MusicVO> list = service.selectMusic(aid);
-		System.out.println(list);
-		return list;
-	}
 
-	@RequestMapping(value = "/artist/{aid}/{mid}/{voteFlag}", method = RequestMethod.POST)
+	@RequestMapping(value = "/artist/{aid}/{mid}/up", method = RequestMethod.POST)
 	@ResponseBody
 	public int voteUp(@PathVariable("mid") String mid) {
 		System.out.println("mid: " + mid);

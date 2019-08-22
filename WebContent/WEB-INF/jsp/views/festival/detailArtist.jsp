@@ -33,10 +33,6 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
 	type="text/javascript"></script>
 <script>
-	$(document).ready(function() {
-		getVote();
-	});
-
 	function vote(mid) {
 		var text = $('#voteBtn' + mid).val();
 		if (text == "투표") {
@@ -46,89 +42,27 @@
 						type : "POST",
 						success : function(data) {
 							$('#mCnt' + mid).html(data);
-							getVote();
 							$('#voteBtn' + mid).val("취소");
+							$('#voteBtn' + mid).attr("disabled","disabled");
 						},
 						error : function() {
 							alert('실패');
 						}
 					});
-		} else if (text == "취소") {
+		} /* else if (text == "취소") {
 			$.ajax({
 						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
 								+ mid + "/down",
 						type : "POST",
 						success : function(data) {
 							$('#mCnt' + mid).html(data);
-							getVote();
 							$('#voteBtn' + mid).val("투표");
 						},
 						error : function() {
 							alert('실패');
 						}
 					});
-		}
-	}
-	
-	function getVote() {
-		$.ajax({
-			type : "post",
-			url : "${pageContext.request.contextPath}/artist/${artist.aid}/rank",
-			success : function(data) {
-				console.log(data);
-				var output = "<table class='table table-bordered' style='table-layout: fixed;'>";
-				for(var i in data) {
-					if(i==3 || i==6) {
-						output += "<tr>";						
-					}
-					if(i < 3) {
-						output += "<td colspan='4'>";
-						output += "<div><a id='"+data[i].mid+"'</a>";
-						output += "<img	src='"+data[i].src+"' width='90px' height='90px'>";
-						output += "<h6 style='text-align: center'>"+(parseInt(i)+1)+"위";
-						if(data[i].mname.length > 14) {
-							output += "<marquee direction='left'>"+data[i].mname+"</marquee>";
-						} else {
-							output += "<br>" + data[i].mname +"</h6>";
-						}
-						output += "<h6 style='text-align: center; color: red;' id='mCnt"+data[i].mid+"'>"+data[i].mCnt+"</h6>";
-						output += "<div><input class='btn btn-primary btn-sm' type='button'	style='width: 100px' id='voteBtn"+data[i].mid+""
-						+"'onclick='vote("+data[i].mid+")' value='투표'></div>";
-					} else if (i >=3 && i <6) {
-						output += "<td colspan='4'>";
-						output += "<div><a id='"+data[i].mid+"'</a>";
-						output += "<img	src='"+data[i].src+"' width='90px' height='90px'>";
-						output += "<h6 style='text-align: center'>"+(parseInt(i)+1)+"위";
-						if(data[i].mname.length > 14) {
-							output += "<marquee direction='left'>"+data[i].mname+"</marquee>";
-						} else {
-							output += "<br>" + data[i].mname +"</h6>";
-						}
-						output += "<h6 style='text-align: center; color: red;' id='mCnt"+data[i].mid+"'>"+data[i].mCnt+"</h6>";
-						output += "<div><input class='btn btn-primary btn-sm' type='button'	style='width: 100px' id='voteBtn"+data[i].mid+""
-						+"'onclick='vote("+data[i].mid+")' value='투표'></div>";
-					} else {
-						output += "<td colspan='3'>";
-						output += "<div><a id='"+data[i].mid+"'</a>";
-						output += "<img	src='"+data[i].src+"' width='90px' height='90px'>";
-						output += "<h6 style='text-align: center'>"+(parseInt(i)+1)+"위";
-						if(data[i].mname.length > 14) {
-							output += "<marquee direction='left'>"+data[i].mname+"</marquee>";
-						} else {
-							output += "<br>" + data[i].mname +"</h6>";
-						}
-						output += "<h6 style='text-align: center; color: red;' id='mCnt"+data[i].mid+"'>"+data[i].mCnt+"</h6>";
-						output += "<div><input class='btn btn-primary btn-sm' type='button'	style='width: 100px' id='voteBtn"+data[i].mid+""
-						+"'onclick='vote("+data[i].mid+")' value='투표'></div>";			
-					}
-				}
-				output += "</tr></table>";
-				$(".userRecomList").html(output);
-			},
-			error : function(request, status, error) {
-				console.log(error);
-			}
-		});
+		} */
 	}
 </script>
 <script>
@@ -284,8 +218,100 @@
 			</div>
 
 			<div class="userRecomList">
-				<!-- 투표 리스트 받아오는 영역 -->
-			</div>
+            
+               <table class="table table-bordered" style="table-layout: fixed;">
+                  <!-- word-break:break-all; -->
+
+                  <tr>
+                     <c:forEach items="${requestScope.musicList }" begin="0" end="2"
+                        var="music" varStatus="status">
+                        <td colspan="4">
+                           <div>
+                              <a id="mid" style="display: none">${music.mid }</a> <img
+                                 src="${music.src }" width="90px" height="90px">
+                              <h6 style="text-align: center;">${status.count}위
+                                 <c:set var="m" value="${music.mname }" />
+                                 <c:choose>
+                                    <c:when test="${fn:length(m) > 14}">
+                                       <marquee direction="left">${music.mname }</marquee>
+                                    </c:when>
+                                    <c:otherwise>
+                                       <br>${music.mname }</c:otherwise>
+                                 </c:choose>
+                              </h6>
+                              <h6 style="text-align: center; color: red;"
+                                 id="mCnt${music.mid}">${music.mCnt }</h6>
+                              <div>
+                                 <input class="btn btn-primary btn-sm" type="button"
+                                    style="width: 100px" id="voteBtn${music.mid}"
+                                    onclick="vote(${music.mid})" value="투표">
+                              </div>
+
+                           </div>
+                        </td>
+                     </c:forEach>
+                  </tr>
+
+                  <tr>
+                     <c:forEach items="${requestScope.musicList }" begin="3" end="5"
+                        var="music" varStatus="status">
+                        <td colspan="4">
+                           <div>
+                              <a id="mid" style="display: none">${music.mid }</a> <img
+                                 src="${music.src }" width="90px" height="90px">
+                              <h6 style="text-align: center;">${status.count+3}위
+                                 <c:set var="m" value="${music.mname }" />
+                                 <c:choose>
+                                    <c:when test="${fn:length(m) > 20}">
+                                       <marquee direction="left">${music.mname }</marquee>
+                                    </c:when>
+                                    <c:otherwise>
+                                       <br>${music.mname }</c:otherwise>
+                                 </c:choose>
+                              </h6>
+                              <h6 style="text-align: center; color: red;"
+                                 id="mCnt${music.mid}">${music.mCnt }</h6>
+                              <input class="btn btn-primary btn-sm" type="button"
+                                 style="width: 100px" id="voteBtn${music.mid}"
+                                 onclick="vote(${music.mid})" value="투표">
+                           </div>
+                        </td>
+                     </c:forEach>
+                  </tr>
+
+                  <tr>
+                     <c:forEach items="${requestScope.musicList }" begin="6" end="9"
+                        var="music" varStatus="status">
+                        <td colspan="3">
+                           <div>
+                              <a id="mid" style="display: none">${music.mid }</a> <img
+                                 src="${music.src }" width="90px" height="90px">
+                              <h6 style="text-align: center;">${status.count+6}위
+                                 <c:set var="m" value="${music.mname }" />
+                                 <c:choose>
+                                    <c:when test="${fn:length(m) > 20}">
+                                       <marquee direction="left">${music.mname }</marquee>
+                                    </c:when>
+                                    <c:otherwise>
+                                       <br>${music.mname }</c:otherwise>
+                                 </c:choose>
+                              </h6>
+                              <h6 style="text-align: center; color: red;"
+                                 id="mCnt${music.mid}">${music.mCnt }</h6>
+                              <input class="btn btn-primary btn-sm" type="button"
+                                 style="width: 100px" id="voteBtn${music.mid}"
+                                 onclick="vote(${music.mid})" value="투표">
+                           </div>
+
+                        </td>
+                     </c:forEach>
+                  </tr>
+
+               </table>
+
+         </div>
+      </div>
+   </div>
 		</div>
 	</div>
 	<br>
@@ -335,9 +361,6 @@
 				</thead>
 
 				<tbody>
-
-
-
 					<tr>
 						<td><iframe width="300" height="200"
 								src="https://www.youtube.com/embed/mxa8ydeI-ZQ" frameborder="0"
