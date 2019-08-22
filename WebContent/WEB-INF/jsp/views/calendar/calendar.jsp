@@ -23,6 +23,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     calendar.render();
   });
+  
+function searching(){
+	var searchBox = document.getElementById("searchBox").value;
+	if(searchBox==""){
+		alert("검색어를 입력해주세요!");
+		document.getElementById("searchBox").focus();
+		return false;
+	}
+	else{
+		return true;
+	}
+}
 </script>
 <style>
 body {
@@ -62,9 +74,9 @@ body {
 		</c:catch>
 	</div>
 	<br>
-	<form action="/search" method="get">
-		<input type="text" name="search">
-		<button type="submit">검색!</button>
+	<form action="/search" method="get" onsubmit="return searching()">
+		<input type="text" name="search" id="searchBox">
+		<button type="submit" onclick="searching()">검색!</button>
 	</form>
 
 	<div id="calendar"></div>

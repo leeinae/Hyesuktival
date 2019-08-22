@@ -1,6 +1,7 @@
 package kr.co.fedal.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -113,10 +114,16 @@ public class HomeController {
 		System.out.println(keyword);
 
 		List<FestivalVO> searchList = service.searchAllFestival(keyword);
-
+		List<ArtistVO> searchArtistList = service.searchAllArtist(keyword);
+		Map<String, List<FestivalVO>> map = service.partiFestival(searchArtistList);
+		System.out.println("map: " + map);
+		
 		ModelAndView mav = new ModelAndView("search/searchFestival");
-
+		
 		mav.addObject("searchList", searchList);
+		
+		mav.addObject("searchArtistList", searchArtistList);
+		mav.addObject("resultMap", map);
 		return mav;
 	}
 

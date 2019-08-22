@@ -1,6 +1,9 @@
 package kr.co.fedal.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -82,6 +85,29 @@ public class FestivalServiceImpl implements FestivalService {
 	public List<FestivalVO> searchAllFestival(String keyword) {
 		List<FestivalVO> list = festivalDao.searchFestival(keyword);
 		return list;
+	}
+	
+	@Override
+	public List<ArtistVO> searchAllArtist(String keyword) {
+		List<ArtistVO> list = artistDao.searchArtist(keyword);
+		return list;
+	}
+
+
+	@Override
+	public Map<String, List<FestivalVO>> partiFestival(List<ArtistVO> fidList) {
+		Map<String, List<FestivalVO>> map = new HashMap<>();
+		for(ArtistVO a: fidList) {
+			List<String> aidList = festivalDao.findFids(a.getAid());
+			List<FestivalVO> festVOList = new ArrayList<>();
+			for(String s: aidList) {
+				festVOList.add(festivalDao.searchRes(s));
+			}
+			map.put(a.getAid(), festVOList);
+		}
+		
+		return map;
+		
 	}
 
 	public void insertFestivalComment(FreviewVO fvo) {

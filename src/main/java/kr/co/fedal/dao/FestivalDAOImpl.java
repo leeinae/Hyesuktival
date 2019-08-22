@@ -80,6 +80,18 @@ public class FestivalDAOImpl implements FestivalDAO {
 	public void updateUserInfo(SignupVO vo) {
 		session.update("kr.co.fedal.dao.FestivalDAO.updateUserInfo", vo);
 	}
+
+	@Override
+	public List<String> findFids(String aid) {
+		List<String> findFids = session.selectList("kr.co.fedal.dao.FestivalDAO.findFid", aid);
+		return findFids;
+	}
+
+	@Override
+	public FestivalVO searchRes(String fid) {
+		FestivalVO partiFestival = session.selectOne("kr.co.fedal.dao.FestivalDAO.searchRes", fid);
+		return partiFestival;
+	}
 	
 	
 }

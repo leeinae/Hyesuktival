@@ -36,61 +36,181 @@
 	function vote(mid) {
 		var text = $('#voteBtn' + mid).val();
 		if (text == "투표") {
-			$('#voteBtn' + mid).val("취소");
 			$.ajax({
-				url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
-						+ mid + "/up",
-				type : "POST",
-				success : function(data) {
-					$('#mCnt' + mid).html(data);
-				},
-				error : function() {
-					alert('실패');
-				}
-			});
-		} else if (text == "취소") {
-			$('#voteBtn' + mid).val("투표");
+						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
+								+ mid + "/up",
+						type : "POST",
+						success : function(data) {
+							$('#mCnt' + mid).html(data);
+							$('#voteBtn' + mid).val("취소");
+							$('#voteBtn' + mid).attr("disabled","disabled");
+						},
+						error : function() {
+							alert('실패');
+						}
+					});
+		} /* else if (text == "취소") {
 			$.ajax({
-				url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
-						+ mid + "/down",
-				type : "POST",
-				success : function(data) {
-					$('#mCnt' + mid).html(data);
-				},
-				error : function() {
-					alert('실패');
-				}
-			});
-		}
+						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
+								+ mid + "/down",
+						type : "POST",
+						success : function(data) {
+							$('#mCnt' + mid).html(data);
+							$('#voteBtn' + mid).val("투표");
+						},
+						error : function() {
+							alert('실패');
+						}
+					});
+		} */
 	}
 </script>
 <script>
-	function urlValidation() {
-		var youtubeUrl = document.getElementById("youtubeUrl").value;
-		var youtubeUrlArray = String(youtubeUrl.split('/')[3]);
-		youtubeUrlArray = String(youtubeUrlArray.split('=')[1]);
-		var realUrl = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+youtubeUrlArray+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
-		var reple = document.getElementById("reple").value;
-		var check = 'www.youtube.com';
-		if (youtubeUrl.indexOf(check) != -1) {
-			alert('등록되었습니다!');
-			var table = document.getElementById("zickcamUrl");
-			var row = table.insertRow(table.rows.length);
-			var cell1 = row.insertCell();
-			var cell2 = row.insertCell();
-			var cell3 = row.insertCell();
-			var cell4 = row.insertCell();
-			cell1.innerHTML = "<td>" + realUrl + "</td>"
-			cell2.innerHTML = "<td>" + reple + "</td>"
-			cell3.innerHTML = "<td><input type='button' value='추천'></td>"
-			cell4.innerHTML = "<td><input type='button' value='비추천'></td>"
-			document.getElementById("youtubeUrl").value = "";
-			document.getElementById("reple").value = "";
-		} else {
-			alert('올바른 Youtube URL을 입력해 주세요!');
-			document.getElementById("youtubeUrl").focus();
-		}
-	}
+$(document).ready(function(){
+    getComments("1");
+ });
+ 
+ function deleteComment(no) {
+    if(confirm("정말 삭제하시겠습니까?")==true) {
+        $.ajax({
+          url : "${pageContext.request.contextPath}/artist/comments/delete/" +no,
+          type : "post",
+          success : function(data) {
+             alert("삭제 완료!");
+             getComments(replyPage);
+          }
+       });         
+    } else {
+       return;
+    }
+ }
+ 
+ function updateComment(no) {
+     var content = $('#comment'+no+' #content').val().trim();
+     if (content ==="") {
+       alert("댓글을 입력하세요");
+       $('#comment'+no+' #content').focus();
+     } else {
+       $.ajax({
+          url : "${pageContext.request.contextPath}/artist/comments/update/"+no,
+          type: "post",
+          data : {
+             'content' : content,
+             'no' : no
+          },
+          success : function(data) {
+             getComments(replyPage);
+          },
+           error:function(request,status,error){
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);}
+       });   
+     }
+ }
+ 
+ function editComment(no, content){
+     var date = $('#comment'+no+ '> #commentDate').text();
+     var content = $('#comment' + no + '> #commentContent').text()
+     var writer = $('#comment'+no+ '> #commentWriter').text();
+     var editForm ='';
+     editForm += "<td>"+writer+"</td>";
+     editForm += "<td>"+url+"</td>";
+     editForm += "<td><input type='text' placeholder='댓글을 입력하세요' value='"+content+"' name='content' id='content'></td>";
+     editForm += "<td>"+date+"</td>";       
+     editForm += "<td><input id='btn' type='button' onclick='updateComment("+no+")' value='수정'>";
+     editForm += "<input id='btn' type='button' onclick='getComments("
+			+ replyPage + ")' value='취소'></td>";
+     
+     $('#comment'+no).html(editForm);
+ }
+ 
+ function insertComment() {
+    var content = $("#content").val().trim();
+    var url = $("#url").val();
+    var check = 'www.youtube.com';
+    if(content ==="") {
+       alert("댓글을 입력하세요");
+       $("#content").focus();
+    } else if(url.indexOf(check) < 0){
+  	  alert("올바른 youtube Url을 입력해주세요!")
+  	  $("#url").focus();
+    } else {
+       $.ajax({
+          url: "${pageContext.request.contextPath}/artist/comments/${requestScope.artist.aid}",
+          type : "POST",
+          data : $("#comments").serialize(),
+          success: function(data) {
+             alert("전송 성공");
+             $("#url").val("");
+             $("#content").val("");
+             getComments("1");
+          },
+             error:function(request,status,error){
+                 alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                 }
+          });
+    }
+ }
+ 
+ var replyPage = 1;
+ 
+ function getComments(pageInfo) {
+    $.ajax({
+       type: "post",
+       url : "${pageContext.request.contextPath}/artist/comments/${requestScope.artist.aid}/"+pageInfo,
+       success: function(data) {
+          printPaging(data.paging, $("#pagination"));
+          console.log(data);
+          replyPage = pageInfo;
+          var output = "";
+          for(var i in data.list) {
+          	var youtubeUrl = data.list[i].url;
+          	var youtubeUrlArray = String(youtubeUrl.split('/')[3]);
+              youtubeUrlArray = String(youtubeUrlArray.split('=')[1]);
+              var realUrl = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+youtubeUrlArray+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+             output += "<tr id='comment"+data.list[i].no+"'>";
+             output += "<td id='commentWriter'>"+data.list[i].writer +"</td>";
+             output += "<td id='youtubeUrl'>"+realUrl +"</td>";
+             output += "<td id='commentContent'>"+data.list[i].content +"</td>";
+             output += "<td id='commentDate'>"+data.list[i].regDate +"</td>";
+             output += "<td>";
+             output += "<button type='button' id='recomBtn' onclick='recom(${selectAreview.writer})'>추천하기</button>";
+             output += "</td>";
+             output += "<td>${selectAreview.writer}</td>"
+             output += "<td>";
+             if ("${sessionScope.sessionName}" == data.list[i].writer
+						|| "${sessionScope.AuthInfoNickname}" == data.list[i].writer) {
+					output += "<button type='button' id='btnDelete' onclick='deleteComment("
+							+ data.list[i].no + ")'>삭제</button>";
+					output += "<button type='button' id='btnUpdate' onclick='editComment("
+							+ data.list[i].no
+							+ ",\""
+							+ data.list[i].content
+							+ "\")'>수정</button>";
+				}
+             output += "</td>";
+             output += "</tr>";
+          }
+          $("#commentsList").html(output);
+       }
+    });
+ }
+ 
+ var printPaging= function(pageMaker, target) {
+    var str ="";
+    if (pageMaker.curPage > 1 ) {
+       str += str += "<li><a href='javascript:getComments(1)'> [이전] </a></li>";
+    }
+
+    for (var i = pageMaker.blockBegin; i <= pageMaker.blockEnd; i++) {
+       var strClass = pageMaker.curPage == i ? 'class=active' : '';
+       str += "<li "+strClass+"><a href='javascript:getComments("+i+")'>"+i+"</a></li>";
+    }
+
+    if (pageMaker.curBlock < pageMaker.blockEnd ) {
+       str += "<li><a href='javascript:getComments("+pageMaker.blockEnd+")'> [다음] </a></li>";
+    }
+    target.html(str);
+ }
 </script>
 
 <title>Insert title here</title>
@@ -201,7 +321,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${requestScope.musicAll }" begin="0" end="4"
+						<c:forEach items="${requestScope.musicAll }" begin="1" end="5"
 							var="musicAll" varStatus="status">
 							<tr>
 								<td>${ status.count }</td>
@@ -217,102 +337,102 @@
 			</div>
 
 			<div class="userRecomList">
-				<div>
-					<table class="table table-bordered" style="table-layout: fixed;">
-						<!-- word-break:break-all; -->
 
-						<tr>
-							<c:forEach items="${requestScope.musicList }" begin="0" end="2"
-								var="music" varStatus="status">
-								<td colspan="4">
+				<table class="table table-bordered" style="table-layout: fixed;">
+					<!-- word-break:break-all; -->
+
+					<tr>
+						<c:forEach items="${requestScope.musicList }" begin="0" end="2"
+							var="music" varStatus="status">
+							<td colspan="4">
+								<div>
+									<a id="mid" style="display: none">${music.mid }</a> <img
+										src="${music.src }" width="90px" height="90px">
+									<h6 style="text-align: center;">${status.count}위
+										<c:set var="m" value="${music.mname }" />
+										<c:choose>
+											<c:when test="${fn:length(m) > 14}">
+												<marquee direction="left">${music.mname }</marquee>
+											</c:when>
+											<c:otherwise>
+												<br>${music.mname }</c:otherwise>
+										</c:choose>
+									</h6>
+									<h6 style="text-align: center; color: red;"
+										id="mCnt${music.mid}">${music.mCnt }</h6>
 									<div>
-										<a id="mid" style="display: none">${music.mid }</a> <img
-											src="${music.src }" width="90px" height="90px">
-										<h6 style="text-align: center">${status.count}위
-											<c:set var="m" value="${music.mname }" />
-											<c:choose>
-												<c:when test="${fn:length(m) > 14}">
-													<marquee direction="left">${music.mname }</marquee>
-												</c:when>
-												<c:otherwise>
-													<br>${music.mname }</c:otherwise>
-											</c:choose>
-										</h6>
-										<h6 style="text-align: center; color: red;"
-											id="mCnt${music.mid}">${music.mCnt }</h6>
-										<div>
-											<input class="btn btn-primary btn-sm" type="button"
-												style="width: 100px" id="voteBtn${music.mid}"
-												onclick="vote(${music.mid})" value="투표">
-										</div>
-
-									</div>
-								</td>
-							</c:forEach>
-						</tr>
-
-						<tr>
-							<c:forEach items="${requestScope.musicList }" begin="3" end="5"
-								var="music" varStatus="status">
-								<td colspan="4">
-									<div>
-										<a id="mid" style="display: none">${music.mid }</a> <img
-											src="${music.src }" width="90px" height="90px">
-										<h6 style="text-align: center">${status.count+3}위
-											<c:set var="m" value="${music.mname }" />
-											<c:choose>
-												<c:when test="${fn:length(m) > 20}">
-													<marquee direction="left">${music.mname }</marquee>
-												</c:when>
-												<c:otherwise>
-													<br>${music.mname }</c:otherwise>
-											</c:choose>
-										</h6>
-										<h6 style="text-align: center; color: red;"
-											id="mCnt${music.mid}">${music.mCnt }</h6>
-										<input class="btn btn-primary btn-sm" type="button"
-											style="width: 100px" id="voteBtn${music.mid}"
-											onclick="vote(${music.mid})" value="투표">
-									</div>
-								</td>
-							</c:forEach>
-						</tr>
-
-						<tr>
-							<c:forEach items="${requestScope.musicList }" begin="6" end="9"
-								var="music" varStatus="status">
-								<td colspan="3">
-									<div>
-										<a id="mid" style="display: none">${music.mid }</a> <img
-											src="${music.src }" width="90px" height="90px">
-										<h6 style="text-align: center">${status.count+6}위
-											<c:set var="m" value="${music.mname }" />
-											<c:choose>
-												<c:when test="${fn:length(m) > 20}">
-													<marquee direction="left">${music.mname }</marquee>
-												</c:when>
-												<c:otherwise>
-													<br>${music.mname }</c:otherwise>
-											</c:choose>
-										</h6>
-										<h6 style="text-align: center; color: red;"
-											id="mCnt${music.mid}">${music.mCnt }</h6>
 										<input class="btn btn-primary btn-sm" type="button"
 											style="width: 100px" id="voteBtn${music.mid}"
 											onclick="vote(${music.mid})" value="투표">
 									</div>
 
-								</td>
-							</c:forEach>
-						</tr>
+								</div>
+							</td>
+						</c:forEach>
+					</tr>
 
-					</table>
+					<tr>
+						<c:forEach items="${requestScope.musicList }" begin="3" end="5"
+							var="music" varStatus="status">
+							<td colspan="4">
+								<div>
+									<a id="mid" style="display: none">${music.mid }</a> <img
+										src="${music.src }" width="90px" height="90px">
+									<h6 style="text-align: center;">${status.count+3}위
+										<c:set var="m" value="${music.mname }" />
+										<c:choose>
+											<c:when test="${fn:length(m) > 20}">
+												<marquee direction="left">${music.mname }</marquee>
+											</c:when>
+											<c:otherwise>
+												<br>${music.mname }</c:otherwise>
+										</c:choose>
+									</h6>
+									<h6 style="text-align: center; color: red;"
+										id="mCnt${music.mid}">${music.mCnt }</h6>
+									<input class="btn btn-primary btn-sm" type="button"
+										style="width: 100px" id="voteBtn${music.mid}"
+										onclick="vote(${music.mid})" value="투표">
+								</div>
+							</td>
+						</c:forEach>
+					</tr>
 
+					<tr>
+						<c:forEach items="${requestScope.musicList }" begin="6" end="9"
+							var="music" varStatus="status">
+							<td colspan="3">
+								<div>
+									<a id="mid" style="display: none">${music.mid }</a> <img
+										src="${music.src }" width="90px" height="90px">
+									<h6 style="text-align: center;">${status.count+6}위
+										<c:set var="m" value="${music.mname }" />
+										<c:choose>
+											<c:when test="${fn:length(m) > 20}">
+												<marquee direction="left">${music.mname }</marquee>
+											</c:when>
+											<c:otherwise>
+												<br>${music.mname }</c:otherwise>
+										</c:choose>
+									</h6>
+									<h6 style="text-align: center; color: red;"
+										id="mCnt${music.mid}">${music.mCnt }</h6>
+									<input class="btn btn-primary btn-sm" type="button"
+										style="width: 100px" id="voteBtn${music.mid}"
+										onclick="vote(${music.mid})" value="투표">
+								</div>
 
-				</div>
+							</td>
+						</c:forEach>
+					</tr>
+
+				</table>
+
 
 			</div>
+
 		</div>
+	</div>
 	</div>
 	<br>
 	<br>
@@ -333,6 +453,42 @@
 			<!--  <div class="divider-custom-line"></div> -->
 		</div>
 
+		<c:choose>
+			<c:when test="${empty AuthInfoId && empty sessionId }">
+				<h1>로그인 하세요 ~</h1>
+				<a href="${pageContext.request.contextPath }/login"><button>로그인</button></a>
+			</c:when>
+			<c:when test="${sessionId != null}">
+				<form id="comments">
+					<input type="text" value="${sessionName }" name="writer"
+						id="writer"><br> <input type="text" id="url"
+						name="url" class="form-control"
+						placeholder="https://www.youtube.com/...">
+					<textarea id="content" name="content" class="form-control"
+						style="width: 100%;" rows="3" cols="30" id="comment"
+						name="comment" placeholder="댓글을 입력하세요">
+                        	 </textarea>
+					<%-- <a href='#' onClick="fn_comment('${result.code }')"
+										class="btn pull-right btn-success">등록</a> --%>
+				</form>
+				<input type="button" class="btn pull-right btn-success" id="btn"
+					onclick="insertComment()" value="등록" />
+			</c:when>
+			<c:otherwise>
+				<form id="comments">
+					<input type="text" value="${AuthInfoNickname }" name="writer"
+						id="writer"><br> <input type="text" id="url"
+						name="url" class="form-control"
+						placeholder="https://www.youtube.com/...">
+					<textarea id="content" name="content" class="form-control"
+						style="width: 100%;" rows="3" cols="30" id="comment"
+						name="comment" placeholder="댓글을 입력하세요">
+                        	 </textarea>
+				</form>
+				<input type="button" class="btn pull-right btn-success" id="btn"
+					onclick="insertComment()" value="등록" />
+			</c:otherwise>
+		</c:choose>
 
 		<!--Comment-->
 		<br> <br> <br>
@@ -340,27 +496,26 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<td colspan="3">
-							<div>
-								<input type="text" class="form-control"
-									placeholder="https://www.youtube.com/...">
-								<textarea class="form-control" style="width: 100%;" rows="3"
-									cols="30" id="comment" name="comment" placeholder="댓글을 입력하세요">
-                         </textarea>
-								<div>
-									<a href='#' onClick="fn_comment('${result.code }')"
-										class="btn pull-right btn-success">등록</a>
-								</div>
-
-							</div> <br>
-						</td>
+						<td colspan="3"><br></td>
 					</tr>
+					<td><strong>작성자</strong></td>
 					<td><strong>영상</strong></td>
 					<td><strong>댓글</strong></td>
+					<td><strong>작성일</strong></td>
+					<td><strong>추천하기</strong></td>
 					<td><strong>추천수</strong></td>
+					<td><strong>수정/삭제</strong></td>
 				</thead>
+				<tbody id="commentsList">
+				</tbody>
+			</table>
+			<div id="paging">
+				<ul id="pagination">
 
-				<tbody>
+				</ul>
+			</div>
+
+			<!-- <tbody>
 
 
 
@@ -433,7 +588,7 @@
 					</tr>
 
 				</tbody>
-			</table>
+			</table> -->
 			<div id="pageForm" align="center">
 				<c:if test="true">
 					<a href="BoardListAction.bo?page=-1" style="color: black">[ 이전

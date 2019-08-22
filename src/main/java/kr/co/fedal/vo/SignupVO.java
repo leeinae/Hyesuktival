@@ -2,15 +2,7 @@ package kr.co.fedal.vo;
 
 public class SignupVO {
 	int no;
-	String id, email, nickname, password, password2;
-
-	public boolean isPwEqualToCheckPw() {
-		return password.equals(password2);
-	}
-
-	public boolean matchPassword(String pw) {
-		return this.password.equals(pw);
-	}
+	String id, email, nickname, password;
 
 	public int getNo() {
 		return no;
@@ -52,32 +44,27 @@ public class SignupVO {
 		this.password = password;
 	}
 
-	public String getPassword2() {
-		return password2;
-	}
-
-	public void setPassword2(String password2) {
-		this.password2 = password2;
-	}
-
 	@Override
 	public String toString() {
 		return "SignupVO [no=" + no + ", id=" + id + ", email=" + email + ", nickname=" + nickname + ", password="
-				+ password + ", password2=" + password2 + "]";
+				+ password + "]";
 	}
 
-	public SignupVO(int no, String id, String email, String nickname, String password, String password2) {
+	public SignupVO(int no, String id, String email, String nickname, String password) {
 		super();
 		this.no = no;
 		this.id = id;
 		this.email = email;
 		this.nickname = nickname;
 		this.password = password;
-		this.password2 = password2;
 	}
 
 	public SignupVO() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public boolean matchPassword(String pw) {
+		return this.password.equals(pw);
 	}
 }

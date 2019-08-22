@@ -25,4 +25,8 @@ public interface FestivalDAO {
 	public List<FestivalVO> searchFestival(String keyword);
 	
 	public void updateUserInfo(SignupVO vo);
+	
+	public List<String> findFids(String aid);
+	
+	public FestivalVO searchRes(String fid);
 }
