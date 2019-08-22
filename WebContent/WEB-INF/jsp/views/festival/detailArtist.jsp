@@ -268,6 +268,8 @@
                                        <br>${music.mname }</c:otherwise>
                                  </c:choose>
                               </h6>
+                              <h6 style="text-align: center; color: red;"
+                                 id="mCnt${music.mid}">${music.mCnt }</h6>
                               <div>
                               	<c:choose>
                               		<c:when test="${music.like == true}">
@@ -303,6 +305,8 @@
                                        <br>${music.mname }</c:otherwise>
                                  </c:choose>
                               </h6>
+                              <h6 style="text-align: center; color: red;"
+                                 id="mCnt${music.mid}">${music.mCnt }</h6>
                               <div>
                               	<c:choose>
                               		<c:when test="${music.like == true}">
