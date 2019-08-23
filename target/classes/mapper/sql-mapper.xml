@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.fedal.dao.FestivalDAO">
+
+	<resultMap type="festivalVO" id="festivalMap">
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+	</resultMap>
+
+	<select id="selectFestival" resultType="festivalVO">
+		select fid, fname,
+		to_char(start_date,'yyyy-mm-dd') as startDate,
+		to_char(end_date,
+		'yyyy-mm-dd') as endDate,
+		floc, genre, src
+		from festival
+	</select>
+
+	<select id="selectByEmail" resultType="kr.co.fedal.vo.SignupVO">
+		select email,nickname
+		from
+		u_data
+		where email = #{email}
+	</select>
+
+	<select id="selectById" resultType="kr.co.fedal.vo.SignupVO">
+		select id,nickname
+		from u_data
+		where id = #{id}
+	</select>
+
+	<insert id="insertMember"
+		parameterType="kr.co.fedal.vo.SignupVO">
+		insert into u_data(
+		no,
+		id,
+		email,
+		nickname,
+		password
+		)values(
+		u_data_no_seq.nextval,
+		#{id},
+		#{email},
+		#{nickname},
+		#{password}
+		)
+	</insert>
+
+	<select id="selectAllById" resultType="kr.co.fedal.vo.SignupVO">
+		select *
+		from u_data
+		where
+		id = #{id}
+	</select>
+
+	<select id="searchFestivalDetail" parameterType="string"
+		resultType="festivalVO">
+		select fid, fname,
+		to_char(start_date,'yyyy-mm-dd') as
+		startDate,
+		to_char(end_date, 'yyyy-mm-dd') as endDate,
+		floc, genre, src
+		from festival
+		where fid =#{fid}
+	</select>
+
+	<select id="selectArtistList" resultType="artistVO"
+		parameterType="string">
+		select aid, aname, src from artist where aid in (select
+		aid from
+		festival JOIN relation on festival.fid = relation.fid where
+		relation.fid=#{fid})
+	</select>
+
+	<select id="selectArtist" resultType="artistVO"
+		parameterType="String">
+		select aid, aname, src from artist where aid = #{aid}
+	</select>
+
+	<select id="selectAllMusic" resultType="musicVO"
+		parameterType="String">
+		select aid, mname, mCnt, src, album, mid from music
+		where aid = #{aid}
+	</select>
+
+	<select id="selectMusic" resultType="musicVO"
+		parameterType="String">
+		select aid, mname, mCnt, src, album, mid from music
+		where aid = #{aid}
+		order by mCnt desc
+	</select>
+
+	<select id="searchFestival" resultType="festivalVO"
+		parameterType="String">
+		<bind name="pattern" value="'%'+keyword +'%'" />
+		select fid, fname from festival  where replace(upper(fname),' ','') like replace(upper(#{pattern}),' ','')
+	</select>
+
+	<!-- 아티스트 검색 -->
+	<select id = "searchArtist" resultType="artistVO" parameterType="String">
+	<bind name="pattern" value="'%'+ keyword +'%'" />
+		select aid, aname, src from artist where replace(upper(aname),' ','') like replace(upper(#{pattern}),' ','')
+	</select>
+	
+	<!-- 아티스트로 검색한 결과로 relation테이블에서 fid 찾기 -->
+	<select id = "findFid" parameterType="String" resultType="String">
+      	select fid from relation where aid=#{aid}
+   	</select>
+   	<!-- 위 fid로 festival테이블에서 fid, fname 찾기 -->
+   	<select id = "searchRes" parameterType="String" resultType="festivalVO">
+      	select fid, fname from festival where fid=#{fid}
+   	</select>
+   
+	<insert id="insertFestivalComment" parameterType="freviewVO">
+		insert into
+		f_review(no, content, reg_date, writer, fid)
+		values(f_review_seq.nextVal, #{content}, sysdate, #{writer}, #{fid})
+	</insert>
+
+	<update id="voteCnt" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt+1
+		where mid=#{mid}
+		]]>
+	</update>
+
+	<update id="voteCntCancel" parameterType="String">
+		<![CDATA[
+		update music set mCnt=mCnt-1
+		where mid=#{mid}
+		]]>
+	</update>
+
+	<select id="selectAreview" resultType="areviewVO"
+		parameterType="String">
+		select no, url, cnt, content, reg_date, writer, aid
+		from a_review
+		where writer = #{writer}
+		order by cnt desc
+	</select>
+	
+	<update id="youtubeVoteCnt" parameterType="int">
+		<![CDATA[
+		update a_review set cnt=cnt+1
+		where no=#{no}
+		]]>
+	</update>
+
+	<update id="youtubeVoteCntCancel" parameterType="int">
+		<![CDATA[
+		update a_review set cnt=cnt-1
+		where no=#{no}
+		]]>
+	</update>
+	
+	<select id="selectNoCnt" resultType="areviewVO"
+		parameterType="int">
+		select cnt from a_review
+		where no =#{no}
+	</select>	
+	
+	<select id="selectCnt" resultType="musicVO"
+		parameterType="String">
+		select mCnt from music
+		where mid =#{mid}
+	</select>
+	
+	<update id="updateUserInfo" parameterType="signupVO">
+		update u_data SET
+		email=#{email}, nickname=#{nickname}, password=#{password} where
+		id=#{id}
+	</update>
+	
+	<select id="YselectLikeCheck" resultType="int" parameterType="String">
+		select no from y_like where id=#{id}
+	</select>
+	
+	<insert id="YinsertLikeCheck" parameterType="Map">
+		insert into y_like(no, id) values(#{no}, #{id})
+	</insert>
+	
+</mapper>
