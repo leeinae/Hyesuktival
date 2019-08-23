@@ -250,7 +250,7 @@
 		<!-- Slide Two - Set the background image for this slide in the line below -->
 	      <div class="carousel-item" style="background-image: url('/resources/Detail/img/aud.jpg')">
 	        <div class="carousel-caption d-none d-md-block">          
-	          <h2 class="display-4" style="color:black;"><strong>공연기간</strong></h2>
+	          <h2 class="display-4" style="color:black;font-size: 4rem;"><strong>공연기간</strong></h2><br>	
 	          <p class="lead" style="color:black;">${requestScope.festival.startDate}&nbsp;~&nbsp;${requestScope.festival.endDate}</p>
 	        </div>
 	      </div>
@@ -258,7 +258,7 @@
 	      <!-- Slide Three - Set the background image for this slide in the line below -->
 	      <div class="carousel-item" style="background-image: url('/resources/Detail/img/ff2.jpg')">
 	        <div class="carousel-caption d-none d-md-block">
-	          <h2 class="display-4"style="color:white;">공연장</h2>
+	          <h2 class="display-4"style="color:white;font-size: 4rem;">공연장</h2><br>
 	          <p class="lead">${requestScope.festival.floc}</p>
 	        </div>
 	      </div>

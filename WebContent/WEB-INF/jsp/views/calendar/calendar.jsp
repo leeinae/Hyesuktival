@@ -49,7 +49,7 @@
 	    var calendarEl = document.getElementById('calendar');
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
 	      plugins: [ 'interaction', 'dayGrid' ],
-	      editable: true,
+	      editable: false,
 	      eventLimit: true, // allow "more" link when too many events
 	      events: [${requestScope.festivalList}],
 	      contentHeight : 700,

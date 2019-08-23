@@ -40,19 +40,19 @@ public class HomeController {
 			String color = "";
 			switch (genre) {
 			case "R":
-				color = "purple";
+				color = "brown";
 				break;
 			case "E":
-				color = "pink";
+				color = "black";
 				break;
 			case "H":
-				color = "blue";
+				color = "royalblue";
 				break;
 			case "J":
-				color = "orange";
+				color = "coral";
 				break;
 			default:
-				color = "red";
+				color = "darkblue";				
 				break;
 			}
 

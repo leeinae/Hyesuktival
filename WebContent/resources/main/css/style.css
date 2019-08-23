@@ -167,7 +167,7 @@ color: #fff;
 }
 
 .link:active, .link:focus {
-	background: aqua;
+	background: blueviolet;
 	text-decoration:none;
 	color:#fff !important;
 }
