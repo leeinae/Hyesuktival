@@ -70,7 +70,5 @@ public class MusicVO {
 		return "MusicVO [mid=" + mid + ", aid=" + aid + ", mname=" + mname + ", mCnt=" + mCnt + ", src=" + src
 				+ ", album=" + album + ", like=" + like + "]";
 	}
-
-
-
 }
+

@@ -104,7 +104,7 @@ hr.fc-divider {
 
 .fc th,
 .fc td {
-  border-style: solid;
+ /*  border-style: solid; */
   border-width: 1px;
   padding: 0;
   vertical-align: top; }
@@ -218,14 +218,13 @@ temporary rendered events).
 /* Global Event Styles
 --------------------------------------------------------------------------------------------------*/
 .fc-event {
-  position: relative;
-  /* for resize handle and other inner positioning */
-  display: block;
-  /* make the <a> tag block */
-  font-size: .85em;
-  line-height: 1.4;
-  border-radius: 3px;
-  border: 1px solid #3788d8; }
+	font-family: lottemartdream;
+    position: relative;
+    display: block;
+    font-size: 1em;
+    line-height: 1.4;
+    border-radius: 3px;
+    border: 1px solid #3788d8; }
 
 .fc-event,
 .fc-event-dot {
@@ -501,9 +500,9 @@ TODO: more distinction between this file and common.css
   background: #eee; }
 
 .fc-unthemed td.fc-today {
-    background: gray;
-    opacity: 0.8;
-    color: black; }
+    background: ghostwhite;
+    opacity: .7;
+    color: black;; }
 
 .fc-unthemed .fc-disabled-day {
   background: #d7d7d7;
@@ -619,8 +618,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 /* "primary" coloring */
 .fc-button-primary {
   color: #fff;
-  background-color: teal;
-  border-color: teal; }
+  background-color: black;
+  border-color: black; }
 
 .fc-button-primary:hover {
   color: #fff;
@@ -633,8 +632,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 
 .fc-button-primary:disabled {
   color: #fff;
-  background-color: teal;
-  border-color: teal; }
+  background-color: black;
+  border-color: black; }
 
 .fc-button-primary:not(:disabled):active,
 .fc-button-primary:not(:disabled).fc-button-active {
@@ -717,7 +716,7 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 .fc-toolbar h2 {
   font-size: 1.75em;
   margin: 0;
-  color: teal; }
+  color: black; }
 
 /* View Structure
 --------------------------------------------------------------------------------------------------*/

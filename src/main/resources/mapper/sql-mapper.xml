@@ -95,9 +95,24 @@
 	<select id="searchFestival" resultType="festivalVO"
 		parameterType="String">
 		<bind name="pattern" value="'%'+keyword +'%'" />
-		select fid, fname from festival where fname like #{pattern}
+		select fid, fname from festival  where replace(upper(fname),' ','') like replace(upper(#{pattern}),' ','')
 	</select>
 
+	<!-- 아티스트 검색 -->
+	<select id = "searchArtist" resultType="artistVO" parameterType="String">
+	<bind name="pattern" value="'%'+ keyword +'%'" />
+		select aid, aname, src from artist where replace(upper(aname),' ','') like replace(upper(#{pattern}),' ','')
+	</select>
+	
+	<!-- 아티스트로 검색한 결과로 relation테이블에서 fid 찾기 -->
+	<select id = "findFid" parameterType="String" resultType="String">
+      	select fid from relation where aid=#{aid}
+   	</select>
+   	<!-- 위 fid로 festival테이블에서 fid, fname 찾기 -->
+   	<select id = "searchRes" parameterType="String" resultType="festivalVO">
+      	select fid, fname from festival where fid=#{fid}
+   	</select>
+   
 	<insert id="insertFestivalComment" parameterType="freviewVO">
 		insert into
 		f_review(no, content, reg_date, writer, fid)
@@ -118,6 +133,29 @@
 		]]>
 	</update>
 
+	<select id="selectAreview" resultType="areviewVO"
+		parameterType="String">
+		select no, url, cnt, content, reg_date, writer, aid
+		from a_review
+		where writer = #{writer}
+		order by mCnt desc
+	</select>
+	
+	<update id="AreviewCnt" parameterType="String">
+		<![CDATA[
+		update a_review set cnt=cnt+1
+		where writer=#{writer}
+		]]>
+	</update>
+
+	<update id="AreviewCntCancel" parameterType="String">
+		<![CDATA[
+		update a_review set cnt=cnt-1
+		where writer=#{writer}
+		]]>
+	</update>
+	
+	
 	<select id="selectCnt" resultType="musicVO"
 		parameterType="String">
 		select mCnt from music
@@ -129,7 +167,7 @@
 		email=#{email}, nickname=#{nickname}, password=#{password} where
 		id=#{id}
 	</update>
-	
+
 	<select id="selectLikeCheck" resultType="Map" parameterType="String">
 		select mid from v_like where id=#{id}
 	</select>
@@ -137,4 +175,5 @@
 	<insert id="insertLikeCheck" parameterType="Map">
 		insert into v_like(mid, id) values(#{mid}, #{id})
 	</insert>
+
 </mapper>

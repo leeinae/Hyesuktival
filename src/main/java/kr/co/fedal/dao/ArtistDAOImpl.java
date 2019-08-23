@@ -26,4 +26,10 @@ public class ArtistDAOImpl implements ArtistDAO {
 		return vo;
 	}
 
+	@Override
+	public List<ArtistVO> searchArtist(String keyword) {
+		List<ArtistVO> searchArtistList = session.selectList("kr.co.fedal.dao.FestivalDAO.searchArtist", keyword);
+		return searchArtistList;
+	}
+
 }

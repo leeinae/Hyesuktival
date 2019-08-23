@@ -40,7 +40,8 @@ Docs & License: https://fullcalendar.io/
   /* column headers can't have as much v space */ }
 
 .fc-ltr .fc-dayGrid-view .fc-day-top .fc-day-number {
-  float: right; }
+  float: right;
+  font-weight: bold; }
 
 .fc-rtl .fc-dayGrid-view .fc-day-top .fc-day-number {
   float: left; }

@@ -77,6 +77,7 @@ public class LoginController {
 		// 구글 로그인
 		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
 		String url = oauthOperations.buildAuthorizeUrl(GrantType.AUTHORIZATION_CODE, googleOAuth2Parameters);
+		System.out.println(url);
 		model.addAttribute("google_url", url);
 		
 		//이전 페이지 기억

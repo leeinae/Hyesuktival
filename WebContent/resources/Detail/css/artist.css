@@ -583,6 +583,7 @@ pre code {
 
 @media (min-width: 1200px) {
   .container {
+  	margin-top: -10px;
     max-width: 1600px;
   }
 }
@@ -10753,8 +10754,8 @@ a.text-dark:hover, a.text-dark:focus {
 
 @media (min-width: 992px) {
   .masthead {
-    padding-top: calc(6rem + 104px);
-    padding-bottom: 6rem;
+    padding-top: calc(4rem + 104px);
+    padding-bottom: 0rem;
    
   }
   .masthead .masthead-heading {
@@ -10880,10 +10881,10 @@ form .row:first-child .floating-label-form-group {
   background-color: black;
   color: #fff;
 }
-
+/* 
 .copyright {
   background-color: #1a252f;
-}
+} */
 
 .MList{
   text-align: center;
@@ -10901,9 +10902,9 @@ form .row:first-child .floating-label-form-group {
   color : black;
   background-color: gainsboro;
   width : 45%;
-  height: 700px;
+  height: 720px;
   font-weight: bold;
-  border: 10px solid black;
+  border: 15px solid black;
   float : left;
 }
 
@@ -10917,8 +10918,8 @@ form .row:first-child .floating-label-form-group {
   font-weight: bold;
   color : black;
   width : 45%;
-  height:700px;
-  border: 10px solid black;
+  height:720px;
+  border: 15px solid black;
   float : right;
   box-sizing: border-box;
 }
@@ -10963,12 +10964,12 @@ form .row:first-child .floating-label-form-group {
 	transition: background .55s ease;
 }
 .container-1 .icon{
-  position: absolute;
-  top: 50%;
-  margin-left: 22%;
-  margin-top: 4%;
-  z-index: 1;
-  color: #4f5b66;
+    position: absolute;
+    /* top: 50%; */
+    margin-left: -26%;
+    margin-top: 5%;
+    z-index: 1;
+    color: #4f5b66;
 }
 .container-1 input#search:hover, .container-1 input#search:focus, .container-1 input#search:active{
     outline:none;
@@ -10996,19 +10997,18 @@ form .row:first-child .floating-label-form-group {
   position: relative;
   overflow: hidden;
   transform: translate3d(0, 0, 0);
+  margin-top: -5rem;
 }
 
 .wave {
   z-index:-1;
-  opacity: .5;
+  opacity: .7;
   position: absolute;
-  top: 70%;
-  left: 40%;
-  background: teal;
-  width: 300px;
-  height: 300px;
-/*   margin-left: -250px;
-  margin-top: -250px; */
+  top: 80%;
+  left: 32%;
+  background: blueviolet;
+  width: 600px;
+  height: 600px;
   transform-origin: 50% 48%;
   border-radius: 45%;
   animation: drift 4000ms infinite linear;
@@ -11021,7 +11021,7 @@ form .row:first-child .floating-label-form-group {
 .wave.-two {
   animation: drift 7000ms infinite linear;
   opacity: .1;
-  background: yellow;
+  background: hotpink;
 }
 
 .box2:after {

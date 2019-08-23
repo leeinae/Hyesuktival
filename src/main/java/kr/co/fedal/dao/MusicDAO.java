@@ -20,3 +20,5 @@ public interface MusicDAO {
 	
 	public void insertLike(Map<String, String> map);
 }
+
+

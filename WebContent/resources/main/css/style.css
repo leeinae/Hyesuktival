@@ -58,7 +58,7 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	font-size:14px;
 	font-weight:normal;
-	color:#888888;
+	color:black;
 	margin:0;
 }
 h2{
@@ -79,14 +79,14 @@ h3{
 	text-transform:uppercase;
 	font-weight:400;
 }
-h6{
+/* h6{
 	font-size:16px;
 	color:#888888;
 	font-family: 'Open Sans', sans-serif;
 	font-weight:400;
 	text-align:center;
 	margin:0 0 60px 0;
-}
+} */
 p{
 	line-height:24px;
 	margin:0;
@@ -146,7 +146,7 @@ color: #fff;
 
 .link{
 	padding:15px 35px;
-	background:teal;
+	background:blueviolet;
 	color:#fff !important;
 	font-size:16px;
 	font-weight:400;
@@ -162,12 +162,12 @@ color: #fff;
 }
 .link:hover {
 	text-decoration:none;
-	color:#7cc576 !important;
+	color:blueviolet!important;
 	background:#fff;
 }
 
 .link:active, .link:focus {
-	background: #7cc576;
+	background: aqua;
 	text-decoration:none;
 	color:#fff !important;
 }

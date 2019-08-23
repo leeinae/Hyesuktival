@@ -396,7 +396,7 @@ h4, .h4 {
 
 h5, .h5 {
   font-size: 1.25rem;
-  color:#008080;
+  color:white;
 }
 
 h6, .h6 {
@@ -427,7 +427,8 @@ h6, .h6 {
 }
 
 .display-4 {
-  font-size: 3.5rem;
+  font-family: S-CoreDream-8Heavy;
+  font-size: 3.2rem;
   font-weight: 300;
   line-height: 1.2;
 }
@@ -497,6 +498,10 @@ mark,
   margin-left: auto;
   margin-right: auto;
   
+}
+.img-fluid:hover {
+  border: blueviolet solid 5px;
+	
 }
 
 .img-thumbnail {
@@ -2161,7 +2166,7 @@ select.form-control[size], select.form-control[multiple] {
 
 textarea.form-control {
   height: auto;
-  width: 630px;
+  
 }
 
 .form-group {
@@ -6758,8 +6763,8 @@ a.close.disabled {
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
   background: no-repeat 50% / 100% 100%;
 }
 
@@ -6795,8 +6800,8 @@ a.close.disabled {
   -webkit-box-flex: 0;
   -ms-flex: 0 1 auto;
   flex: 0 1 auto;
-  width: 30px;
-  height: 3px;
+  width: 70px;
+  height: 7px;
   margin-right: 3px;
   margin-left: 3px;
   text-indent: -999px;
@@ -6824,7 +6829,7 @@ a.close.disabled {
 .carousel-caption {
   position: absolute;
   right: 15%;
-  bottom: 20px;
+  bottom: 20em;
   left: 15%;
   z-index: 10;
   padding-top: 20px;
@@ -10771,7 +10776,7 @@ a.text-dark:hover, a.text-dark:focus {
 @media (min-width: 992px) {
   .masthead {
     padding-bottom: 6rem;
-    margin-top: -5rem;
+    margin-top: -11rem;
     margin-bottom: -6rem;
   }
   .masthead .masthead-heading {
@@ -10903,9 +10908,9 @@ form .row:first-child .floating-label-form-group {
   color: #fff;
 }
 
-.copyright {
+/* .copyright {
   background-color: #1a252f;
-}
+} */
 .f11{
 	font-family: "CulDeSac";
 }

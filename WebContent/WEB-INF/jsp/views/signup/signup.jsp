@@ -1,76 +1,130 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<meta charset='utf-8' />
-<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
-<style>
-.board_list {
-	width: 500px;
-	margin: 0 auto;
-}
-
-.board_list tfoot {
-	text-align: center;
-}
-</style>
-<title>Insert title here</title>
+	<title>Login V2</title>
+	<meta charset="EUC-KR">
+	<meta charset="UTF-8">
+	<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/resources/Login_v2/css/main.css">
+<!--===============================================================================================-->
 </head>
 <body>
-	<h1>Signup Page</h1>
-	<section>
-		<div class="panel-body" align="center">
-			<form:form role="form" commandName="signupRequest"
-				action="/signupSuccess" method="post">
-				<table class="board_list">
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				
+				<form:form role="form" commandName="signupRequest" action="/signupSuccess" method="post">
+					
+					<span class="login100-form-title p-b-26" style="font-family: 'S-CoreDream-8Heavy';">
+						íšŒì›ê°€ì…
+					</span>									
+
+					<table  class="board_list" style="border-collapse: separate; border-spacing: 0 20px;">
 					<tr>
-						<th scope="row">¾ÆÀÌµğ</th>
+						<th scope="row" style="font-family: 'LotteMartDream';">ì•„ì´ë””</th>
 						<td><form:input type="text" class="form-control"
 								placeholder="ID" path="id" /> <form:errors path="id" /></td>
 						<td></td>
-					</tr>
-
+					</tr>					
+				
 					<tr>
-						<th scope="row">ºñ¹Ğ¹øÈ£</th>
-						<td><form:password class="form-control"
-								placeholder="Password" path="password" /> <form:errors
-								path="password" /></td>
+						<th scope="row" style="font-family: 'LotteMartDream';">ë¹„ë°€ë²ˆí˜¸</th>
+						<td><form:password class="form-control" placeholder="Password"
+								path="password" /> <form:errors path="password" /></td>
 						<td></td>
-					</tr>
-
+					</tr>					
+						
 					<tr>
-						<th scope="row">ºñ¹Ğ¹øÈ£ È®ÀÎ</th>
+						<th scope="row" style="font-family: 'LotteMartDream';">ë¹„ë°€ë²ˆí˜¸ &nbsp;&nbsp;í™•ì¸</th>
 						<td><form:password class="form-control"
 								placeholder="Password Check" path="password2" /> <form:errors
 								path="password2" /></td>
 						<td></td>
-					</tr>
-
+					</tr>					
+	
 					<tr>
-						<th scope="row">´Ğ³×ÀÓ</th>
+						<th scope="row" style="font-family: 'LotteMartDream';">ë‹‰ë„¤ì„</th>
 						<td><form:input type="text" class="form-control"
 								placeholder="Nickname" path="nickname" /> <form:errors
 								path="nickname" /></td>
 						<td></td>
-					</tr>
-
+					</tr>					
+	
 					<tr>
-						<th scope="row">ÀÌ¸ŞÀÏ</th>
+						<th scope="row" style="font-family: 'LotteMartDream';">ì´ë©”ì¼</th>
 						<td><form:input type="email" class="form-control"
 								placeholder="E-mail" path="email" /></td>
 						<td></td>
 					</tr>
+					
 				</table>
-				<br>
-
-				<button type="submit" class="btn btn-default">°¡ÀÔÇÏ±â</button>
-			</form:form>
-				<a href="${pageContext.request.contextPath }/signupCancel"><button>Ãë¼ÒÇÏ±â</button></a>
+			
+			<br>
+			<div align="center">								
+				<button type="submit" class="btn btn-defualt"
+				 style="background: teal;font-family: 'LotteMartDream';width: 130px;" >ê°€ì…</button>				
+				<button type="reset"  class="btn btn-defualt" style="background:gray;
+				   font-family: 'LotteMartDream';width: 130px;margin-left: 10px; ">ì·¨ì†Œ</button>
+			</div>	
+		
+			</form:form>				
+			</div>	
+			<br>
+			<br>
+		
+			</div>
 		</div>
-	</section>
+	
+	
+
+	<!-- <div id="dropDownSelect1"></div> -->
+	
+<!--===============================================================================================-->
+	<script src="/resources/Login_v2/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/Login_v2/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/Login_v2/vendor/bootstrap/js/popper.js"></script>
+	<script src="/resources/Login_v2/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/Login_v2/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/Login_v2/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/resources/Login_v2/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/Login_v2/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/Login_v2/js/main.js"></script>
+	
+	<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+	
+
 </body>
 </html>

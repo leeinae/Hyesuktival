@@ -44,6 +44,10 @@ public interface FestivalService {
 
 	public void updateUserInfo(SignupVO vo);
 	
+	public List<ArtistVO> searchAllArtist(String keyword);
+
+	public Map<String, List<FestivalVO>> partiFestival(List<ArtistVO> fidList);
+	
 	public List<Map<String,String>> selectLikeCheck(String id);
 	
 	public void insertLike(Map<String, String> map);
