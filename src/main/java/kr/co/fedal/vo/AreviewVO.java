@@ -8,6 +8,8 @@ public class AreviewVO {
 	private String writer;
 	private String aid;
 	private String regDate;
+	private Boolean like;
+	
 	public int getNo() {
 		return no;
 	}
@@ -45,18 +47,25 @@ public class AreviewVO {
 		this.aid = aid;
 	}
 	
-	
-	@Override
-	public String toString() {
-		return "AreviewVO [no=" + no + ", url=" + url + ", cnt=" + cnt + ", content=" + content + ", writer=" + writer
-				+ ", aid=" + aid + ", regDate=" + regDate + "]";
-	}
 	public String getRegDate() {
 		return regDate;
 	}
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
+	public Boolean getLike() {
+		return like;
+	}
+	public void setLike(Boolean like) {
+		this.like = like;
+	}
+	
+	@Override
+	public String toString() {
+		return "AreviewVO [no=" + no + ", url=" + url + ", cnt=" + cnt + ", content=" + content + ", writer=" + writer
+				+ ", aid=" + aid + ", regDate=" + regDate + ", like=" + like + "]";
+	}
+
 	
 	
 	

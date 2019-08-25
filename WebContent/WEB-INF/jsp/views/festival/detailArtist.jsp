@@ -31,22 +31,37 @@ function vote(mid) {
 	if("${AuthInfoId }" == "" && "${sessionName }" == "") {
 		alert("로그인 후 투표하세요!");
 	} else {
-		var text = $('#voteBtn' + mid).val();
-		if (text == "투표") {
-			$.ajax({
-						url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
-								+ mid + "/up",
-						type : "POST",
-						success : function(data) {
-							$('#mCnt' + mid).html(data);
-							$('#voteBtn' + mid).val("투표 완료");
-							$('#voteBtn' + mid).attr("disabled","disabled");
-						},
-						error : function() {
-							alert('실패');
-						}
-					});
-		}
+		$.ajax({
+			url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
+					+ mid + "/up",
+			type : "POST",
+			success : function(data) {
+				$('#mCnt' + mid).html(data);
+				$('#voteBtn' + mid).val("투표 완료");
+				$('#voteBtn' + mid).attr("disabled","disabled");
+			},
+			error : function() {
+				alert('실패');
+			}
+		});
+	}
+}
+
+function recom(no){
+	if("${AuthInfoId }" == "" && "${sessionName }" == "") {
+		alert("로그인 후 추천하세요!");
+	} else {
+		$.ajax({
+			url : "${pageContext.request.contextPath}/artist/${artist.aid}/"
+					+ no + "/yup",
+			type : "POST",
+			success : function(data) {
+				getComments(replyPage);
+			},
+			error : function(request,status , error) {
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		});
 	}
 }
 </script>
@@ -165,9 +180,13 @@ function vote(mid) {
 		             output += "<td style='vertical-align: middle;'id='commentContent'>"+data.list[i].content +"</td>";
 		             output += "<td style='vertical-align: middle;'id='commentDate'>"+data.list[i].regDate +"</td>";
 		             output += "<td>";
-		             output += "<button class='btn btn-primary btn-sm' style='vertical-align: middle;'type='button' id='recomBtn' onclick='recom(${selectAreview.writer})'>추천</button>";
+		             if(data.list[i].like==true) {
+			             output += "<input type='button' class='btn btn-primary btn-sm' style='vertical-align: middle;' value='추천 완료' disabled></button>";	            	 		            	 
+		             } else {
+			             output += "<input type='button' class='btn btn-primary btn-sm' style='vertical-align: middle;' id='recomBtn"+data.list[i].no+"' value='추천' onclick='recom("+data.list[i].no+")'></button>";	            	 
+		             } 
 		             output += "</td>";
-		             output += "<td style='vertical-align: middle;'>${selectAreview.writer}</td>"
+		             output += "<td style='vertical-align: middle;'>"+data.list[i].cnt+"</td>"
 		             output += "<td>";
 		             if ("${sessionScope.sessionName}" == data.list[i].writer
 								|| "${sessionScope.AuthInfoId}" == data.list[i].writer) {

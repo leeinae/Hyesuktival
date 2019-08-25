@@ -56,4 +56,30 @@ public class AreviewDAOImpl implements AreviewDAO{
 		return session.selectList("kr.co.fedal.dao.AreviewDAO.selectArtistCommentsPage", map);
 	}
 
+	@Override
+	public List<String> YselectLikeCheck(String id) {
+		List<String> list = session.selectList("kr.co.fedal.dao.AreviewDAO.YselectLikeCheck",id);
+		return list;
+	}
+
+	@Override
+	public void YinsertLike(Map<String, Object> map) {
+		session.insert("kr.co.fedal.dao.AreviewDAO.YinsertLikeCheck",map);
+		
+	}
+
+	@Override
+	public void youtubeVoteCnt(String no) {
+		session.insert("kr.co.fedal.dao.AreviewDAO.youtubeVoteCnt",no);
+	}
+
+	@Override
+	public String selectYoutubeCnt(String no) {
+		String cnt = session.selectOne("kr.co.fedal.dao.AreviewDAO.selectYoutubeCnt", no);
+		return cnt;
+	}
+	
+	
+	
+	
 }

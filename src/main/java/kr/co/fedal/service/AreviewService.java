@@ -1,6 +1,7 @@
 package kr.co.fedal.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.co.fedal.vo.AreviewVO;
 
@@ -22,4 +23,13 @@ public interface AreviewService {
 		
 		//Artist comment insert between start and end
 		public List<AreviewVO> selectArtistCommentsPaging(String aid, int start, int end);
+		
+		public List<String> selectLikeCheck(String id);
+		
+		public void insertLike(Map<String, Object> map);
+		
+		public void youtubeVoteCnt(String no);
+		
+		public String selectYoutubeCnt(String no);
+		
 }

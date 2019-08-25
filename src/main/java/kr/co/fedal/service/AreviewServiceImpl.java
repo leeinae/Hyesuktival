@@ -1,6 +1,7 @@
 package kr.co.fedal.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,29 @@ public class AreviewServiceImpl implements AreviewService{
 		List<AreviewVO> list = areviewDao.selectArtistCommentsPaging(aid, start, end);
 		return list;
 	}
+
+	@Override
+	public List<String> selectLikeCheck(String id) {
+		List<String> list = areviewDao.YselectLikeCheck(id);
+		return list;
+	}
+
+	@Override
+	public void insertLike(Map<String, Object> map) {
+		areviewDao.YinsertLike(map);
+	}
+
+	@Override
+	public void youtubeVoteCnt(String no) {
+		areviewDao.youtubeVoteCnt(no);		
+	}
+
+	@Override
+	public String selectYoutubeCnt(String no) {
+		String cnt = areviewDao.selectYoutubeCnt(no);
+		return cnt;
+	}
+	
+	
 
 }

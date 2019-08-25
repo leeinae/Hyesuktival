@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -23,32 +25,56 @@ public class AReplyController {
 	@Autowired
 	private AreviewService service;
 	
-	//´ñ±Û ÀÔ·Â -> DB ÀúÀå
+	//ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ -> DB ï¿½ï¿½ï¿½ï¿½
 	@RequestMapping(value="/{aid}", method=RequestMethod.POST)
 	public void insertComment(@PathVariable("aid") String aid, AreviewVO review){	
-		//´ñ±Û db¿¡ ÀúÀå
+		//ï¿½ï¿½ï¿½ dbï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		service.insertArtistComment(review);
-		System.out.println("´ñ±Û ÀúÀå ¿Ï·á");
+		System.out.println("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½");
 	}
 	
-	//DB¿¡ ÀúÀåµÈ ÇØ´ç Æä½ºÆ¼¹ú ÈÄ±â ´ñ±Û ¹Þ¾Æ¿À±â
+	//DBï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ä½ºÆ¼ï¿½ï¿½ ï¿½Ä±ï¿½ ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
 	@RequestMapping(value="/{aid}/{page}", method=RequestMethod.POST)
 	public Map<String, Object> getComments(
 			@PathVariable("aid") String aid,
-			@PathVariable("page") Integer page)	
+			@PathVariable("page") Integer page,
+			HttpSession session)	
 	{
-		//db¿¡¼­ ´ñ±Û °³¼ö ¹Þ¾Æ¿À±â, paging °´Ã¼ »ý¼º ÈÄ ÇöÀç ÆäÀÌÁö, ÀüÃ¼ ÆäÀÌÁö ¼ö ¼³Á¤
+		//dbï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½, paging ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		int count = service.countArtistComments(aid);
 		Paging paging = new Paging(count ,page);
 		int start = paging.getPageBegin();
 		int end = paging.getPageEnd();
 		
+		String id;
+		
+		if(session.getId() != null && session.getAttribute("sessionName") != null) {
+			id = (String) session.getAttribute("sessionName");
+		} else if(session.getId() != null && session.getAttribute("AuthInfoId") != null) {
+			id = (String) session.getAttribute("AuthInfoId");
+		} else {
+			id ="";
+		}
+		
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<AreviewVO> cList = service.selectArtistCommentsPaging(aid, start, end);
+
+		List<String> likeList = service.selectLikeCheck(id);
+		
+		for(String str: likeList) {
+			for(AreviewVO vo : cList) {
+				if(str.equals(Integer.toString(vo.getNo()))) {
+					vo.setLike(true);
+				}
+			}
+		}
 		
 		map.put("list",cList);
 		map.put("paging",paging);
 
+		System.out.println(cList);
+		
 		return map;
 	}
 	
