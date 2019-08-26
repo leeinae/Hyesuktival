@@ -5,13 +5,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
+<title>HYESUKTIVAL</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 <meta content="" name="description">
 <meta content="" name="author">
 
-<title>Freelancer - Start Bootstrap Theme</title>
 
 <!-- Custom fonts for this theme -->
 <link href="/resources/Detail/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> 
@@ -117,8 +116,8 @@ function recom(no){
 	     editForm += "<td>"+url+"</td>";
 	     editForm += "<td><input type='text' placeholder='댓글을 입력하세요' value='"+content+"' name='content' id='content'></td>";
 	     editForm += "<td>"+date+"</td>";       
-	     editForm += "<td><input id='btn' type='button' onclick='updateComment("+no+")' value='수정'>";
-	     editForm += "<input id='btn' type='button' onclick='getComments("
+	     editForm += "<td><input id='btn' class='btn btn-warining' type='button' onclick='updateComment("+no+")' value='수정'>";
+	     editForm += "<input id='btn' class='btn btn-defualt' type='button' onclick='getComments("
 				+ replyPage + ")' value='취소'></td>";
 	     
 	     $('#comment'+no).html(editForm);
@@ -175,24 +174,24 @@ function recom(no){
 		              youtubeUrlArray = String(youtubeUrlArray.split('=')[1]);
 		              var realUrl = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+youtubeUrlArray+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
 		             output += "<tr id='comment"+data.list[i].no+"'>";
-		             output += "<td style='vertical-align: middle;'id='commentWriter'>"+data.list[i].writer +"</td>";
-		             output += "<td style='vertical-align: middle;'id='youtubeUrl'>"+realUrl +"</td>";
-		             output += "<td style='vertical-align: middle;'id='commentContent'>"+data.list[i].content +"</td>";
-		             output += "<td style='vertical-align: middle;'id='commentDate'>"+data.list[i].regDate +"</td>";
-		             output += "<td>";
+		             output += "<td style='vertical-align: middle;text-align: center;'id='commentWriter'>"+data.list[i].writer +"</td>";
+		             output += "<td style='vertical-align: middle;text-align: center;'id='youtubeUrl'>"+realUrl +"</td>";
+		             output += "<td style='vertical-align: middle;font-size: large;'id='commentContent'>"+data.list[i].content +"</td>";
+		             output += "<td style='vertical-align: middle;text-align: center;'id='commentDate'>"+data.list[i].regDate +"</td>";
+		             output += "<td style='vertical-align: middle;text-align: center;'>";
 		             if(data.list[i].like==true) {
-			             output += "<input type='button' class='btn btn-primary btn-sm' style='vertical-align: middle;' value='추천 완료' disabled></button>";	            	 		            	 
+			             output += "<input type='button' class='btn btn-primary btn-sm'  value='추천 완료' disabled></button>";	            	 		            	 
 		             } else {
-			             output += "<input type='button' class='btn btn-primary btn-sm' style='vertical-align: middle;' id='recomBtn"+data.list[i].no+"' value='추천' onclick='recom("+data.list[i].no+")'></button>";	            	 
+			             output += "<input type='button' class='btn btn-primary btn-sm'  id='recomBtn"+data.list[i].no+"' value='추천' onclick='recom("+data.list[i].no+")'></button>";	            	 
 		             } 
 		             output += "</td>";
-		             output += "<td style='vertical-align: middle;'>"+data.list[i].cnt+"</td>"
-		             output += "<td>";
+		             output += "<td style='vertical-align: middle;text-align: center;'>"+data.list[i].cnt+"</td>"
+		             output += "<td  style='vertical-align: middle;text-align: center;' >";
 		             if ("${sessionScope.sessionName}" == data.list[i].writer
 								|| "${sessionScope.AuthInfoId}" == data.list[i].writer) {
 							output += "<button class='btn btn-danger' type='button' id='btnDelete' onclick='deleteComment("
 									+ data.list[i].no + ")'>삭제</button>";
-							output += "<button class='btn btn-warning' type='button' id='btnUpdate' onclick='editComment("
+							output += "<button class='btn btn-warning'type='button' id='btnUpdate' onclick='editComment("
 									+ data.list[i].no
 									+ ",\""
 									+ data.list[i].content
@@ -209,16 +208,16 @@ function recom(no){
 	var printPaging= function(pageMaker, target) {
 	    var str ="";
 	    if (pageMaker.curPage > 1 ) {
-	       str += str += "<li style='display: inline-block;margin: 10px;'><a href='javascript:getComments(1)'> [이전] </a></li>";
+	       str += str += "<li style='display: inline-block;margin: 10px;font-size: larger;'><a href='javascript:getComments(1)' style='color:black;'> [이전] </a></li>";
 	    }
 
 	    for (var i = pageMaker.blockBegin; i <= pageMaker.blockEnd; i++) {
 	       var strClass = pageMaker.curPage == i ? 'class=active' : '';
-	       str += "<li "+"style='color:black;display: inline-block;margin: 10px;'"+strClass+"><a href='javascript:getComments("+i+")'>"+i+"</a></li>";
+	       str += "<li "+"style='display: inline-block;margin: 10px;font-size: larger;'"+strClass+"><a href='javascript:getComments("+i+")' style='color:black;'>"+i+"</a></li>";
 	    }
 
 	    if (pageMaker.curBlock < pageMaker.blockEnd ) {
-	       str += "<li style='color:black;display: inline-block;margin: 10px;'><a href='javascript:getComments("+pageMaker.blockEnd+")'> [다음] </a></li>";
+	       str += "<li style='display: inline-block;margin: 10px;font-size: larger;'><a href='javascript:getComments("+pageMaker.blockEnd+")' style='color:black;'> [다음] </a></li>";
 	    }
 	    target.html(str);
 	 }
@@ -256,7 +255,7 @@ function recom(no){
 
 <body id="page-top">
 	<!-- navbar -->
-	 <nav class="main-nav-outer" id="test"style="font-family: Summer Festival;">		
+	 <nav class="main-nav-outer" id="test">		
 		<div class="container">
 			<ul class="main-nav" >						
 				<li class="small-logo"><a href="/"><h2 style="font-family: Summer Festival;
@@ -302,7 +301,7 @@ function recom(no){
 		<div class='box2'>
 
 			<img alt="" class="masthead-avatar" src="${requestScope.artist.src }"
-				style="z-index: 50; margin-bottom: 7rem;">
+				style="z-index: 50;margin-top: 4.7rem;margin-bottom: 5rem;">
 
 			<div class='wave -one'></div>
 			<div class='wave -two'></div>
@@ -358,7 +357,7 @@ function recom(no){
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${requestScope.musicAll }" begin="1" end="5"
+						<c:forEach items="${requestScope.musicAll }" begin="0" end="4"
 							var="musicAll" varStatus="status">
 							<tr>
 								<td>${ status.count }</td>
@@ -515,8 +514,12 @@ function recom(no){
 
 		<c:choose>
 			<c:when test="${empty AuthInfoId && empty sessionId }">
-				<h6>로그인 후 댓글을 남길 수 있습니다.</h6>
-				<a href="${pageContext.request.contextPath }/login"><button>로그인</button></a>
+				<!-- <h6>로그인 후 댓글을 남길 수 있습니다.</h6> -->
+				<textarea id="content" name="content" class="form-control"
+				style="width: 100%; resize:none;" rows="3" cols="30"
+				placeholder="로그인 후 댓글을 남길 수 있습니다."></textarea>				
+				<a href="${pageContext.request.contextPath }/login">
+				<button class="btn btn-success">로그인</button></a>
 			</c:when>
 			<c:otherwise>
 				<form id="comments">
@@ -552,18 +555,18 @@ function recom(no){
 					<!-- <tr>
 						<td colspan="3"><br></td>
 					</tr> -->
-					<td style="text-align: center;"><strong>작성자</strong></td>
-					<td style="text-align: center;"><strong>영상</strong></td>
-					<td style="width: 600px;text-align: center;"><strong>댓글</strong></td>
-					<td style="text-align: center;"><strong>작성일</strong></td>
-					<td style="text-align: center;"><strong>추천하기</strong></td>
-					<td style="text-align: center;"><strong>추천수</strong></td>
-					<td></td>
+					<td style="text-align: center;width: 100px;"><strong>작성자</strong></td>
+					<td style="text-align: center;width: 500px;"><strong>영상</strong></td>
+					<td style="text-align: center;width: 300px;"><strong>댓글</strong></td>
+					<td style="text-align: center;width: 80px;"><strong>작성일</strong></td>
+					<td style="text-align: center;width: 80px;"><strong>추천하기</strong></td>
+					<td style="text-align: center;width: 60px;"><strong>추천수</strong></td>
+					<td style="text-align: center;width: 80px;"></td>
 				</thead>
 				<tbody id="commentsList">
 				</tbody>
 			</table>
-			<div id="paging">
+			<div id="paging" style="text-align: center;">
 				<ul id="pagination">
 
 				</ul>

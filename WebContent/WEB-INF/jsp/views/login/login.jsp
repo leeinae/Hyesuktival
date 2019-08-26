@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login V2</title>
+	<title>HYESUKTIVAL</title>
 	<meta charset="EUC-KR">
 	<meta charset="UTF-8">
 	<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>

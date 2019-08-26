@@ -53,6 +53,7 @@
 		(select * from a_review where aid=#{aid} order by no desc) a)
 		where numrow
 		between #{start} and #{end}
+		order by cnt desc
 	</select>
 	
 	<select id="YselectLikeCheck" resultType="String" parameterType="String">

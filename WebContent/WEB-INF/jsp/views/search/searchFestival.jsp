@@ -57,18 +57,18 @@
 		#searchdiv{  
 			    flex: 0 0 25%;
 			    max-width: 20%;
-			    max-width: 40%;
-			    */: ;
-			    border: 2px solid black;
-			    width: :200px;
-			    /* height: 300px; */
+			    max-width: 40%;			   			   
+			    width: :200px;			    
 			    cursor: pointer;
 			    position: relative;
 			    display: block;
 			    max-width: 20%;
+			    margin-left: 50px;
 			    margin-bottom: 30px;
 			    border-radius: 0.5rem;
 			    overflow: hidden;
+			    background-color: rgba(0,0,0,0.5);
+			    
 		}
 		
 		#div0{
@@ -79,6 +79,11 @@
 				    flex-wrap: wrap;
 				    margin-right: -15px;
 				    margin-left: -15px;
+		}
+		
+		ul{
+		list-style-type:circle;	
+		
 		}
 	</style>
 	
@@ -125,8 +130,8 @@
 						</c:when>
 						
 						<c:otherwise>
-							<li>${AuthInfoNickname }님,반갑습니다!</li>							
-							<li><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
+							<li style="font-family:lottemartdream;">${AuthInfoNickname }님,반갑습니다!</li>							
+							<li style="font-family:lottemartdream;"><a href="/myPage"><i class="mypage"></i> 마이페이지</a></li>
 							<li style="margin-right: -60px;"><a href="/logout"><i class="logout"></i> 로그아웃</a></li>
 						</c:otherwise>
 					</c:choose>
@@ -139,10 +144,10 @@
 			
 	<!--searchlist start-->
 	<section class="wow" id="service"
-	style="height: 1400px;background:url('/resources/Detail/img/mic2.jpg');margin-top: -20px;">
+	style="height: AUTO;OVERFLOW:OVERLAY;background:url('/resources/Detail/img/mic2.jpg');margin-top: -20px;">
 	 <div id="container1">  
 		  	<br>
-			<h1 style="font-family: LotteMartDream;"><strong>페스티벌 검색결과</strong></h1>
+			<h1 style="font-family: LotteMartDream;"><strong style="color: bisque;">페스티벌 검색결과</strong></h1>
 			<hr>
 			<c:choose>
 				<c:when test="${empty requestScope.searchList }">
@@ -152,13 +157,13 @@
 				<c:otherwise>
 					<c:forEach items="${requestScope.searchList }" var="result">
 						<h4><a href="${pageContext.request.contextPath }/festival/${result.fid}"
-						 style="color:white;font-family:'Eoe_Zno_L';">${result.fname }</a></h4>
+						 style="color:white;font-family:'Eoe_Zno_L';">[${result.fname }]</a></h4>
 					</c:forEach>
 				</c:otherwise>			
 			</c:choose>
 			<br>
 			<br>			
-			<h1 style="font-family: LotteMartDream;"><strong>아티스트 검색결과</strong></h1>	
+			<h1 style="font-family: LotteMartDream;"><strong style="color: bisque;">아티스트 검색결과</strong></h1>	
 			<hr>
 			<div id="div0">
 				<c:choose>
@@ -173,14 +178,16 @@
 								<img alt="" src="${result2.src }" width="150px">
 							</div>
 							<div>
+								<h4 style="color:white;font-family: lottemartdream;"	>${result2.aname }</h4>
 								<c:forEach items="${ resultMap }" var="map">
 								<c:if test="${ map.key == result2.aid }">
 									<c:forEach items="${ map.value }" var="mapvalue">
-									<h5><a href="${pageContext.request.contextPath }/festival/${mapvalue.fid}">${ mapvalue.fname }</a><br></h5>
+																		
+									 <h5><a href="${pageContext.request.contextPath }/festival/${mapvalue.fid}">${ mapvalue.fname }</a><br></h5> 
 									</c:forEach>
 								</c:if>
 								</c:forEach>						
-								<h5><a>${result2.aname }</a></h5>
+								
 							</div>							
 															
 						</div>

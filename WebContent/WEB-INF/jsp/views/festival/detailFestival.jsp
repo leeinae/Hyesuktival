@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>HYESUKTIVAL</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport"
@@ -11,7 +12,6 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>Freelancer - Start Bootstrap Theme</title>
 
 <!-- Custom fonts for this theme -->
 <link href="/resources/Detail/resources/vendor/fontawesome-free/css/all.min.css"
@@ -119,7 +119,7 @@
 	var printPaging = function(pageMaker, target) {
 		var str = "";
 		if (pageMaker.curPage > 1) {
-			str += str += "<li style='display: inline-block;margin: 10px;'><a href='javascript:getComments(1)'> [이전] </a></li>";
+			str += str += "<li style='display: inline-block;margin: 10px;font-size: larger;'><a href='javascript:getComments(1)'> [이전] </a></li>";
 		}
 
 		for (var i = pageMaker.blockBegin; i <= pageMaker.blockEnd; i++) {
@@ -311,7 +311,7 @@
 		               </a>            
 		            </c:otherwise>
 		         </c:choose>
-		         <h5 style="text-align: center;padding-top: .5em;color:white">${artist.aname }</h5>
+		         <h5 style="text-align: center;padding-top: .5em;color:white;font-family: 'S-CoreDream-8Heavy', sans-serif;">${artist.aname }</h5>
 		      </div>
 		      </div>
 		   </c:forEach>
@@ -343,8 +343,12 @@
 					<c:choose>
 						
 						<c:when test="${empty AuthInfoId && empty sessionId }">
-							<h6>로그인 후 댓글을 남길 수 있습니다.</h6>
-							<a href="${pageContext.request.contextPath }/login"><button>로그인</button></a>
+							<!-- <h6>로그인 후 댓글을 남길 수 있습니다.</h6> -->
+							<textarea class="form-control" rows="3" cols="30" 
+						                style="width: 100%; resize:none;"
+						                  name="content" placeholder="로그인 후 댓글을 남길 수 있습니다."></textarea>	
+							<a href="${pageContext.request.contextPath }/login">
+							<button class="btn btn-success">로그인</button></a>
 						</c:when>
 						
 						

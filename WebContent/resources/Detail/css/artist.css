@@ -11001,17 +11001,18 @@ form .row:first-child .floating-label-form-group {
 }
 
 .wave {
-  z-index:-1;
-  opacity: .7;
-  position: absolute;
-  top: 80%;
-  left: 32%;
-  background: blueviolet;
-  width: 600px;
-  height: 600px;
-  transform-origin: 50% 48%;
-  border-radius: 45%;
-  animation: drift 4000ms infinite linear;
+  
+    z-index: -1;
+    opacity: .8;
+    position: absolute;
+    top: 3%;
+    left: 37.7%;
+    background: blueviolet;
+    width: 380px;
+    height: 380px;
+    transform-origin: 50% 48%;
+    border-radius: 44%;
+    animation: drift 8000ms infinite linear
 }
 
 .wave.-three {
